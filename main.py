@@ -23,32 +23,39 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
 
         # setup combo boxes (filters)
         self.completers = {}
-        self.combo_boxes = {"cb_existingcodes": self.cb_existingcodes,
-                       "cb_brandfilter": self.cb_brandfilter,
-                       "cb_podcast": self.cb_podcast,
-                       "cb_podcastsuspendcode": self.cb_podcastsuspendcode,
-                       "cb_spendgoalpodcast": self.cb_spendgoalpodcast,
-                       "cb_actualspendpodcast": self.cb_actualspendpodcast,
-                       "cb_actualspendbrand": self.cb_actualspendbrand}
-        
+        self.code_combo_boxes = {"cb_existingcodes": self.cb_existingcodes,
+                                    "cb_podcastsuspendcode": self.cb_podcastsuspendcode}
+        self.brand_combo_boxes = {"cb_brandfilter": self.cb_brandfilter,
+                       "cb_brandactualspend": self.cb_brandactualspend}
+        self.podcast_combo_boxes = {"cb_podcast": self.cb_podcast,
+                       "cb_podcastspendgoal": self.cb_podcastspendgoal,
+                       "cb_podcastactualspend": self.cb_podcastactualspend}
+        self.cbxs = [self.code_combo_boxes, self.brand_combo_boxes, self.podcast_combo_boxes]
         self.db_funcs = {"cb_existingcodes": get_codes(),
                        "cb_brandfilter": get_brands(),
                        "cb_podcast": get_podcasts(),
                        "cb_podcastsuspendcode": get_podcasts(),
-                       "cb_spendgoalpodcast": get_podcasts(),
-                       "cb_actualspendpodcast": get_podcasts(),
-                       "cb_actualspendbrand": get_brands()}
+                       "cb_podcastspendgoal": get_podcasts(),
+                       "cb_podcastactualspend": get_podcasts(),
+                       "cb_brandactualspend": get_brands()}
         
-        for k,v in self.combo_boxes.items():
-            v.setEditable(True)
-            completer = QtWidgets.QCompleter(v)
-            completer.setCaseSensitivity(Qt.CaseSensitivity(False))
-            v.setCompleter(completer)
-            self.completers[k] = completer
+        for cbxs in self.cbxs:
+            for k,v in cbxs.items():
+                v.setEditable(True)
+                completer = QtWidgets.QCompleter(v)
+                completer.setCaseSensitivity(Qt.CaseSensitivity(False))
+                v.setCompleter(completer)
+                self.completers[k] = completer
 
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_combo_boxes)
-        self.timer.start(5000)
+                data = self.db_funcs[k]
+                v.addItems(data)
+                completer.setModel(v.model())
+
+        #self.bt_.connect(lambda: self.update_combo_boxes(self.brand_combo_boxes))
+        self.bt_submitnewcode.clicked.connect(self.add_new_code)
+        self.bt_submitnewpodcast.clicked.connect(self.add_new_podcast)
+        self.bt_suspendcode.clicked.connect(self.suspend_code)
+
 
         # Home page
         revenue = 2349.342
@@ -61,15 +68,19 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         # chat page
         self.bt_submitchat.clicked.connect(self.handle_chat_submit)
 
-    def update_combo_boxes(self):
-        for k,v in self.combo_boxes.items():
+    def update_combo_boxes(self, combo_boxes):
+        for k,v in combo_boxes.items():
             self.update_combo_box(v, self.completers[k], self.db_funcs[k])
 
     def update_combo_box(self, combo_box, completer, db_func):
+        current_choice = combo_box.currentText()
         data = db_func
         combo_box.clear()
         combo_box.addItems(data)
         completer.setModel(combo_box.model())
+        if current_choice in data:
+            index = combo_box.findText(current_choice)
+            combo_box.setCurrentIndex(index)
 
     def switch_view(self, index):
         self.stackedWidget.setCurrentIndex(index)
@@ -78,6 +89,17 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         in_text = self.te_chatinput.toPlainText()
         self.te_chathistory.setHtml(f"<p>{in_text}</p>")
         self.te_chatinput.clear()
+
+    def add_new_code(self):
+        self.update_combo_boxes(self.code_combo_boxes)
+
+    def add_new_podcast(self):
+        self.update_combo_boxes(self.podcast_combo_boxes)
+
+    def suspend_code(self):
+        self.update_combo_boxes(self.code_combo_boxes)
+
+    
 
 
 if __name__ == "__main__":

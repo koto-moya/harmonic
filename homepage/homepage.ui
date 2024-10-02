@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="homepage">
      <widget class="QLabel" name="spend_label">
@@ -153,7 +153,7 @@
        <rect>
         <x>330</x>
         <y>40</y>
-        <width>103</width>
+        <width>171</width>
         <height>32</height>
        </rect>
       </property>
@@ -302,7 +302,7 @@
        <rect>
         <x>510</x>
         <y>80</y>
-        <width>103</width>
+        <width>191</width>
         <height>32</height>
        </rect>
       </property>
@@ -343,7 +343,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="bt_submitnewcode_2">
+     <widget class="QPushButton" name="bt_suspendcode">
       <property name="geometry">
        <rect>
         <x>510</x>
@@ -379,7 +379,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="bt_submitnewcode_3">
+     <widget class="QPushButton" name="bt_submitnewpodcast">
       <property name="geometry">
        <rect>
         <x>470</x>
@@ -394,22 +394,22 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="cb_brandspendgoal">
       <property name="geometry">
        <rect>
         <x>60</x>
         <y>70</y>
-        <width>103</width>
+        <width>191</width>
         <height>32</height>
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="cb_spendgoalpodcast">
+     <widget class="QComboBox" name="cb_podcastspendgoal">
       <property name="geometry">
        <rect>
         <x>60</x>
         <y>150</y>
-        <width>103</width>
+        <width>191</width>
         <height>32</height>
        </rect>
       </property>
@@ -489,12 +489,12 @@
        <string>brand</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="cb_actualspendbrand">
+     <widget class="QComboBox" name="cb_brandactualspend">
       <property name="geometry">
        <rect>
         <x>500</x>
         <y>70</y>
-        <width>103</width>
+        <width>211</width>
         <height>32</height>
        </rect>
       </property>
@@ -512,12 +512,12 @@
        <string>podcast</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="cb_actualspendpodcast">
+     <widget class="QComboBox" name="cb_podcastactualspend">
       <property name="geometry">
        <rect>
         <x>500</x>
         <y>150</y>
-        <width>103</width>
+        <width>211</width>
         <height>32</height>
        </rect>
       </property>
