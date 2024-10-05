@@ -17,10 +17,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QDockWidget,
-    QLabel, QMainWindow, QMenu, QMenuBar,
-    QProgressBar, QPushButton, QSizePolicy, QStackedWidget,
-    QStatusBar, QTextBrowser, QTextEdit, QToolButton,
-    QWidget)
+    QLabel, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
+    QStackedWidget, QStatusBar, QTextBrowser, QTextEdit,
+    QToolButton, QWidget)
 
 class Ui_mw_home(object):
     def setupUi(self, mw_home):
@@ -34,7 +34,7 @@ class Ui_mw_home(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(10, 0, 721, 541))
+        self.stackedWidget.setGeometry(QRect(20, 10, 721, 541))
         self.homepage = QWidget()
         self.homepage.setObjectName(u"homepage")
         self.spend_label = QLabel(self.homepage)
@@ -87,12 +87,9 @@ class Ui_mw_home(object):
         self.stackedWidget.addWidget(self.brandperformance)
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.te_newcode = QTextEdit(self.page)
-        self.te_newcode.setObjectName(u"te_newcode")
-        self.te_newcode.setGeometry(QRect(90, 80, 191, 41))
         self.lbl_newcode = QLabel(self.page)
         self.lbl_newcode.setObjectName(u"lbl_newcode")
-        self.lbl_newcode.setGeometry(QRect(90, 50, 71, 16))
+        self.lbl_newcode.setGeometry(QRect(90, 80, 71, 16))
         self.lbl_podcast = QLabel(self.page)
         self.lbl_podcast.setObjectName(u"lbl_podcast")
         self.lbl_podcast.setGeometry(QRect(90, 150, 71, 16))
@@ -133,13 +130,16 @@ class Ui_mw_home(object):
         self.bt_suspendcode.setGeometry(QRect(510, 220, 100, 32))
         self.lbl_newcode_3 = QLabel(self.page)
         self.lbl_newcode_3.setObjectName(u"lbl_newcode_3")
-        self.lbl_newcode_3.setGeometry(QRect(470, 310, 91, 16))
-        self.te_newcode_2 = QTextEdit(self.page)
-        self.te_newcode_2.setObjectName(u"te_newcode_2")
-        self.te_newcode_2.setGeometry(QRect(470, 350, 191, 41))
+        self.lbl_newcode_3.setGeometry(QRect(470, 280, 91, 16))
         self.bt_submitnewpodcast = QPushButton(self.page)
         self.bt_submitnewpodcast.setObjectName(u"bt_submitnewpodcast")
-        self.bt_submitnewpodcast.setGeometry(QRect(470, 420, 121, 32))
+        self.bt_submitnewpodcast.setGeometry(QRect(470, 350, 121, 32))
+        self.le_newcode = QLineEdit(self.page)
+        self.le_newcode.setObjectName(u"le_newcode")
+        self.le_newcode.setGeometry(QRect(90, 110, 113, 21))
+        self.le_newpodcast = QLineEdit(self.page)
+        self.le_newpodcast.setObjectName(u"le_newpodcast")
+        self.le_newpodcast.setGeometry(QRect(470, 310, 113, 21))
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -155,15 +155,12 @@ class Ui_mw_home(object):
         self.lbl_podcastspendgoal = QLabel(self.page_2)
         self.lbl_podcastspendgoal.setObjectName(u"lbl_podcastspendgoal")
         self.lbl_podcastspendgoal.setGeometry(QRect(70, 130, 58, 16))
-        self.te_spengoal = QTextEdit(self.page_2)
-        self.te_spengoal.setObjectName(u"te_spengoal")
-        self.te_spengoal.setGeometry(QRect(70, 250, 104, 41))
         self.lbl_spendgoal = QLabel(self.page_2)
         self.lbl_spendgoal.setObjectName(u"lbl_spendgoal")
-        self.lbl_spendgoal.setGeometry(QRect(70, 220, 101, 16))
+        self.lbl_spendgoal.setGeometry(QRect(70, 200, 101, 16))
         self.bt_spendgoal = QPushButton(self.page_2)
         self.bt_spendgoal.setObjectName(u"bt_spendgoal")
-        self.bt_spendgoal.setGeometry(QRect(70, 330, 131, 32))
+        self.bt_spendgoal.setGeometry(QRect(70, 260, 131, 32))
         self.lbl_actualspendbrand = QLabel(self.page_2)
         self.lbl_actualspendbrand.setObjectName(u"lbl_actualspendbrand")
         self.lbl_actualspendbrand.setGeometry(QRect(510, 50, 58, 16))
@@ -178,19 +175,22 @@ class Ui_mw_home(object):
         self.cb_podcastactualspend.setGeometry(QRect(500, 150, 211, 32))
         self.bt_updtspendgoal = QPushButton(self.page_2)
         self.bt_updtspendgoal.setObjectName(u"bt_updtspendgoal")
-        self.bt_updtspendgoal.setGeometry(QRect(70, 380, 131, 32))
+        self.bt_updtspendgoal.setGeometry(QRect(70, 300, 131, 32))
         self.lbl_actualspend = QLabel(self.page_2)
         self.lbl_actualspend.setObjectName(u"lbl_actualspend")
-        self.lbl_actualspend.setGeometry(QRect(510, 210, 101, 16))
-        self.te_actualspend = QTextEdit(self.page_2)
-        self.te_actualspend.setObjectName(u"te_actualspend")
-        self.te_actualspend.setGeometry(QRect(500, 250, 104, 41))
+        self.lbl_actualspend.setGeometry(QRect(510, 200, 101, 16))
         self.bt_submitactualspend = QPushButton(self.page_2)
         self.bt_submitactualspend.setObjectName(u"bt_submitactualspend")
-        self.bt_submitactualspend.setGeometry(QRect(490, 330, 151, 32))
+        self.bt_submitactualspend.setGeometry(QRect(510, 270, 151, 32))
         self.bt_updtactualspend = QPushButton(self.page_2)
         self.bt_updtactualspend.setObjectName(u"bt_updtactualspend")
-        self.bt_updtactualspend.setGeometry(QRect(490, 390, 151, 32))
+        self.bt_updtactualspend.setGeometry(QRect(510, 310, 151, 32))
+        self.le_spendgoal = QLineEdit(self.page_2)
+        self.le_spendgoal.setObjectName(u"le_spendgoal")
+        self.le_spendgoal.setGeometry(QRect(70, 230, 113, 21))
+        self.le_actualspend = QLineEdit(self.page_2)
+        self.le_actualspend.setObjectName(u"le_actualspend")
+        self.le_actualspend.setGeometry(QRect(510, 230, 113, 21))
         self.stackedWidget.addWidget(self.page_2)
         mw_home.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_home)
@@ -251,6 +251,11 @@ class Ui_mw_home(object):
         self.bt_spendinput.setGeometry(QRect(10, 210, 31, 31))
         icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditPaste))
         self.bt_spendinput.setIcon(icon6)
+        self.bt_refresh = QToolButton(self.dockWidgetContents)
+        self.bt_refresh.setObjectName(u"bt_refresh")
+        self.bt_refresh.setGeometry(QRect(10, 440, 31, 31))
+        icon7 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
+        self.bt_refresh.setIcon(icon7)
         self.w_dock.setWidget(self.dockWidgetContents)
         mw_home.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.w_dock)
 
@@ -259,7 +264,7 @@ class Ui_mw_home(object):
 
         self.retranslateUi(mw_home)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(mw_home)
@@ -302,5 +307,6 @@ class Ui_mw_home(object):
         self.bt_settings.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_codepodcastinput.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_spendinput.setText(QCoreApplication.translate("mw_home", u"...", None))
+        self.bt_refresh.setText(QCoreApplication.translate("mw_home", u"...", None))
     # retranslateUi
 

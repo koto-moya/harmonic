@@ -20,14 +20,14 @@
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>0</y>
+      <x>20</x>
+      <y>10</y>
       <width>721</width>
       <height>541</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="homepage">
      <widget class="QLabel" name="spend_label">
@@ -186,21 +186,11 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page">
-     <widget class="QTextEdit" name="te_newcode">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>80</y>
-        <width>191</width>
-        <height>41</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="lbl_newcode">
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>50</y>
+        <y>80</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -360,7 +350,7 @@
       <property name="geometry">
        <rect>
         <x>470</x>
-        <y>310</y>
+        <y>280</y>
         <width>91</width>
         <height>16</height>
        </rect>
@@ -369,27 +359,37 @@
        <string>new podcast</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="te_newcode_2">
-      <property name="geometry">
-       <rect>
-        <x>470</x>
-        <y>350</y>
-        <width>191</width>
-        <height>41</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="bt_submitnewpodcast">
       <property name="geometry">
        <rect>
         <x>470</x>
-        <y>420</y>
+        <y>350</y>
         <width>121</width>
         <height>32</height>
        </rect>
       </property>
       <property name="text">
        <string>submit podcast</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="le_newcode">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>110</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="le_newpodcast">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>310</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -440,21 +440,11 @@
        <string>podcast</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="te_spengoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>250</y>
-        <width>104</width>
-        <height>41</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="lbl_spendgoal">
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>220</y>
+        <y>200</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -467,7 +457,7 @@
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>330</y>
+        <y>260</y>
         <width>131</width>
         <height>32</height>
        </rect>
@@ -526,7 +516,7 @@
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>380</y>
+        <y>300</y>
         <width>131</width>
         <height>32</height>
        </rect>
@@ -539,7 +529,7 @@
       <property name="geometry">
        <rect>
         <x>510</x>
-        <y>210</y>
+        <y>200</y>
         <width>101</width>
         <height>16</height>
        </rect>
@@ -548,21 +538,11 @@
        <string>actual spend</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="te_actualspend">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>250</y>
-        <width>104</width>
-        <height>41</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="bt_submitactualspend">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>330</y>
+        <x>510</x>
+        <y>270</y>
         <width>151</width>
         <height>32</height>
        </rect>
@@ -574,14 +554,34 @@
      <widget class="QPushButton" name="bt_updtactualspend">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>390</y>
+        <x>510</x>
+        <y>310</y>
         <width>151</width>
         <height>32</height>
        </rect>
       </property>
       <property name="text">
        <string>update actual spend</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="le_spendgoal">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>230</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="le_actualspend">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>230</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -743,6 +743,22 @@
      </property>
      <property name="icon">
       <iconset theme="QIcon::ThemeIcon::EditPaste"/>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="bt_refresh">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>440</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset theme="QIcon::ThemeIcon::MediaSeekForward"/>
      </property>
     </widget>
    </widget>
