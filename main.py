@@ -2,6 +2,7 @@ from homepage.homepage_ui import Ui_mw_home
 from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 from modules.app_requests import get_combo_boxes, login, Token
 
 
@@ -29,8 +30,9 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         self.w_dock.setWindowTitle("podscale")
+        self.w_dock.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         self.w_dock.setFixedWidth(50)
         self.setStatusBar(None)
         self.actionclose.triggered.connect(self.close)
@@ -50,7 +52,15 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         # Home page
         self.current_month_revenue.setText("revenue")
         self.current_spend_goal.setValue(100)
+
+        # brand performance page
+        headers = ["podcasts", "copy start date", "spend", "code revenue", "code orders", "roas", 
+                   "attributed revenue", "attributed roas", "survey revenue", "survey revenue modeled", 
+                   "survey write-ins", "survey modeled write-ins", "survey roas", "podscribe revenue", "podscribe roas"]
         
+        table_model = QStandardItemModel()
+        table_model.setHorizontalHeaderLabels(headers)
+        self.tbl_brandperformance.setModel(table_model)
         # chat page
         self.bt_submitchat.clicked.connect(self.handle_chat_submit)
 
@@ -62,12 +72,12 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
 
     def intialize_combo_boxes(self):
         self.completers = {}
-        self.combo_boxes = {"code": [self.cb_existingcodes],
-                            "podcasts":[self.cb_podcast,
+        self.combo_boxes = {"/getcodes": [self.cb_existingcodes],
+                            "/getpodcasts":[self.cb_podcast,
                                         self.cb_podcastspendgoal,
                                         self.cb_podcastactualspend,
                                         self.cb_podcastsuspendcode],
-                            "brand":[self.cb_brandfilter,
+                            "/getbrands":[self.cb_brandfilter,
                                     self.cb_brandspendgoal,
                                     self.cb_brandactualspend] 
                             }

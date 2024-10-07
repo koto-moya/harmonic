@@ -17,24 +17,34 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QDockWidget,
-    QLabel, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
-    QStackedWidget, QStatusBar, QTextBrowser, QTextEdit,
-    QToolButton, QWidget)
+    QHBoxLayout, QHeaderView, QLabel, QLayout,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QProgressBar, QPushButton, QSizePolicy, QSpacerItem,
+    QStackedWidget, QStatusBar, QTableView, QTextBrowser,
+    QTextEdit, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_mw_home(object):
     def setupUi(self, mw_home):
         if not mw_home.objectName():
             mw_home.setObjectName(u"mw_home")
         mw_home.setEnabled(True)
-        mw_home.resize(804, 603)
+        mw_home.resize(805, 621)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(mw_home.sizePolicy().hasHeightForWidth())
+        mw_home.setSizePolicy(sizePolicy)
         self.actionclose = QAction(mw_home)
         self.actionclose.setObjectName(u"actionclose")
         self.centralwidget = QWidget(mw_home)
         self.centralwidget.setObjectName(u"centralwidget")
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(20, 10, 721, 541))
+        self.stackedWidget.setGeometry(QRect(1, -2, 761, 581))
+        sizePolicy.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
+        self.stackedWidget.setSizePolicy(sizePolicy)
         self.homepage = QWidget()
         self.homepage.setObjectName(u"homepage")
         self.spend_label = QLabel(self.homepage)
@@ -67,23 +77,68 @@ class Ui_mw_home(object):
         self.stackedWidget.addWidget(self.chatpage)
         self.brandperformance = QWidget()
         self.brandperformance.setObjectName(u"brandperformance")
-        self.de_startdate = QDateEdit(self.brandperformance)
-        self.de_startdate.setObjectName(u"de_startdate")
-        self.de_startdate.setGeometry(QRect(40, 40, 110, 22))
-        self.de_startdate.setCalendarPopup(True)
-        self.de_enddate = QDateEdit(self.brandperformance)
-        self.de_enddate.setObjectName(u"de_enddate")
-        self.de_enddate.setGeometry(QRect(160, 40, 110, 22))
-        self.de_enddate.setCalendarPopup(True)
-        self.cb_brandfilter = QComboBox(self.brandperformance)
-        self.cb_brandfilter.setObjectName(u"cb_brandfilter")
-        self.cb_brandfilter.setGeometry(QRect(330, 40, 171, 32))
-        self.lbl_datefilter = QLabel(self.brandperformance)
-        self.lbl_datefilter.setObjectName(u"lbl_datefilter")
-        self.lbl_datefilter.setGeometry(QRect(50, 10, 61, 16))
+        sizePolicy.setHeightForWidth(self.brandperformance.sizePolicy().hasHeightForWidth())
+        self.brandperformance.setSizePolicy(sizePolicy)
+        self.verticalLayout_2 = QVBoxLayout(self.brandperformance)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lbl_brandfilter = QLabel(self.brandperformance)
         self.lbl_brandfilter.setObjectName(u"lbl_brandfilter")
-        self.lbl_brandfilter.setGeometry(QRect(350, 20, 61, 16))
+
+        self.horizontalLayout_2.addWidget(self.lbl_brandfilter)
+
+        self.horizontalSpacer_2 = QSpacerItem(98, 17, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
+
+        self.lbl_datefilter = QLabel(self.brandperformance)
+        self.lbl_datefilter.setObjectName(u"lbl_datefilter")
+
+        self.horizontalLayout_2.addWidget(self.lbl_datefilter)
+
+        self.horizontalSpacer = QSpacerItem(1, 1, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.cb_brandfilter = QComboBox(self.brandperformance)
+        self.cb_brandfilter.setObjectName(u"cb_brandfilter")
+
+        self.horizontalLayout.addWidget(self.cb_brandfilter)
+
+        self.de_startdate = QDateEdit(self.brandperformance)
+        self.de_startdate.setObjectName(u"de_startdate")
+        self.de_startdate.setCalendarPopup(True)
+
+        self.horizontalLayout.addWidget(self.de_startdate)
+
+        self.de_enddate = QDateEdit(self.brandperformance)
+        self.de_enddate.setObjectName(u"de_enddate")
+        self.de_enddate.setCalendarPopup(True)
+
+        self.horizontalLayout.addWidget(self.de_enddate)
+
+        self.bt_seeperformance = QPushButton(self.brandperformance)
+        self.bt_seeperformance.setObjectName(u"bt_seeperformance")
+
+        self.horizontalLayout.addWidget(self.bt_seeperformance)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.tbl_brandperformance = QTableView(self.brandperformance)
+        self.tbl_brandperformance.setObjectName(u"tbl_brandperformance")
+        sizePolicy.setHeightForWidth(self.tbl_brandperformance.sizePolicy().hasHeightForWidth())
+        self.tbl_brandperformance.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_2.addWidget(self.tbl_brandperformance)
+
         self.stackedWidget.addWidget(self.brandperformance)
         self.page = QWidget()
         self.page.setObjectName(u"page")
@@ -195,7 +250,7 @@ class Ui_mw_home(object):
         mw_home.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_home)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 804, 24))
+        self.menubar.setGeometry(QRect(0, 0, 805, 24))
         self.menubar.setDefaultUp(False)
         self.menubar.setNativeMenuBar(False)
         self.file = QMenu(self.menubar)
@@ -209,53 +264,73 @@ class Ui_mw_home(object):
         mw_home.setStatusBar(self.statusbar)
         self.w_dock = QDockWidget(mw_home)
         self.w_dock.setObjectName(u"w_dock")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.w_dock.sizePolicy().hasHeightForWidth())
-        self.w_dock.setSizePolicy(sizePolicy)
-        self.w_dock.setMinimumSize(QSize(40, 38))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.w_dock.sizePolicy().hasHeightForWidth())
+        self.w_dock.setSizePolicy(sizePolicy1)
+        self.w_dock.setMinimumSize(QSize(50, 288))
         font = QFont()
         font.setPointSize(9)
         self.w_dock.setFont(font)
         self.w_dock.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
         self.dockWidgetContents = QWidget()
         self.dockWidgetContents.setObjectName(u"dockWidgetContents")
+        self.verticalLayout_3 = QVBoxLayout(self.dockWidgetContents)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.bt_home = QToolButton(self.dockWidgetContents)
         self.bt_home.setObjectName(u"bt_home")
-        self.bt_home.setGeometry(QRect(10, 10, 31, 31))
         icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.GoHome))
         self.bt_home.setIcon(icon1)
+
+        self.verticalLayout_3.addWidget(self.bt_home)
+
         self.bt_chat = QToolButton(self.dockWidgetContents)
         self.bt_chat.setObjectName(u"bt_chat")
-        self.bt_chat.setGeometry(QRect(10, 60, 31, 31))
         icon2 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.WeatherStorm))
         self.bt_chat.setIcon(icon2)
+
+        self.verticalLayout_3.addWidget(self.bt_chat)
+
         self.bt_brandperformance = QToolButton(self.dockWidgetContents)
         self.bt_brandperformance.setObjectName(u"bt_brandperformance")
-        self.bt_brandperformance.setGeometry(QRect(10, 110, 31, 31))
         icon3 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MailMarkImportant))
         self.bt_brandperformance.setIcon(icon3)
-        self.bt_settings = QToolButton(self.dockWidgetContents)
-        self.bt_settings.setObjectName(u"bt_settings")
-        self.bt_settings.setGeometry(QRect(10, 490, 31, 31))
-        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout))
-        self.bt_settings.setIcon(icon4)
+
+        self.verticalLayout_3.addWidget(self.bt_brandperformance)
+
         self.bt_codepodcastinput = QToolButton(self.dockWidgetContents)
         self.bt_codepodcastinput.setObjectName(u"bt_codepodcastinput")
-        self.bt_codepodcastinput.setGeometry(QRect(10, 160, 31, 31))
-        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaEject))
-        self.bt_codepodcastinput.setIcon(icon5)
+        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaEject))
+        self.bt_codepodcastinput.setIcon(icon4)
+
+        self.verticalLayout_3.addWidget(self.bt_codepodcastinput)
+
         self.bt_spendinput = QToolButton(self.dockWidgetContents)
         self.bt_spendinput.setObjectName(u"bt_spendinput")
-        self.bt_spendinput.setGeometry(QRect(10, 210, 31, 31))
-        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditPaste))
-        self.bt_spendinput.setIcon(icon6)
+        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditPaste))
+        self.bt_spendinput.setIcon(icon5)
+
+        self.verticalLayout_3.addWidget(self.bt_spendinput)
+
+        self.verticalSpacer = QSpacerItem(20, 285, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
+
         self.bt_refresh = QToolButton(self.dockWidgetContents)
         self.bt_refresh.setObjectName(u"bt_refresh")
-        self.bt_refresh.setGeometry(QRect(10, 440, 31, 31))
-        icon7 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
-        self.bt_refresh.setIcon(icon7)
+        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
+        self.bt_refresh.setIcon(icon6)
+
+        self.verticalLayout_3.addWidget(self.bt_refresh)
+
+        self.bt_settings = QToolButton(self.dockWidgetContents)
+        self.bt_settings.setObjectName(u"bt_settings")
+        icon7 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout))
+        self.bt_settings.setIcon(icon7)
+
+        self.verticalLayout_3.addWidget(self.bt_settings)
+
         self.w_dock.setWidget(self.dockWidgetContents)
         mw_home.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.w_dock)
 
@@ -277,8 +352,9 @@ class Ui_mw_home(object):
         self.current_month_revenue.setText(QCoreApplication.translate("mw_home", u"TextLabel", None))
         self.rev_title.setText(QCoreApplication.translate("mw_home", u"Curent Monthly Revenue", None))
         self.bt_submitchat.setText("")
-        self.lbl_datefilter.setText(QCoreApplication.translate("mw_home", u"date filter", None))
         self.lbl_brandfilter.setText(QCoreApplication.translate("mw_home", u"brand", None))
+        self.lbl_datefilter.setText(QCoreApplication.translate("mw_home", u"date filter", None))
+        self.bt_seeperformance.setText(QCoreApplication.translate("mw_home", u"see performance", None))
         self.lbl_newcode.setText(QCoreApplication.translate("mw_home", u"new code", None))
         self.lbl_podcast.setText(QCoreApplication.translate("mw_home", u"podcast", None))
         self.lbl_newcodestartdate.setText(QCoreApplication.translate("mw_home", u"code start date", None))
@@ -304,9 +380,9 @@ class Ui_mw_home(object):
         self.bt_home.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_chat.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_brandperformance.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_settings.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_codepodcastinput.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_spendinput.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_refresh.setText(QCoreApplication.translate("mw_home", u"...", None))
+        self.bt_settings.setText(QCoreApplication.translate("mw_home", u"...", None))
     # retranslateUi
 
