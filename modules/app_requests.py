@@ -8,21 +8,13 @@ from config import server_endpoint
 class Token:
     token: str = None
 
-def get_combo_boxes(token, endpoint):
+def get(token, endpoint, payload=None):
     headers = {"Authorization":f"Bearer {token}",
                "Content-Type": "application/json"}
-    response = requests.get(server_endpoint+endpoint, headers=headers)
+    response = requests.get(server_endpoint+endpoint, headers=headers, params=payload)
     if response.status_code == 200:
         items = response.json()
         return items
-    
-def get_performance(token, payload):
-    headers = {"Authorization":f"Bearer {token}",
-               "Content-Type": "application/json"}
-    response = requests.get(server_endpoint+"/getperformance", headers=headers, params=payload)
-    if response.status_code == 200:
-        data = response.json()
-        return data
 
 def login(username, password):
     data = {"username":username,

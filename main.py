@@ -3,7 +3,7 @@ from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from modules.app_requests import get_combo_boxes, login, Token, get_performance
+from modules.app_requests import get, login, Token
 
 
 
@@ -77,13 +77,13 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
                             "/getbrands":[self.cb_brandfilter, self.cb_brandspend] 
                             }
         for endpoint, cbx in self.combo_boxes.items():
+            data = get(self.token, endpoint)
             for cb in cbx:
                 cb.setEditable(True)
                 completer = QtWidgets.QCompleter(cb)
                 completer.setCaseSensitivity(Qt.CaseSensitivity(False))
                 cb.setCompleter(completer)
                 self.completers[cb] = completer
-                data = get_combo_boxes(self.token, endpoint)
                 cb.addItems(data)
                 completer.setModel(cb.model())
         
@@ -93,7 +93,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
 
     def update_combo_box(self, combo_box, completer, endpoint):
         current_choice = combo_box.currentText()
-        data = get_combo_boxes(self.token, endpoint)
+        data = get(self.token, endpoint)
         combo_box.clear()
         combo_box.addItems(data)
         completer.setModel(combo_box.model())
@@ -109,20 +109,17 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         self.te_chathistory.setHtml(f"<p>{in_text}</p>")
         self.te_chatinput.clear()
 
-    
-
     def display_performance(self):
         # headers = ["podcasts", "copy start date", "spend", "code revenue", "code orders", "roas", 
         #            "attributed revenue", "attributed roas", "survey revenue", "survey revenue modeled", 
         #            "survey write-ins", "survey modeled write-ins", "survey roas", "podscribe revenue", "podscribe roas"]
-        headers = ["podcast", "revenue", "Orders"]
         payload = {"startdate":self.de_startdate.date().toString(),
                    "enddate" : self.de_enddate.date().toString(),
                    "brand" : self.cb_brandfilter.currentText()}
         self.table_model.clear()
-        self.table_model.setHorizontalHeaderLabels(headers)
-        data = get_performance(self.token, payload) # expect this to be a list of lists
-        for row in data:
+        data = get(self.token, "/getperformance", payload) # expect this to be a list of lists
+        self.table_model.setHorizontalHeaderLabels(data[0])
+        for row in data[1:]:
             row_items = [QStandardItem(str(item)) for item in row]
             self.table_model.appendRow(row_items)
 
