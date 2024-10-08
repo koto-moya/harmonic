@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>805</width>
-    <height>621</height>
+    <width>1104</width>
+    <height>933</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,111 +32,124 @@
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>1</x>
-      <y>-2</y>
-      <width>761</width>
-      <height>581</height>
+      <x>10</x>
+      <y>0</y>
+      <width>1021</width>
+      <height>871</height>
      </rect>
     </property>
     <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="homepage">
-     <widget class="QLabel" name="spend_label">
+     <widget class="QWidget" name="gridLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>50</y>
-        <width>81</width>
-        <height>20</height>
+        <x>120</x>
+        <y>60</y>
+        <width>321</width>
+        <height>161</height>
        </rect>
       </property>
-      <property name="text">
-       <string>spend goal</string>
-      </property>
-     </widget>
-     <widget class="QProgressBar" name="current_spend_goal">
-      <property name="geometry">
-       <rect>
-        <x>320</x>
-        <y>90</y>
-        <width>118</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="value">
-       <number>24</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="current_month_revenue">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>80</y>
-        <width>141</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="rev_title">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>50</y>
-        <width>151</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Curent Monthly Revenue</string>
-      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="current_month_revenue">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="rev_title">
+         <property name="text">
+          <string>Curent Monthly Revenue</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="spend_label">
+         <property name="text">
+          <string>spend goal</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QProgressBar" name="current_spend_goal">
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="chatpage">
-     <widget class="QTextBrowser" name="te_chathistory">
+     <widget class="QWidget" name="gridLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>731</width>
-        <height>441</height>
+        <x>10</x>
+        <y>20</y>
+        <width>961</width>
+        <height>811</height>
        </rect>
       </property>
-     </widget>
-     <widget class="QTextEdit" name="te_chatinput">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>450</y>
-        <width>381</width>
-        <height>81</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_submitchat">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>450</y>
-        <width>31</width>
-        <height>71</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset theme="QIcon::ThemeIcon::GoUp"/>
-      </property>
+      <layout class="QGridLayout" name="gridLayout" rowstretch="100,10" columnstretch="100">
+       <property name="sizeConstraint">
+        <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+       </property>
+       <item row="0" column="0">
+        <widget class="QTextBrowser" name="te_chathistory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="10,1">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTextEdit" name="te_chatinput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bt_submitchat">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::GoUp"/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="brandperformance">
@@ -241,403 +254,257 @@
      </layout>
     </widget>
     <widget class="QWidget" name="page">
-     <widget class="QLabel" name="lbl_newcode">
+     <widget class="QWidget" name="gridLayoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>80</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>new code</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_podcast">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>150</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>podcast</string>
-      </property>
-     </widget>
-     <widget class="QDateEdit" name="de_codestartdate">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>270</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_newcodestartdate">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>240</y>
-        <width>101</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>code start date</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_podcast">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>180</y>
-        <width>201</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_newcodeenddate">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>310</y>
-        <width>101</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>code end date</string>
-      </property>
-     </widget>
-     <widget class="QDateEdit" name="de_codeenddate">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>350</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_submitnewcode">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>410</y>
-        <width>100</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>submit code</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_existingcodes">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>80</y>
-        <width>191</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_newcode_2">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
+        <x>40</x>
         <y>50</y>
-        <width>91</width>
-        <height>16</height>
+        <width>881</width>
+        <height>271</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Exisiting code</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_podcast_2">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>130</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>podcast</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_podcastsuspendcode">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>160</y>
-        <width>191</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_suspendcode">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>220</y>
-        <width>100</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>suspend code</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_newcode_3">
-      <property name="geometry">
-       <rect>
-        <x>470</x>
-        <y>280</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>new podcast</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_submitnewpodcast">
-      <property name="geometry">
-       <rect>
-        <x>470</x>
-        <y>350</y>
-        <width>121</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>submit podcast</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="le_newcode">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>110</y>
-        <width>113</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="le_newpodcast">
-      <property name="geometry">
-       <rect>
-        <x>470</x>
-        <y>310</y>
-        <width>113</width>
-        <height>21</height>
-       </rect>
-      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="2" column="4">
+        <widget class="QComboBox" name="cb_existingcodes"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="bt_submitnewpodcast">
+         <property name="text">
+          <string>submit podcast</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="bt_submitnewcode">
+         <property name="text">
+          <string>submit code</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QPushButton" name="bt_suspendcode">
+         <property name="text">
+          <string>suspend code</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="lbl_newcode_3">
+         <property name="text">
+          <string>new podcast</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLineEdit" name="le_newcode"/>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLabel" name="lbl_newcode_2">
+         <property name="text">
+          <string>Exisiting code</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lbl_newcode">
+         <property name="text">
+          <string>new code</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="2" column="0">
+          <widget class="QComboBox" name="cb_podcastsuspendcode"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lbl_podcast_2">
+           <property name="text">
+            <string>podcast</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="1" column="1">
+            <widget class="QDateEdit" name="de_codeenddate">
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_newcodestartdate">
+             <property name="text">
+              <string>code start date</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QDateEdit" name="de_codestartdate">
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="lbl_newcodeenddate">
+             <property name="text">
+              <string>code end date</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <widget class="QComboBox" name="cb_podcast"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lbl_podcast">
+           <property name="text">
+            <string>podcast</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="le_newpodcast"/>
+       </item>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">
-     <widget class="QComboBox" name="cb_brandspendgoal">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>70</y>
-        <width>191</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_podcastspendgoal">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>150</y>
-        <width>191</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_brandspendgoal">
+     <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>50</y>
-        <width>58</width>
-        <height>16</height>
+        <y>30</y>
+        <width>481</width>
+        <height>321</height>
        </rect>
       </property>
-      <property name="text">
-       <string>brand</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_podcastspendgoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>130</y>
-        <width>58</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>podcast</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_spendgoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>200</y>
-        <width>101</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>spend goal</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_spendgoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>260</y>
-        <width>131</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>submit spend goal</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_actualspendbrand">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>50</y>
-        <width>58</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>brand</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_brandactualspend">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>70</y>
-        <width>211</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_5">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>120</y>
-        <width>58</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>podcast</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="cb_podcastactualspend">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>150</y>
-        <width>211</width>
-        <height>32</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_updtspendgoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>300</y>
-        <width>131</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>update spend goal</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbl_actualspend">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>200</y>
-        <width>101</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>actual spend</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_submitactualspend">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>270</y>
-        <width>151</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>submit actual spend</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="bt_updtactualspend">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>310</y>
-        <width>151</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>update actual spend</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="le_spendgoal">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>230</y>
-        <width>113</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="le_actualspend">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>230</y>
-        <width>113</width>
-        <height>21</height>
-       </rect>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="2" column="0">
+          <widget class="QComboBox" name="cb_brandspend"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QComboBox" name="cb_podcastspend"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>podcast</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lbl_actualspendbrand">
+           <property name="text">
+            <string>brand</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="2" column="0">
+          <widget class="QPushButton" name="bt_spendgoal">
+           <property name="text">
+            <string>submit spend goal</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="le_spendgoal"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="lbl_actualspend">
+           <property name="text">
+            <string>actual spend</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lbl_spendgoal">
+           <property name="text">
+            <string>spend goal</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="le_actualspend"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="bt_updtspendgoal">
+           <property name="text">
+            <string>update spend goal</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="bt_submitactualspend">
+           <property name="text">
+            <string>submit actual spend</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="bt_updtactualspend">
+           <property name="text">
+            <string>update actual spend</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -647,7 +514,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>805</width>
+     <width>1104</width>
      <height>24</height>
     </rect>
    </property>

@@ -1,9 +1,9 @@
 from homepage.homepage_ui import Ui_mw_home
 from login.login_ui import Ui_login
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from modules.app_requests import get_combo_boxes, login, Token
+from modules.app_requests import get_combo_boxes, login, Token, get_performance
 
 
 
@@ -30,9 +30,8 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
+        self.resize(800, 600)
         self.w_dock.setWindowTitle("podscale")
-        self.w_dock.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         self.w_dock.setFixedWidth(50)
         self.setStatusBar(None)
         self.actionclose.triggered.connect(self.close)
@@ -48,19 +47,19 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         self.bt_submitnewcode.clicked.connect(self.add_new_code)
         self.bt_submitnewpodcast.clicked.connect(self.add_new_podcast)
         self.bt_suspendcode.clicked.connect(self.suspend_code)
+        self.bt_seeperformance.clicked.connect(self.display_performance)
 
         # Home page
         self.current_month_revenue.setText("revenue")
         self.current_spend_goal.setValue(100)
 
         # brand performance page
-        headers = ["podcasts", "copy start date", "spend", "code revenue", "code orders", "roas", 
-                   "attributed revenue", "attributed roas", "survey revenue", "survey revenue modeled", 
-                   "survey write-ins", "survey modeled write-ins", "survey roas", "podscribe revenue", "podscribe roas"]
         
-        table_model = QStandardItemModel()
-        table_model.setHorizontalHeaderLabels(headers)
-        self.tbl_brandperformance.setModel(table_model)
+        self.table_model = QStandardItemModel()
+        self.tbl_brandperformance.setModel(self.table_model)
+        self.de_startdate.setDate(QDate(2024,9,1))
+        self.de_enddate.setDate(QDate(2024,10,1))
+
         # chat page
         self.bt_submitchat.clicked.connect(self.handle_chat_submit)
 
@@ -74,12 +73,8 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         self.completers = {}
         self.combo_boxes = {"/getcodes": [self.cb_existingcodes],
                             "/getpodcasts":[self.cb_podcast,
-                                        self.cb_podcastspendgoal,
-                                        self.cb_podcastactualspend,
-                                        self.cb_podcastsuspendcode],
-                            "/getbrands":[self.cb_brandfilter,
-                                    self.cb_brandspendgoal,
-                                    self.cb_brandactualspend] 
+                                        self.cb_podcastsuspendcode, self.cb_podcastspend],
+                            "/getbrands":[self.cb_brandfilter, self.cb_brandspend] 
                             }
         for endpoint, cbx in self.combo_boxes.items():
             for cb in cbx:
@@ -113,6 +108,23 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         in_text = self.te_chatinput.toPlainText()
         self.te_chathistory.setHtml(f"<p>{in_text}</p>")
         self.te_chatinput.clear()
+
+    
+
+    def display_performance(self):
+        # headers = ["podcasts", "copy start date", "spend", "code revenue", "code orders", "roas", 
+        #            "attributed revenue", "attributed roas", "survey revenue", "survey revenue modeled", 
+        #            "survey write-ins", "survey modeled write-ins", "survey roas", "podscribe revenue", "podscribe roas"]
+        headers = ["podcast", "revenue", "Orders"]
+        payload = {"startdate":self.de_startdate.date().toString(),
+                   "enddate" : self.de_enddate.date().toString(),
+                   "brand" : self.cb_brandfilter.currentText()}
+        self.table_model.clear()
+        self.table_model.setHorizontalHeaderLabels(headers)
+        data = get_performance(self.token, payload) # expect this to be a list of lists
+        for row in data:
+            row_items = [QStandardItem(str(item)) for item in row]
+            self.table_model.appendRow(row_items)
 
     def add_new_code(self):
         new_code  = self.le_newcode.toPlainText()
