@@ -29,8 +29,8 @@ class Ui_mw_home(object):
         if not mw_home.objectName():
             mw_home.setObjectName(u"mw_home")
         mw_home.setEnabled(True)
-        mw_home.resize(1104, 933)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        mw_home.resize(1100, 937)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(mw_home.sizePolicy().hasHeightForWidth())
@@ -39,21 +39,22 @@ class Ui_mw_home(object):
         self.actionclose.setObjectName(u"actionclose")
         self.centralwidget = QWidget(mw_home)
         self.centralwidget.setObjectName(u"centralwidget")
-        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
-        self.centralwidget.setSizePolicy(sizePolicy)
-        self.stackedWidget = QStackedWidget(self.centralwidget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setGeometry(QRect(10, 0, 1021, 871))
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy1)
+        self.gridLayout_10 = QGridLayout(self.centralwidget)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.stackedWidget = QStackedWidget(self.centralwidget)
+        self.stackedWidget.setObjectName(u"stackedWidget")
         sizePolicy1.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
         self.stackedWidget.setSizePolicy(sizePolicy1)
         self.homepage = QWidget()
         self.homepage.setObjectName(u"homepage")
         self.gridLayoutWidget_2 = QWidget(self.homepage)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(120, 60, 321, 161))
+        self.gridLayoutWidget_2.setGeometry(QRect(120, 60, 321, 221))
         self.gridLayout_2 = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -83,57 +84,56 @@ class Ui_mw_home(object):
         self.chatpage.setObjectName(u"chatpage")
         self.gridLayoutWidget = QWidget(self.chatpage)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(10, 20, 961, 811))
+        self.gridLayoutWidget.setGeometry(QRect(10, 10, 1011, 851))
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.te_chathistory = QTextBrowser(self.gridLayoutWidget)
-        self.te_chathistory.setObjectName(u"te_chathistory")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.te_chathistory.sizePolicy().hasHeightForWidth())
-        self.te_chathistory.setSizePolicy(sizePolicy2)
-
-        self.gridLayout.addWidget(self.te_chathistory, 0, 0, 1, 1)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setSpacing(2)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(-1, -1, -1, 0)
+        self.gridLayout_12 = QGridLayout()
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridLayout_12.setContentsMargins(-1, -1, -1, 0)
         self.te_chatinput = QTextEdit(self.gridLayoutWidget)
         self.te_chatinput.setObjectName(u"te_chatinput")
-        sizePolicy1.setHeightForWidth(self.te_chatinput.sizePolicy().hasHeightForWidth())
-        self.te_chatinput.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.te_chatinput.sizePolicy().hasHeightForWidth())
+        self.te_chatinput.setSizePolicy(sizePolicy2)
 
-        self.horizontalLayout_3.addWidget(self.te_chatinput)
+        self.gridLayout_12.addWidget(self.te_chatinput, 1, 0, 1, 1)
 
         self.bt_submitchat = QPushButton(self.gridLayoutWidget)
         self.bt_submitchat.setObjectName(u"bt_submitchat")
-        sizePolicy1.setHeightForWidth(self.bt_submitchat.sizePolicy().hasHeightForWidth())
-        self.bt_submitchat.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.bt_submitchat.sizePolicy().hasHeightForWidth())
+        self.bt_submitchat.setSizePolicy(sizePolicy2)
         icon = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.GoUp))
         self.bt_submitchat.setIcon(icon)
 
-        self.horizontalLayout_3.addWidget(self.bt_submitchat)
+        self.gridLayout_12.addWidget(self.bt_submitchat, 2, 0, 1, 1)
 
-        self.horizontalLayout_3.setStretch(0, 10)
-        self.horizontalLayout_3.setStretch(1, 1)
 
-        self.gridLayout.addLayout(self.horizontalLayout_3, 1, 0, 1, 1)
+        self.gridLayout.addLayout(self.gridLayout_12, 1, 0, 1, 1)
+
+        self.te_chathistory = QTextBrowser(self.gridLayoutWidget)
+        self.te_chathistory.setObjectName(u"te_chathistory")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.te_chathistory.sizePolicy().hasHeightForWidth())
+        self.te_chathistory.setSizePolicy(sizePolicy3)
+
+        self.gridLayout.addWidget(self.te_chathistory, 0, 0, 1, 1)
 
         self.gridLayout.setRowStretch(0, 100)
-        self.gridLayout.setRowStretch(1, 10)
         self.gridLayout.setColumnStretch(0, 100)
         self.stackedWidget.addWidget(self.chatpage)
         self.brandperformance = QWidget()
         self.brandperformance.setObjectName(u"brandperformance")
-        sizePolicy.setHeightForWidth(self.brandperformance.sizePolicy().hasHeightForWidth())
-        self.brandperformance.setSizePolicy(sizePolicy)
-        self.verticalLayout_2 = QVBoxLayout(self.brandperformance)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
+        sizePolicy1.setHeightForWidth(self.brandperformance.sizePolicy().hasHeightForWidth())
+        self.brandperformance.setSizePolicy(sizePolicy1)
+        self.gridLayout_13 = QGridLayout(self.brandperformance)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.gridLayout_13.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lbl_brandfilter = QLabel(self.brandperformance)
@@ -155,7 +155,7 @@ class Ui_mw_home(object):
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.gridLayout_13.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -182,50 +182,48 @@ class Ui_mw_home(object):
         self.horizontalLayout.addWidget(self.bt_seeperformance)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.gridLayout_13.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.tbl_brandperformance = QTableView(self.brandperformance)
         self.tbl_brandperformance.setObjectName(u"tbl_brandperformance")
-        sizePolicy.setHeightForWidth(self.tbl_brandperformance.sizePolicy().hasHeightForWidth())
-        self.tbl_brandperformance.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.tbl_brandperformance.sizePolicy().hasHeightForWidth())
+        self.tbl_brandperformance.setSizePolicy(sizePolicy1)
 
-        self.verticalLayout_2.addWidget(self.tbl_brandperformance)
+        self.gridLayout_13.addWidget(self.tbl_brandperformance, 2, 0, 1, 1)
 
         self.stackedWidget.addWidget(self.brandperformance)
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.gridLayoutWidget_3 = QWidget(self.page)
-        self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(40, 50, 881, 271))
-        self.gridLayout_3 = QGridLayout(self.gridLayoutWidget_3)
+        self.gridLayout_9 = QGridLayout(self.page)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.cb_existingcodes = QComboBox(self.gridLayoutWidget_3)
+        self.cb_existingcodes = QComboBox(self.page)
         self.cb_existingcodes.setObjectName(u"cb_existingcodes")
 
         self.gridLayout_3.addWidget(self.cb_existingcodes, 2, 4, 1, 1)
 
-        self.bt_submitnewpodcast = QPushButton(self.gridLayoutWidget_3)
+        self.bt_submitnewpodcast = QPushButton(self.page)
         self.bt_submitnewpodcast.setObjectName(u"bt_submitnewpodcast")
 
         self.gridLayout_3.addWidget(self.bt_submitnewpodcast, 3, 2, 1, 1)
 
-        self.bt_submitnewcode = QPushButton(self.gridLayoutWidget_3)
+        self.bt_submitnewcode = QPushButton(self.page)
         self.bt_submitnewcode.setObjectName(u"bt_submitnewcode")
 
         self.gridLayout_3.addWidget(self.bt_submitnewcode, 3, 0, 1, 1)
 
-        self.bt_suspendcode = QPushButton(self.gridLayoutWidget_3)
+        self.bt_suspendcode = QPushButton(self.page)
         self.bt_suspendcode.setObjectName(u"bt_suspendcode")
 
         self.gridLayout_3.addWidget(self.bt_suspendcode, 3, 4, 1, 1)
 
-        self.lbl_newcode_3 = QLabel(self.gridLayoutWidget_3)
+        self.lbl_newcode_3 = QLabel(self.page)
         self.lbl_newcode_3.setObjectName(u"lbl_newcode_3")
 
         self.gridLayout_3.addWidget(self.lbl_newcode_3, 1, 2, 1, 1)
 
-        self.le_newcode = QLineEdit(self.gridLayoutWidget_3)
+        self.le_newcode = QLineEdit(self.page)
         self.le_newcode.setObjectName(u"le_newcode")
 
         self.gridLayout_3.addWidget(self.le_newcode, 2, 0, 1, 1)
@@ -234,24 +232,24 @@ class Ui_mw_home(object):
 
         self.gridLayout_3.addItem(self.horizontalSpacer_3, 1, 1, 1, 1)
 
-        self.lbl_newcode_2 = QLabel(self.gridLayoutWidget_3)
+        self.lbl_newcode_2 = QLabel(self.page)
         self.lbl_newcode_2.setObjectName(u"lbl_newcode_2")
 
         self.gridLayout_3.addWidget(self.lbl_newcode_2, 1, 4, 1, 1)
 
-        self.lbl_newcode = QLabel(self.gridLayoutWidget_3)
+        self.lbl_newcode = QLabel(self.page)
         self.lbl_newcode.setObjectName(u"lbl_newcode")
 
         self.gridLayout_3.addWidget(self.lbl_newcode, 1, 0, 1, 1)
 
         self.gridLayout_8 = QGridLayout()
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.cb_podcastsuspendcode = QComboBox(self.gridLayoutWidget_3)
+        self.cb_podcastsuspendcode = QComboBox(self.page)
         self.cb_podcastsuspendcode.setObjectName(u"cb_podcastsuspendcode")
 
         self.gridLayout_8.addWidget(self.cb_podcastsuspendcode, 2, 0, 1, 1)
 
-        self.lbl_podcast_2 = QLabel(self.gridLayoutWidget_3)
+        self.lbl_podcast_2 = QLabel(self.page)
         self.lbl_podcast_2.setObjectName(u"lbl_podcast_2")
 
         self.gridLayout_8.addWidget(self.lbl_podcast_2, 1, 0, 1, 1)
@@ -267,24 +265,24 @@ class Ui_mw_home(object):
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.de_codeenddate = QDateEdit(self.gridLayoutWidget_3)
+        self.de_codeenddate = QDateEdit(self.page)
         self.de_codeenddate.setObjectName(u"de_codeenddate")
         self.de_codeenddate.setCalendarPopup(True)
 
         self.gridLayout_6.addWidget(self.de_codeenddate, 1, 1, 1, 1)
 
-        self.lbl_newcodestartdate = QLabel(self.gridLayoutWidget_3)
+        self.lbl_newcodestartdate = QLabel(self.page)
         self.lbl_newcodestartdate.setObjectName(u"lbl_newcodestartdate")
 
         self.gridLayout_6.addWidget(self.lbl_newcodestartdate, 0, 0, 1, 1)
 
-        self.de_codestartdate = QDateEdit(self.gridLayoutWidget_3)
+        self.de_codestartdate = QDateEdit(self.page)
         self.de_codestartdate.setObjectName(u"de_codestartdate")
         self.de_codestartdate.setCalendarPopup(True)
 
         self.gridLayout_6.addWidget(self.de_codestartdate, 1, 0, 1, 1)
 
-        self.lbl_newcodeenddate = QLabel(self.gridLayoutWidget_3)
+        self.lbl_newcodeenddate = QLabel(self.page)
         self.lbl_newcodeenddate.setObjectName(u"lbl_newcodeenddate")
 
         self.gridLayout_6.addWidget(self.lbl_newcodeenddate, 0, 1, 1, 1)
@@ -292,12 +290,12 @@ class Ui_mw_home(object):
 
         self.gridLayout_7.addLayout(self.gridLayout_6, 0, 0, 1, 1)
 
-        self.cb_podcast = QComboBox(self.gridLayoutWidget_3)
+        self.cb_podcast = QComboBox(self.page)
         self.cb_podcast.setObjectName(u"cb_podcast")
 
         self.gridLayout_7.addWidget(self.cb_podcast, 2, 0, 1, 1)
 
-        self.lbl_podcast = QLabel(self.gridLayoutWidget_3)
+        self.lbl_podcast = QLabel(self.page)
         self.lbl_podcast.setObjectName(u"lbl_podcast")
 
         self.gridLayout_7.addWidget(self.lbl_podcast, 1, 0, 1, 1)
@@ -305,7 +303,7 @@ class Ui_mw_home(object):
 
         self.gridLayout_3.addLayout(self.gridLayout_7, 0, 0, 1, 1)
 
-        self.le_newpodcast = QLineEdit(self.gridLayoutWidget_3)
+        self.le_newpodcast = QLineEdit(self.page)
         self.le_newpodcast.setObjectName(u"le_newpodcast")
 
         self.gridLayout_3.addWidget(self.le_newpodcast, 2, 2, 1, 1)
@@ -314,33 +312,29 @@ class Ui_mw_home(object):
 
         self.gridLayout_3.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
 
-        self.stackedWidget.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.verticalLayoutWidget = QWidget(self.page_2)
-        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(70, 30, 481, 321))
-        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+
+        self.gridLayout_9.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+
+        self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.cb_brandspend = QComboBox(self.verticalLayoutWidget)
+        self.cb_brandspend = QComboBox(self.page)
         self.cb_brandspend.setObjectName(u"cb_brandspend")
 
         self.gridLayout_4.addWidget(self.cb_brandspend, 2, 0, 1, 1)
 
-        self.cb_podcastspend = QComboBox(self.verticalLayoutWidget)
+        self.cb_podcastspend = QComboBox(self.page)
         self.cb_podcastspend.setObjectName(u"cb_podcastspend")
 
         self.gridLayout_4.addWidget(self.cb_podcastspend, 4, 0, 1, 1)
 
-        self.label_5 = QLabel(self.verticalLayoutWidget)
+        self.label_5 = QLabel(self.page)
         self.label_5.setObjectName(u"label_5")
 
         self.gridLayout_4.addWidget(self.label_5, 3, 0, 1, 1)
 
-        self.lbl_actualspendbrand = QLabel(self.verticalLayoutWidget)
+        self.lbl_actualspendbrand = QLabel(self.page)
         self.lbl_actualspendbrand.setObjectName(u"lbl_actualspendbrand")
 
         self.gridLayout_4.addWidget(self.lbl_actualspendbrand, 1, 0, 1, 1)
@@ -350,42 +344,42 @@ class Ui_mw_home(object):
 
         self.gridLayout_5 = QGridLayout()
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.bt_spendgoal = QPushButton(self.verticalLayoutWidget)
+        self.bt_spendgoal = QPushButton(self.page)
         self.bt_spendgoal.setObjectName(u"bt_spendgoal")
 
         self.gridLayout_5.addWidget(self.bt_spendgoal, 2, 0, 1, 1)
 
-        self.le_spendgoal = QLineEdit(self.verticalLayoutWidget)
+        self.le_spendgoal = QLineEdit(self.page)
         self.le_spendgoal.setObjectName(u"le_spendgoal")
 
         self.gridLayout_5.addWidget(self.le_spendgoal, 1, 0, 1, 1)
 
-        self.lbl_actualspend = QLabel(self.verticalLayoutWidget)
+        self.lbl_actualspend = QLabel(self.page)
         self.lbl_actualspend.setObjectName(u"lbl_actualspend")
 
         self.gridLayout_5.addWidget(self.lbl_actualspend, 0, 1, 1, 1)
 
-        self.lbl_spendgoal = QLabel(self.verticalLayoutWidget)
+        self.lbl_spendgoal = QLabel(self.page)
         self.lbl_spendgoal.setObjectName(u"lbl_spendgoal")
 
         self.gridLayout_5.addWidget(self.lbl_spendgoal, 0, 0, 1, 1)
 
-        self.le_actualspend = QLineEdit(self.verticalLayoutWidget)
+        self.le_actualspend = QLineEdit(self.page)
         self.le_actualspend.setObjectName(u"le_actualspend")
 
         self.gridLayout_5.addWidget(self.le_actualspend, 1, 1, 1, 1)
 
-        self.bt_updtspendgoal = QPushButton(self.verticalLayoutWidget)
+        self.bt_updtspendgoal = QPushButton(self.page)
         self.bt_updtspendgoal.setObjectName(u"bt_updtspendgoal")
 
         self.gridLayout_5.addWidget(self.bt_updtspendgoal, 3, 0, 1, 1)
 
-        self.bt_submitactualspend = QPushButton(self.verticalLayoutWidget)
+        self.bt_submitactualspend = QPushButton(self.page)
         self.bt_submitactualspend.setObjectName(u"bt_submitactualspend")
 
         self.gridLayout_5.addWidget(self.bt_submitactualspend, 2, 1, 1, 1)
 
-        self.bt_updtactualspend = QPushButton(self.verticalLayoutWidget)
+        self.bt_updtactualspend = QPushButton(self.page)
         self.bt_updtactualspend.setObjectName(u"bt_updtactualspend")
 
         self.gridLayout_5.addWidget(self.bt_updtactualspend, 3, 1, 1, 1)
@@ -393,11 +387,20 @@ class Ui_mw_home(object):
 
         self.verticalLayout.addLayout(self.gridLayout_5)
 
+
+        self.gridLayout_9.addLayout(self.verticalLayout, 1, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.page)
+        self.page_2 = QWidget()
+        self.page_2.setObjectName(u"page_2")
         self.stackedWidget.addWidget(self.page_2)
+
+        self.gridLayout_10.addWidget(self.stackedWidget, 0, 0, 1, 1)
+
         mw_home.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_home)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1104, 24))
+        self.menubar.setGeometry(QRect(0, 0, 1100, 24))
         self.menubar.setDefaultUp(False)
         self.menubar.setNativeMenuBar(False)
         self.file = QMenu(self.menubar)
@@ -411,11 +414,8 @@ class Ui_mw_home(object):
         mw_home.setStatusBar(self.statusbar)
         self.w_dock = QDockWidget(mw_home)
         self.w_dock.setObjectName(u"w_dock")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.w_dock.sizePolicy().hasHeightForWidth())
-        self.w_dock.setSizePolicy(sizePolicy3)
+        sizePolicy.setHeightForWidth(self.w_dock.sizePolicy().hasHeightForWidth())
+        self.w_dock.setSizePolicy(sizePolicy)
         self.w_dock.setMinimumSize(QSize(50, 288))
         font = QFont()
         font.setPointSize(9)
@@ -453,28 +453,21 @@ class Ui_mw_home(object):
 
         self.verticalLayout_3.addWidget(self.bt_codepodcastinput)
 
-        self.bt_spendinput = QToolButton(self.dockWidgetContents)
-        self.bt_spendinput.setObjectName(u"bt_spendinput")
-        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.EditPaste))
-        self.bt_spendinput.setIcon(icon5)
-
-        self.verticalLayout_3.addWidget(self.bt_spendinput)
-
         self.verticalSpacer = QSpacerItem(20, 285, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.bt_refresh = QToolButton(self.dockWidgetContents)
         self.bt_refresh.setObjectName(u"bt_refresh")
-        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
-        self.bt_refresh.setIcon(icon6)
+        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
+        self.bt_refresh.setIcon(icon5)
 
         self.verticalLayout_3.addWidget(self.bt_refresh)
 
         self.bt_settings = QToolButton(self.dockWidgetContents)
         self.bt_settings.setObjectName(u"bt_settings")
-        icon7 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout))
-        self.bt_settings.setIcon(icon7)
+        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout))
+        self.bt_settings.setIcon(icon6)
 
         self.verticalLayout_3.addWidget(self.bt_settings)
 
@@ -486,7 +479,7 @@ class Ui_mw_home(object):
 
         self.retranslateUi(mw_home)
 
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(mw_home)
@@ -526,7 +519,6 @@ class Ui_mw_home(object):
         self.bt_chat.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_brandperformance.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_codepodcastinput.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_spendinput.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_refresh.setText(QCoreApplication.translate("mw_home", u"...", None))
         self.bt_settings.setText(QCoreApplication.translate("mw_home", u"...", None))
     # retranslateUi

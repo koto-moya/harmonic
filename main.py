@@ -1,11 +1,11 @@
-from homepage.homepage_ui import Ui_mw_home
+from homepage_v2.homepage_ui import Ui_MainWindow
 from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from modules.app_requests import get, login, Token
-
-
+from modules.utils import create_message, create_chat
+from config import chat_interface_html_head
 
 class LoginWindow(QtWidgets.QWidget, Ui_login):
 
@@ -26,33 +26,24 @@ class LoginWindow(QtWidgets.QWidget, Ui_login):
             return None
         
 # The home window should only handle the mechanistic action of the UI not actually do any logic
-class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
+class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.resize(800, 600)
-        self.w_dock.setWindowTitle("podscale")
-        self.w_dock.setFixedWidth(50)
-        self.setStatusBar(None)
-        self.actionclose.triggered.connect(self.close)
-
+        self.chat_history = ""
+        self.te_chathistory.setHtml(chat_interface_html_head+"<body></body>")
         # sidebar select
         self.bt_home.clicked.connect(lambda: self.switch_view(0))
-        self.bt_chat.clicked.connect(lambda: self.switch_view(1))
-        self.bt_brandperformance.clicked.connect(lambda: self.switch_view(2))
-        self.bt_codepodcastinput.clicked.connect(lambda: self.switch_view(3))
-        self.bt_spendinput.clicked.connect(lambda: self.switch_view(4))
+        self.bt_chat.clicked.connect(lambda: self.switch_view(2))
+        self.bt_brandperformance.clicked.connect(lambda: self.switch_view(1))
+        self.bt_datainput.clicked.connect(lambda: self.switch_view(3))
 
         # Connect submit buttons to the combo box refresh
         self.bt_submitnewcode.clicked.connect(self.add_new_code)
         self.bt_submitnewpodcast.clicked.connect(self.add_new_podcast)
-        self.bt_suspendcode.clicked.connect(self.suspend_code)
+        self.bt_suspendcode.clicked.connect(self.sus_code)
         self.bt_seeperformance.clicked.connect(self.display_performance)
-
-        # Home page
-        self.current_month_revenue.setText("revenue")
-        self.current_spend_goal.setValue(100)
-
         # brand performance page
         
         self.table_model = QStandardItemModel()
@@ -72,9 +63,10 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
     def intialize_combo_boxes(self):
         self.completers = {}
         self.combo_boxes = {"/getcodes": [self.cb_existingcodes],
-                            "/getpodcasts":[self.cb_podcast,
-                                        self.cb_podcastsuspendcode, self.cb_podcastspend],
-                            "/getbrands":[self.cb_brandfilter, self.cb_brandspend] 
+                            "/getpodcasts":[self.cb_existingpodcasts,self.cb_podcastnewcode, self.cb_podcastactspd,
+                                        self.cb_podcastsuspendcode, self.cb_podcastspdgl],
+                            "/getbrands":[self.cb_brandfilterperf, self.cb_brandfilterspdgl, self.cb_brandfilteractspd,
+                                          self.cb_brandfilternewcode] 
                             }
         for endpoint, cbx in self.combo_boxes.items():
             data = get(self.token, endpoint)
@@ -105,8 +97,16 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         self.stackedWidget.setCurrentIndex(index)
 
     def handle_chat_submit(self):
+        # find the equivalent method for line edits
         in_text = self.te_chatinput.toPlainText()
-        self.te_chathistory.setHtml(f"<p>{in_text}</p>")
+        self.chat_history += create_message("messageoutgoing", in_text)
+        # agent_message = get_agent_response(in_text)
+        #while not agent_message:
+        #   time.sleep(.1)
+        agent_message = "hi boiiiii"
+        self.chat_history += create_message("messageincoming", agent_message)
+        chat = create_chat(self.chat_history)
+        self.te_chathistory.setHtml(chat)
         self.te_chatinput.clear()
 
     def display_performance(self):
@@ -115,7 +115,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
         #            "survey write-ins", "survey modeled write-ins", "survey roas", "podscribe revenue", "podscribe roas"]
         payload = {"startdate":self.de_startdate.date().toString(),
                    "enddate" : self.de_enddate.date().toString(),
-                   "brand" : self.cb_brandfilter.currentText()}
+                   "brand" : self.cb_brandfilterperf.currentText()}
         self.table_model.clear()
         data = get(self.token, "/getperformance", payload) # expect this to be a list of lists
         self.table_model.setHorizontalHeaderLabels(data[0])
@@ -125,14 +125,14 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_mw_home):
 
     def add_new_code(self):
         new_code  = self.le_newcode.toPlainText()
-
-        self.update_combo_boxes("code")
+        self.update_combo_boxes("/getcodes")
 
     def add_new_podcast(self):
-        self.update_combo_boxes("podcasts")
+        self.update_combo_boxes("/getpodcasts")
+    
+    def sus_code(self):
+        self.update_combo_boxes("/getcodes")
 
-    def suspend_code(self):
-        self.update_combo_boxes("code")
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication()

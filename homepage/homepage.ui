@@ -9,12 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1104</width>
-    <height>933</height>
+    <width>1100</width>
+    <height>937</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -29,492 +29,470 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>1021</width>
-      <height>871</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="currentIndex">
-     <number>2</number>
-    </property>
-    <widget class="QWidget" name="homepage">
-     <widget class="QWidget" name="gridLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>60</y>
-        <width>321</width>
-        <height>161</height>
-       </rect>
+   <layout class="QGridLayout" name="gridLayout_10">
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QLabel" name="current_month_revenue">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="rev_title">
-         <property name="text">
-          <string>Curent Monthly Revenue</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="spend_label">
-         <property name="text">
-          <string>spend goal</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QProgressBar" name="current_spend_goal">
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="chatpage">
-     <widget class="QWidget" name="gridLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>961</width>
-        <height>811</height>
-       </rect>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="100,10" columnstretch="100">
-       <property name="sizeConstraint">
-        <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
-       </property>
-       <item row="0" column="0">
-        <widget class="QTextBrowser" name="te_chathistory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="10,1">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QTextEdit" name="te_chatinput">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="bt_submitchat">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::GoUp"/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="brandperformance">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="sizeConstraint">
-       <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="lbl_brandfilter">
-          <property name="text">
-           <string>brand</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>98</width>
-            <height>17</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="lbl_datefilter">
-          <property name="text">
-           <string>date filter</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Policy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>1</width>
-            <height>1</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QComboBox" name="cb_brandfilter"/>
-        </item>
-        <item>
-         <widget class="QDateEdit" name="de_startdate">
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDateEdit" name="de_enddate">
-          <property name="calendarPopup">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="bt_seeperformance">
-          <property name="text">
-           <string>see performance</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTableView" name="tbl_brandperformance">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <widget class="QWidget" name="homepage">
+       <widget class="QWidget" name="gridLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>60</y>
+          <width>321</width>
+          <height>221</height>
+         </rect>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="page">
-     <widget class="QWidget" name="gridLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>50</y>
-        <width>881</width>
-        <height>271</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="2" column="4">
-        <widget class="QComboBox" name="cb_existingcodes"/>
-       </item>
-       <item row="3" column="2">
-        <widget class="QPushButton" name="bt_submitnewpodcast">
-         <property name="text">
-          <string>submit podcast</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="bt_submitnewcode">
-         <property name="text">
-          <string>submit code</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="4">
-        <widget class="QPushButton" name="bt_suspendcode">
-         <property name="text">
-          <string>suspend code</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="lbl_newcode_3">
-         <property name="text">
-          <string>new podcast</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLineEdit" name="le_newcode"/>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="4">
-        <widget class="QLabel" name="lbl_newcode_2">
-         <property name="text">
-          <string>Exisiting code</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lbl_newcode">
-         <property name="text">
-          <string>new code</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
-        <layout class="QGridLayout" name="gridLayout_8">
-         <item row="2" column="0">
-          <widget class="QComboBox" name="cb_podcastsuspendcode"/>
-         </item>
+        <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="0">
-          <widget class="QLabel" name="lbl_podcast_2">
+          <widget class="QLabel" name="current_month_revenue">
            <property name="text">
-            <string>podcast</string>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="0">
-        <layout class="QGridLayout" name="gridLayout_7">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_6">
-           <item row="1" column="1">
-            <widget class="QDateEdit" name="de_codeenddate">
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="lbl_newcodestartdate">
-             <property name="text">
-              <string>code start date</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QDateEdit" name="de_codestartdate">
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="lbl_newcodeenddate">
-             <property name="text">
-              <string>code end date</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="0">
-          <widget class="QComboBox" name="cb_podcast"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lbl_podcast">
+          <widget class="QLabel" name="rev_title">
            <property name="text">
-            <string>podcast</string>
+            <string>Curent Monthly Revenue</string>
            </property>
           </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="le_newpodcast"/>
-       </item>
-       <item row="1" column="3">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_2">
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>30</y>
-        <width>481</width>
-        <height>321</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="2" column="0">
-          <widget class="QComboBox" name="cb_brandspend"/>
-         </item>
-         <item row="4" column="0">
-          <widget class="QComboBox" name="cb_podcastspend"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>podcast</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lbl_actualspendbrand">
-           <property name="text">
-            <string>brand</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="2" column="0">
-          <widget class="QPushButton" name="bt_spendgoal">
-           <property name="text">
-            <string>submit spend goal</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="le_spendgoal"/>
          </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="lbl_actualspend">
-           <property name="text">
-            <string>actual spend</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lbl_spendgoal">
+          <widget class="QLabel" name="spend_label">
            <property name="text">
             <string>spend goal</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="le_actualspend"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="bt_updtspendgoal">
-           <property name="text">
-            <string>update spend goal</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QPushButton" name="bt_submitactualspend">
-           <property name="text">
-            <string>submit actual spend</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="bt_updtactualspend">
-           <property name="text">
-            <string>update actual spend</string>
+          <widget class="QProgressBar" name="current_spend_goal">
+           <property name="value">
+            <number>24</number>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-      </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="chatpage">
+       <widget class="QWidget" name="gridLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>1011</width>
+          <height>851</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout" rowstretch="100,0" columnstretch="100">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+         </property>
+         <item row="1" column="0">
+          <layout class="QGridLayout" name="gridLayout_12">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="1" column="0">
+            <widget class="QTextEdit" name="te_chatinput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QPushButton" name="bt_submitchat">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::GoUp"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0">
+          <widget class="QTextBrowser" name="te_chathistory">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="brandperformance">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_13">
+        <property name="sizeConstraint">
+         <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+        </property>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="lbl_brandfilter">
+            <property name="text">
+             <string>brand</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>98</width>
+              <height>17</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_datefilter">
+            <property name="text">
+             <string>date filter</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>1</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QComboBox" name="cb_brandfilter"/>
+          </item>
+          <item>
+           <widget class="QDateEdit" name="de_startdate">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDateEdit" name="de_enddate">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bt_seeperformance">
+            <property name="text">
+             <string>see performance</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
+         <widget class="QTableView" name="tbl_brandperformance">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page">
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="4">
+           <widget class="QComboBox" name="cb_existingcodes"/>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="bt_submitnewpodcast">
+            <property name="text">
+             <string>submit podcast</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="bt_submitnewcode">
+            <property name="text">
+             <string>submit code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QPushButton" name="bt_suspendcode">
+            <property name="text">
+             <string>suspend code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="lbl_newcode_3">
+            <property name="text">
+             <string>new podcast</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLineEdit" name="le_newcode"/>
+          </item>
+          <item row="1" column="1">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="lbl_newcode_2">
+            <property name="text">
+             <string>Exisiting code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lbl_newcode">
+            <property name="text">
+             <string>new code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="2" column="0">
+             <widget class="QComboBox" name="cb_podcastsuspendcode"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lbl_podcast_2">
+              <property name="text">
+               <string>podcast</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="1" column="1">
+               <widget class="QDateEdit" name="de_codeenddate">
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lbl_newcodestartdate">
+                <property name="text">
+                 <string>code start date</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QDateEdit" name="de_codestartdate">
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="lbl_newcodeenddate">
+                <property name="text">
+                 <string>code end date</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="cb_podcast"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lbl_podcast">
+              <property name="text">
+               <string>podcast</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="le_newpodcast"/>
+          </item>
+          <item row="1" column="3">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="2" column="0">
+             <widget class="QComboBox" name="cb_brandspend"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QComboBox" name="cb_podcastspend"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>podcast</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lbl_actualspendbrand">
+              <property name="text">
+               <string>brand</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="2" column="0">
+             <widget class="QPushButton" name="bt_spendgoal">
+              <property name="text">
+               <string>submit spend goal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLineEdit" name="le_spendgoal"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lbl_actualspend">
+              <property name="text">
+               <string>actual spend</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lbl_spendgoal">
+              <property name="text">
+               <string>spend goal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="le_actualspend"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="bt_updtspendgoal">
+              <property name="text">
+               <string>update spend goal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="bt_submitactualspend">
+              <property name="text">
+               <string>submit actual spend</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="bt_updtactualspend">
+              <property name="text">
+               <string>update actual spend</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2"/>
      </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1104</width>
+     <width>1100</width>
      <height>24</height>
     </rect>
    </property>
@@ -609,16 +587,6 @@
        </property>
        <property name="icon">
         <iconset theme="QIcon::ThemeIcon::MediaEject"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="bt_spendinput">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::EditPaste"/>
        </property>
       </widget>
      </item>

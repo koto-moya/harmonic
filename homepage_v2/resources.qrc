@@ -1,0 +1,12 @@
+<RCC>
+  <qresource>
+    <file>icons/logout.png</file>
+    <file>icons/send.png</file>
+    <file>icons/favicon.ico</file>
+    <file>icons/chat.png</file>
+    <file>icons/gestalt.png</file>
+    <file>icons/home.png</file>
+    <file>icons/up-arrow.png</file>
+    <file>icons/upload.png</file>
+  </qresource>
+</RCC>
