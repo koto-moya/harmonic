@@ -11,515 +11,777 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QDockWidget,
-    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLayout, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
-    QSpacerItem, QStackedWidget, QStatusBar, QTableView,
-    QTextBrowser, QTextEdit, QToolButton, QVBoxLayout,
-    QWidget)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
+    QStackedWidget, QTabWidget, QTableView, QTextEdit,
+    QVBoxLayout, QWidget)
+from homepage_v2 import resources_rc
 
-class Ui_mw_home(object):
-    def setupUi(self, mw_home):
-        if not mw_home.objectName():
-            mw_home.setObjectName(u"mw_home")
-        mw_home.setEnabled(True)
-        mw_home.resize(1100, 937)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(mw_home.sizePolicy().hasHeightForWidth())
-        mw_home.setSizePolicy(sizePolicy)
-        self.actionclose = QAction(mw_home)
-        self.actionclose.setObjectName(u"actionclose")
-        self.centralwidget = QWidget(mw_home)
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        if not MainWindow.objectName():
+            MainWindow.setObjectName(u"MainWindow")
+        MainWindow.resize(1140, 763)
+        MainWindow.setStyleSheet(u"QMainWindow {\n"
+"    background-color: #2d2b2b;\n"
+"}\n"
+"")
+        self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
-        self.centralwidget.setSizePolicy(sizePolicy1)
-        self.gridLayout_10 = QGridLayout(self.centralwidget)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.stackedWidget = QStackedWidget(self.centralwidget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        sizePolicy1.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
-        self.stackedWidget.setSizePolicy(sizePolicy1)
-        self.homepage = QWidget()
-        self.homepage.setObjectName(u"homepage")
-        self.gridLayoutWidget_2 = QWidget(self.homepage)
-        self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(120, 60, 321, 221))
-        self.gridLayout_2 = QGridLayout(self.gridLayoutWidget_2)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.current_month_revenue = QLabel(self.gridLayoutWidget_2)
-        self.current_month_revenue.setObjectName(u"current_month_revenue")
-
-        self.gridLayout_2.addWidget(self.current_month_revenue, 1, 0, 1, 1)
-
-        self.rev_title = QLabel(self.gridLayoutWidget_2)
-        self.rev_title.setObjectName(u"rev_title")
-
-        self.gridLayout_2.addWidget(self.rev_title, 0, 0, 1, 1)
-
-        self.spend_label = QLabel(self.gridLayoutWidget_2)
-        self.spend_label.setObjectName(u"spend_label")
-
-        self.gridLayout_2.addWidget(self.spend_label, 0, 1, 1, 1)
-
-        self.current_spend_goal = QProgressBar(self.gridLayoutWidget_2)
-        self.current_spend_goal.setObjectName(u"current_spend_goal")
-        self.current_spend_goal.setValue(24)
-
-        self.gridLayout_2.addWidget(self.current_spend_goal, 1, 1, 1, 1)
-
-        self.stackedWidget.addWidget(self.homepage)
-        self.chatpage = QWidget()
-        self.chatpage.setObjectName(u"chatpage")
-        self.gridLayoutWidget = QWidget(self.chatpage)
-        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(10, 10, 1011, 851))
-        self.gridLayout = QGridLayout(self.gridLayoutWidget)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_12 = QGridLayout()
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.gridLayout_12.setContentsMargins(-1, -1, -1, 0)
-        self.te_chatinput = QTextEdit(self.gridLayoutWidget)
-        self.te_chatinput.setObjectName(u"te_chatinput")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.te_chatinput.sizePolicy().hasHeightForWidth())
-        self.te_chatinput.setSizePolicy(sizePolicy2)
-
-        self.gridLayout_12.addWidget(self.te_chatinput, 1, 0, 1, 1)
-
-        self.bt_submitchat = QPushButton(self.gridLayoutWidget)
-        self.bt_submitchat.setObjectName(u"bt_submitchat")
-        sizePolicy2.setHeightForWidth(self.bt_submitchat.sizePolicy().hasHeightForWidth())
-        self.bt_submitchat.setSizePolicy(sizePolicy2)
-        icon = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.GoUp))
-        self.bt_submitchat.setIcon(icon)
-
-        self.gridLayout_12.addWidget(self.bt_submitchat, 2, 0, 1, 1)
-
-
-        self.gridLayout.addLayout(self.gridLayout_12, 1, 0, 1, 1)
-
-        self.te_chathistory = QTextBrowser(self.gridLayoutWidget)
-        self.te_chathistory.setObjectName(u"te_chathistory")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.te_chathistory.sizePolicy().hasHeightForWidth())
-        self.te_chathistory.setSizePolicy(sizePolicy3)
-
-        self.gridLayout.addWidget(self.te_chathistory, 0, 0, 1, 1)
-
-        self.gridLayout.setRowStretch(0, 100)
-        self.gridLayout.setColumnStretch(0, 100)
-        self.stackedWidget.addWidget(self.chatpage)
-        self.brandperformance = QWidget()
-        self.brandperformance.setObjectName(u"brandperformance")
-        sizePolicy1.setHeightForWidth(self.brandperformance.sizePolicy().hasHeightForWidth())
-        self.brandperformance.setSizePolicy(sizePolicy1)
-        self.gridLayout_13 = QGridLayout(self.brandperformance)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.gridLayout_13.setSizeConstraint(QLayout.SizeConstraint.SetMaximumSize)
-        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.lbl_brandfilter = QLabel(self.brandperformance)
-        self.lbl_brandfilter.setObjectName(u"lbl_brandfilter")
-
-        self.horizontalLayout_2.addWidget(self.lbl_brandfilter)
-
-        self.horizontalSpacer_2 = QSpacerItem(98, 17, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
-
-        self.lbl_datefilter = QLabel(self.brandperformance)
-        self.lbl_datefilter.setObjectName(u"lbl_datefilter")
-
-        self.horizontalLayout_2.addWidget(self.lbl_datefilter)
-
-        self.horizontalSpacer = QSpacerItem(1, 1, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
-
-
-        self.gridLayout_13.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
-
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.Icon_widget = QWidget(self.centralwidget)
+        self.Icon_widget.setObjectName(u"Icon_widget")
+        self.verticalLayout_2 = QVBoxLayout(self.Icon_widget)
+        self.verticalLayout_2.setSpacing(0)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(-1, 0, 12, 12)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.cb_brandfilter = QComboBox(self.brandperformance)
-        self.cb_brandfilter.setObjectName(u"cb_brandfilter")
+        self.horizontalLayout.setContentsMargins(-1, 12, 0, 12)
+        self.label = QLabel(self.Icon_widget)
+        self.label.setObjectName(u"label")
+        self.label.setMinimumSize(QSize(40, 40))
+        self.label.setMaximumSize(QSize(40, 40))
+        self.label.setPixmap(QPixmap(u":/icons/gestalt.png"))
+        self.label.setScaledContents(True)
 
-        self.horizontalLayout.addWidget(self.cb_brandfilter)
+        self.horizontalLayout.addWidget(self.label)
 
-        self.de_startdate = QDateEdit(self.brandperformance)
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setSpacing(20)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.bt_home = QPushButton(self.Icon_widget)
+        self.bt_home.setObjectName(u"bt_home")
+        self.bt_home.setMinimumSize(QSize(40, 0))
+        self.bt_home.setMaximumSize(QSize(100, 16777215))
+        self.bt_home.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;          \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:checked{\n"
+"	background-color: #981118;\n"
+"}\n"
+"\n"
+"")
+        icon = QIcon()
+        icon.addFile(u":/icons/home.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_home.setIcon(icon)
+        self.bt_home.setCheckable(True)
+        self.bt_home.setAutoExclusive(True)
+
+        self.verticalLayout.addWidget(self.bt_home)
+
+        self.bt_brandperformance = QPushButton(self.Icon_widget)
+        self.bt_brandperformance.setObjectName(u"bt_brandperformance")
+        self.bt_brandperformance.setMinimumSize(QSize(40, 0))
+        self.bt_brandperformance.setMaximumSize(QSize(100, 16777215))
+        self.bt_brandperformance.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;              \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:checked{\n"
+"	background-color: #981118;\n"
+"}\n"
+"")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/up-arrow.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_brandperformance.setIcon(icon1)
+        self.bt_brandperformance.setCheckable(True)
+        self.bt_brandperformance.setAutoExclusive(True)
+
+        self.verticalLayout.addWidget(self.bt_brandperformance)
+
+        self.bt_chat = QPushButton(self.Icon_widget)
+        self.bt_chat.setObjectName(u"bt_chat")
+        self.bt_chat.setMinimumSize(QSize(40, 0))
+        self.bt_chat.setMaximumSize(QSize(100, 16777215))
+        self.bt_chat.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;             \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:checked{\n"
+"	background-color: #981118;\n"
+"}\n"
+"")
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/chat.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_chat.setIcon(icon2)
+        self.bt_chat.setCheckable(True)
+        self.bt_chat.setAutoExclusive(True)
+
+        self.verticalLayout.addWidget(self.bt_chat)
+
+        self.bt_datainput = QPushButton(self.Icon_widget)
+        self.bt_datainput.setObjectName(u"bt_datainput")
+        self.bt_datainput.setMinimumSize(QSize(40, 0))
+        self.bt_datainput.setMaximumSize(QSize(100, 16777215))
+        self.bt_datainput.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;             \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:checked{\n"
+"	background-color: #981118;\n"
+"}\n"
+"")
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/upload.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_datainput.setIcon(icon3)
+        self.bt_datainput.setCheckable(True)
+        self.bt_datainput.setAutoExclusive(True)
+
+        self.verticalLayout.addWidget(self.bt_datainput)
+
+
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
+        self.verticalSpacer = QSpacerItem(20, 509, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer)
+
+        self.bt_logout = QPushButton(self.Icon_widget)
+        self.bt_logout.setObjectName(u"bt_logout")
+        self.bt_logout.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;             \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:checked{\n"
+"	background-color: #981118;\n"
+"}\n"
+"")
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/logout.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_logout.setIcon(icon4)
+        self.bt_logout.setCheckable(True)
+        self.bt_logout.setAutoExclusive(True)
+
+        self.verticalLayout_2.addWidget(self.bt_logout)
+
+
+        self.horizontalLayout_2.addWidget(self.Icon_widget)
+
+        self.stackedWidget = QStackedWidget(self.centralwidget)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.page = QWidget()
+        self.page.setObjectName(u"page")
+        self.label_2 = QLabel(self.page)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(350, 200, 251, 16))
+        self.stackedWidget.addWidget(self.page)
+        self.performance_page = QWidget()
+        self.performance_page.setObjectName(u"performance_page")
+        self.gridLayout_2 = QGridLayout(self.performance_page)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.cb_brandfilterperf = QComboBox(self.performance_page)
+        self.cb_brandfilterperf.setObjectName(u"cb_brandfilterperf")
+
+        self.verticalLayout_4.addWidget(self.cb_brandfilterperf)
+
+        self.de_startdate = QDateEdit(self.performance_page)
         self.de_startdate.setObjectName(u"de_startdate")
         self.de_startdate.setCalendarPopup(True)
 
-        self.horizontalLayout.addWidget(self.de_startdate)
+        self.verticalLayout_4.addWidget(self.de_startdate)
 
-        self.de_enddate = QDateEdit(self.brandperformance)
+        self.de_enddate = QDateEdit(self.performance_page)
         self.de_enddate.setObjectName(u"de_enddate")
         self.de_enddate.setCalendarPopup(True)
 
-        self.horizontalLayout.addWidget(self.de_enddate)
+        self.verticalLayout_4.addWidget(self.de_enddate)
 
-        self.bt_seeperformance = QPushButton(self.brandperformance)
+        self.bt_seeperformance = QPushButton(self.performance_page)
         self.bt_seeperformance.setObjectName(u"bt_seeperformance")
+        self.bt_seeperformance.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;              \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"\n"
+"QPushButton:pressed{\n"
+"	background-color: #981118;\n"
+"}")
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/send.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.bt_seeperformance.setIcon(icon5)
 
-        self.horizontalLayout.addWidget(self.bt_seeperformance)
-
-
-        self.gridLayout_13.addLayout(self.horizontalLayout, 1, 0, 1, 1)
-
-        self.tbl_brandperformance = QTableView(self.brandperformance)
-        self.tbl_brandperformance.setObjectName(u"tbl_brandperformance")
-        sizePolicy1.setHeightForWidth(self.tbl_brandperformance.sizePolicy().hasHeightForWidth())
-        self.tbl_brandperformance.setSizePolicy(sizePolicy1)
-
-        self.gridLayout_13.addWidget(self.tbl_brandperformance, 2, 0, 1, 1)
-
-        self.stackedWidget.addWidget(self.brandperformance)
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.gridLayout_9 = QGridLayout(self.page)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.cb_existingcodes = QComboBox(self.page)
-        self.cb_existingcodes.setObjectName(u"cb_existingcodes")
-
-        self.gridLayout_3.addWidget(self.cb_existingcodes, 2, 4, 1, 1)
-
-        self.bt_submitnewpodcast = QPushButton(self.page)
-        self.bt_submitnewpodcast.setObjectName(u"bt_submitnewpodcast")
-
-        self.gridLayout_3.addWidget(self.bt_submitnewpodcast, 3, 2, 1, 1)
-
-        self.bt_submitnewcode = QPushButton(self.page)
-        self.bt_submitnewcode.setObjectName(u"bt_submitnewcode")
-
-        self.gridLayout_3.addWidget(self.bt_submitnewcode, 3, 0, 1, 1)
-
-        self.bt_suspendcode = QPushButton(self.page)
-        self.bt_suspendcode.setObjectName(u"bt_suspendcode")
-
-        self.gridLayout_3.addWidget(self.bt_suspendcode, 3, 4, 1, 1)
-
-        self.lbl_newcode_3 = QLabel(self.page)
-        self.lbl_newcode_3.setObjectName(u"lbl_newcode_3")
-
-        self.gridLayout_3.addWidget(self.lbl_newcode_3, 1, 2, 1, 1)
-
-        self.le_newcode = QLineEdit(self.page)
-        self.le_newcode.setObjectName(u"le_newcode")
-
-        self.gridLayout_3.addWidget(self.le_newcode, 2, 0, 1, 1)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_3.addItem(self.horizontalSpacer_3, 1, 1, 1, 1)
-
-        self.lbl_newcode_2 = QLabel(self.page)
-        self.lbl_newcode_2.setObjectName(u"lbl_newcode_2")
-
-        self.gridLayout_3.addWidget(self.lbl_newcode_2, 1, 4, 1, 1)
-
-        self.lbl_newcode = QLabel(self.page)
-        self.lbl_newcode.setObjectName(u"lbl_newcode")
-
-        self.gridLayout_3.addWidget(self.lbl_newcode, 1, 0, 1, 1)
-
-        self.gridLayout_8 = QGridLayout()
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.cb_podcastsuspendcode = QComboBox(self.page)
-        self.cb_podcastsuspendcode.setObjectName(u"cb_podcastsuspendcode")
-
-        self.gridLayout_8.addWidget(self.cb_podcastsuspendcode, 2, 0, 1, 1)
-
-        self.lbl_podcast_2 = QLabel(self.page)
-        self.lbl_podcast_2.setObjectName(u"lbl_podcast_2")
-
-        self.gridLayout_8.addWidget(self.lbl_podcast_2, 1, 0, 1, 1)
+        self.verticalLayout_4.addWidget(self.bt_seeperformance)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_8.addItem(self.verticalSpacer_2, 0, 0, 1, 1)
+        self.verticalLayout_4.addItem(self.verticalSpacer_2)
 
 
-        self.gridLayout_3.addLayout(self.gridLayout_8, 0, 4, 1, 1)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_4)
 
-        self.gridLayout_7 = QGridLayout()
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.gridLayout_6 = QGridLayout()
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.de_codeenddate = QDateEdit(self.page)
-        self.de_codeenddate.setObjectName(u"de_codeenddate")
-        self.de_codeenddate.setCalendarPopup(True)
+        self.tbl_brandperformance = QTableView(self.performance_page)
+        self.tbl_brandperformance.setObjectName(u"tbl_brandperformance")
+        self.tbl_brandperformance.setStyleSheet(u"QTableView {\n"
+"    background-color: #857c7c;\n"
+"    border-radius: 10px;\n"
+"    padding: 10px;\n"
+"    font-family: 'Arial';\n"
+"    font-size: 14px;\n"
+"    gridline-color: #444;  /* Color of the grid lines */\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: #444;\n"
+"    color: white;\n"
+"    padding: 5px;\n"
+"    font-family: 'Arial';\n"
+"    font-size: 14px;\n"
+"    border: none;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QTableView::item {\n"
+"    background-color: #eaeaea;  /* Background for table cells */\n"
+"    color: #000;                /* Text color in cells */\n"
+"    padding: 5px;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QTableView::item:selected {\n"
+"    background-color: #981118;  /* Background when an item is selected */\n"
+"    color: white;\n"
+"}\n"
+"")
 
-        self.gridLayout_6.addWidget(self.de_codeenddate, 1, 1, 1, 1)
-
-        self.lbl_newcodestartdate = QLabel(self.page)
-        self.lbl_newcodestartdate.setObjectName(u"lbl_newcodestartdate")
-
-        self.gridLayout_6.addWidget(self.lbl_newcodestartdate, 0, 0, 1, 1)
-
-        self.de_codestartdate = QDateEdit(self.page)
-        self.de_codestartdate.setObjectName(u"de_codestartdate")
-        self.de_codestartdate.setCalendarPopup(True)
-
-        self.gridLayout_6.addWidget(self.de_codestartdate, 1, 0, 1, 1)
-
-        self.lbl_newcodeenddate = QLabel(self.page)
-        self.lbl_newcodeenddate.setObjectName(u"lbl_newcodeenddate")
-
-        self.gridLayout_6.addWidget(self.lbl_newcodeenddate, 0, 1, 1, 1)
-
-
-        self.gridLayout_7.addLayout(self.gridLayout_6, 0, 0, 1, 1)
-
-        self.cb_podcast = QComboBox(self.page)
-        self.cb_podcast.setObjectName(u"cb_podcast")
-
-        self.gridLayout_7.addWidget(self.cb_podcast, 2, 0, 1, 1)
-
-        self.lbl_podcast = QLabel(self.page)
-        self.lbl_podcast.setObjectName(u"lbl_podcast")
-
-        self.gridLayout_7.addWidget(self.lbl_podcast, 1, 0, 1, 1)
+        self.horizontalLayout_4.addWidget(self.tbl_brandperformance)
 
 
-        self.gridLayout_3.addLayout(self.gridLayout_7, 0, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
 
-        self.le_newpodcast = QLineEdit(self.page)
+        self.stackedWidget.addWidget(self.performance_page)
+        self.chat_interface = QWidget()
+        self.chat_interface.setObjectName(u"chat_interface")
+        self.gridLayout = QGridLayout(self.chat_interface)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.te_chathistory = QTextEdit(self.chat_interface)
+        self.te_chathistory.setObjectName(u"te_chathistory")
+        self.te_chathistory.setStyleSheet(u"QTextEdit {\n"
+"    background-color: #857c7c;\n"
+"    border-radius: 10px;\n"
+"    padding: 10px;\n"
+"    font-family: 'Arial';\n"
+"    font-size: 14px;\n"
+"}")
+        self.te_chathistory.setReadOnly(True)
+
+        self.verticalLayout_3.addWidget(self.te_chathistory)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setSpacing(3)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.te_chatinput = QTextEdit(self.chat_interface)
+        self.te_chatinput.setObjectName(u"te_chatinput")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.te_chatinput.sizePolicy().hasHeightForWidth())
+        self.te_chatinput.setSizePolicy(sizePolicy)
+        self.te_chatinput.setMinimumSize(QSize(0, 60))
+        self.te_chatinput.setMaximumSize(QSize(1000, 60))
+        self.te_chatinput.setStyleSheet(u"QTextEdit {\n"
+"    background-color: #2d2b2b;\n"
+"    border-radius: 10px;\n"
+"	border: 5px solid #857c7c;\n"
+"    padding: 10px;\n"
+"    font-family: 'Arial';\n"
+"    font-size: 14px;\n"
+"	caret-color: red;\n"
+"}")
+
+        self.horizontalLayout_3.addWidget(self.te_chatinput)
+
+        self.bt_submitchat = QPushButton(self.chat_interface)
+        self.bt_submitchat.setObjectName(u"bt_submitchat")
+        self.bt_submitchat.setMinimumSize(QSize(50, 0))
+        self.bt_submitchat.setMaximumSize(QSize(50, 16777215))
+        self.bt_submitchat.setStyleSheet(u"QPushButton {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;          \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;             \n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"	background-color: #981118;\n"
+"}\n"
+"")
+        self.bt_submitchat.setIcon(icon5)
+        self.bt_submitchat.setCheckable(True)
+
+        self.horizontalLayout_3.addWidget(self.bt_submitchat)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+
+
+        self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.chat_interface)
+        self.data_upload = QWidget()
+        self.data_upload.setObjectName(u"data_upload")
+        self.gridLayout_3 = QGridLayout(self.data_upload)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.tab_datainput = QTabWidget(self.data_upload)
+        self.tab_datainput.setObjectName(u"tab_datainput")
+        self.tab_datainput.setStyleSheet(u"QTabWidget::pane { \n"
+"    border: 1px solid #444;            /* Border around the tab panel */\n"
+"    border-radius: 10px;               /* Rounded corners for the tab panel */\n"
+"    background-color: #857c7c;         /* Background color of the tab content area */\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"QTabBar::tab {\n"
+"    background-color: #2d2b2b;       \n"
+"    border: 1px solid #c9d1d9;          \n"
+"    padding: 5px;                     \n"
+"    border-radius: 5px;                           /* Text color for tabs */\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected {\n"
+"    background-color: #981118;         /* Background for the selected tab */\n"
+"    color: white;                      /* Text color for the selected tab */\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"")
+        self.new_podcast = QWidget()
+        self.new_podcast.setObjectName(u"new_podcast")
+        self.layoutWidget = QWidget(self.new_podcast)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(30, 20, 264, 95))
+        self.verticalLayout_5 = QVBoxLayout(self.layoutWidget)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.label_12 = QLabel(self.layoutWidget)
+        self.label_12.setObjectName(u"label_12")
+        self.label_12.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_5.addWidget(self.label_12)
+
+        self.cb_existingpodcasts = QComboBox(self.layoutWidget)
+        self.cb_existingpodcasts.setObjectName(u"cb_existingpodcasts")
+
+        self.verticalLayout_5.addWidget(self.cb_existingpodcasts)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.le_newpodcast = QLineEdit(self.layoutWidget)
         self.le_newpodcast.setObjectName(u"le_newpodcast")
 
-        self.gridLayout_3.addWidget(self.le_newpodcast, 2, 2, 1, 1)
+        self.horizontalLayout_5.addWidget(self.le_newpodcast)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.bt_submitnewpodcast = QPushButton(self.layoutWidget)
+        self.bt_submitnewpodcast.setObjectName(u"bt_submitnewpodcast")
 
-        self.gridLayout_3.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
+        self.horizontalLayout_5.addWidget(self.bt_submitnewpodcast)
 
 
-        self.gridLayout_9.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
 
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.gridLayout_4 = QGridLayout()
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.cb_brandspend = QComboBox(self.page)
-        self.cb_brandspend.setObjectName(u"cb_brandspend")
+        self.tab_datainput.addTab(self.new_podcast, "")
+        self.new_code = QWidget()
+        self.new_code.setObjectName(u"new_code")
+        self.widget = QWidget(self.new_code)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(90, 40, 244, 249))
+        self.verticalLayout_14 = QVBoxLayout(self.widget)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_7 = QVBoxLayout()
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.label_11 = QLabel(self.widget)
+        self.label_11.setObjectName(u"label_11")
+        self.label_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_4.addWidget(self.cb_brandspend, 2, 0, 1, 1)
+        self.horizontalLayout_16.addWidget(self.label_11)
 
-        self.cb_podcastspend = QComboBox(self.page)
-        self.cb_podcastspend.setObjectName(u"cb_podcastspend")
+        self.label_13 = QLabel(self.widget)
+        self.label_13.setObjectName(u"label_13")
+        self.label_13.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_4.addWidget(self.cb_podcastspend, 4, 0, 1, 1)
+        self.horizontalLayout_16.addWidget(self.label_13)
 
-        self.label_5 = QLabel(self.page)
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_16)
+
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.de_startdatenewcode = QDateEdit(self.widget)
+        self.de_startdatenewcode.setObjectName(u"de_startdatenewcode")
+        self.de_startdatenewcode.setCalendarPopup(True)
+
+        self.horizontalLayout_6.addWidget(self.de_startdatenewcode)
+
+        self.de_enddatenewcode = QDateEdit(self.widget)
+        self.de_enddatenewcode.setObjectName(u"de_enddatenewcode")
+        self.de_enddatenewcode.setCalendarPopup(True)
+
+        self.horizontalLayout_6.addWidget(self.de_enddatenewcode)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.label_3 = QLabel(self.widget)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_12.addWidget(self.label_3)
+
+        self.label_4 = QLabel(self.widget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_12.addWidget(self.label_4)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_12)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.cb_brandfilternewcode = QComboBox(self.widget)
+        self.cb_brandfilternewcode.setObjectName(u"cb_brandfilternewcode")
+
+        self.horizontalLayout_7.addWidget(self.cb_brandfilternewcode)
+
+        self.cb_podcastnewcode = QComboBox(self.widget)
+        self.cb_podcastnewcode.setObjectName(u"cb_podcastnewcode")
+
+        self.horizontalLayout_7.addWidget(self.cb_podcastnewcode)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_7)
+
+
+        self.verticalLayout_7.addLayout(self.verticalLayout_6)
+
+        self.le_newcode = QLineEdit(self.widget)
+        self.le_newcode.setObjectName(u"le_newcode")
+
+        self.verticalLayout_7.addWidget(self.le_newcode)
+
+        self.cb_activeorinactivecode = QComboBox(self.widget)
+        self.cb_activeorinactivecode.setObjectName(u"cb_activeorinactivecode")
+
+        self.verticalLayout_7.addWidget(self.cb_activeorinactivecode)
+
+
+        self.verticalLayout_14.addLayout(self.verticalLayout_7)
+
+        self.bt_submitnewcode = QPushButton(self.widget)
+        self.bt_submitnewcode.setObjectName(u"bt_submitnewcode")
+
+        self.verticalLayout_14.addWidget(self.bt_submitnewcode)
+
+        self.tab_datainput.addTab(self.new_code, "")
+        self.suspend_code = QWidget()
+        self.suspend_code.setObjectName(u"suspend_code")
+        self.widget1 = QWidget(self.suspend_code)
+        self.widget1.setObjectName(u"widget1")
+        self.widget1.setGeometry(QRect(30, 30, 402, 145))
+        self.verticalLayout_15 = QVBoxLayout(self.widget1)
+        self.verticalLayout_15.setSpacing(0)
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.verticalLayout_15.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_13 = QHBoxLayout()
+#ifndef Q_OS_MAC
+        self.horizontalLayout_13.setSpacing(-1)
+#endif
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.label_5 = QLabel(self.widget1)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setMaximumSize(QSize(16777215, 20))
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_4.addWidget(self.label_5, 3, 0, 1, 1)
+        self.horizontalLayout_13.addWidget(self.label_5)
 
-        self.lbl_actualspendbrand = QLabel(self.page)
-        self.lbl_actualspendbrand.setObjectName(u"lbl_actualspendbrand")
+        self.label_6 = QLabel(self.widget1)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setMaximumSize(QSize(16777215, 20))
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_4.addWidget(self.lbl_actualspendbrand, 1, 0, 1, 1)
+        self.horizontalLayout_13.addWidget(self.label_6)
+
+        self.label_14 = QLabel(self.widget1)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setMaximumSize(QSize(16777215, 20))
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_13.addWidget(self.label_14)
+
+        self.label_15 = QLabel(self.widget1)
+        self.label_15.setObjectName(u"label_15")
+        self.label_15.setMaximumSize(QSize(16777215, 20))
+        self.label_15.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_13.addWidget(self.label_15)
 
 
-        self.verticalLayout.addLayout(self.gridLayout_4)
+        self.verticalLayout_15.addLayout(self.horizontalLayout_13)
 
-        self.gridLayout_5 = QGridLayout()
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.bt_spendgoal = QPushButton(self.page)
-        self.bt_spendgoal.setObjectName(u"bt_spendgoal")
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.cb_existingcodes = QComboBox(self.widget1)
+        self.cb_existingcodes.setObjectName(u"cb_existingcodes")
 
-        self.gridLayout_5.addWidget(self.bt_spendgoal, 2, 0, 1, 1)
+        self.horizontalLayout_11.addWidget(self.cb_existingcodes)
 
-        self.le_spendgoal = QLineEdit(self.page)
+        self.cb_podcastsuspendcode = QComboBox(self.widget1)
+        self.cb_podcastsuspendcode.setObjectName(u"cb_podcastsuspendcode")
+
+        self.horizontalLayout_11.addWidget(self.cb_podcastsuspendcode)
+
+        self.cb_brandsuspendcode = QComboBox(self.widget1)
+        self.cb_brandsuspendcode.setObjectName(u"cb_brandsuspendcode")
+
+        self.horizontalLayout_11.addWidget(self.cb_brandsuspendcode)
+
+        self.de_suspenddate = QDateEdit(self.widget1)
+        self.de_suspenddate.setObjectName(u"de_suspenddate")
+
+        self.horizontalLayout_11.addWidget(self.de_suspenddate)
+
+
+        self.verticalLayout_15.addLayout(self.horizontalLayout_11)
+
+        self.bt_suspendcode = QPushButton(self.widget1)
+        self.bt_suspendcode.setObjectName(u"bt_suspendcode")
+
+        self.verticalLayout_15.addWidget(self.bt_suspendcode)
+
+        self.tab_datainput.addTab(self.suspend_code, "")
+        self.podcast_spend_goal = QWidget()
+        self.podcast_spend_goal.setObjectName(u"podcast_spend_goal")
+        self.layoutWidget1 = QWidget(self.podcast_spend_goal)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(40, 10, 316, 171))
+        self.verticalLayout_11 = QVBoxLayout(self.layoutWidget1)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_14 = QHBoxLayout()
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.label_7 = QLabel(self.layoutWidget1)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_14.addWidget(self.label_7)
+
+        self.label_8 = QLabel(self.layoutWidget1)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_14.addWidget(self.label_8)
+
+
+        self.verticalLayout_11.addLayout(self.horizontalLayout_14)
+
+        self.verticalLayout_9 = QVBoxLayout()
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.cb_brandfilterspdgl = QComboBox(self.layoutWidget1)
+        self.cb_brandfilterspdgl.setObjectName(u"cb_brandfilterspdgl")
+
+        self.horizontalLayout_8.addWidget(self.cb_brandfilterspdgl)
+
+        self.cb_podcastspdgl = QComboBox(self.layoutWidget1)
+        self.cb_podcastspdgl.setObjectName(u"cb_podcastspdgl")
+
+        self.horizontalLayout_8.addWidget(self.cb_podcastspdgl)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_8)
+
+        self.le_spendgoal = QLineEdit(self.layoutWidget1)
         self.le_spendgoal.setObjectName(u"le_spendgoal")
 
-        self.gridLayout_5.addWidget(self.le_spendgoal, 1, 0, 1, 1)
+        self.verticalLayout_9.addWidget(self.le_spendgoal)
 
-        self.lbl_actualspend = QLabel(self.page)
-        self.lbl_actualspend.setObjectName(u"lbl_actualspend")
 
-        self.gridLayout_5.addWidget(self.lbl_actualspend, 0, 1, 1, 1)
+        self.verticalLayout_11.addLayout(self.verticalLayout_9)
 
-        self.lbl_spendgoal = QLabel(self.page)
-        self.lbl_spendgoal.setObjectName(u"lbl_spendgoal")
+        self.verticalLayout_10 = QVBoxLayout()
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.pushButton_6 = QPushButton(self.layoutWidget1)
+        self.pushButton_6.setObjectName(u"pushButton_6")
 
-        self.gridLayout_5.addWidget(self.lbl_spendgoal, 0, 0, 1, 1)
+        self.verticalLayout_10.addWidget(self.pushButton_6)
 
-        self.le_actualspend = QLineEdit(self.page)
+        self.pushButton_7 = QPushButton(self.layoutWidget1)
+        self.pushButton_7.setObjectName(u"pushButton_7")
+
+        self.verticalLayout_10.addWidget(self.pushButton_7)
+
+
+        self.verticalLayout_11.addLayout(self.verticalLayout_10)
+
+        self.tab_datainput.addTab(self.podcast_spend_goal, "")
+        self.podcast_actual_spend = QWidget()
+        self.podcast_actual_spend.setObjectName(u"podcast_actual_spend")
+        self.layoutWidget2 = QWidget(self.podcast_actual_spend)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(60, 40, 321, 137))
+        self.verticalLayout_13 = QVBoxLayout(self.layoutWidget2)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.label_9 = QLabel(self.layoutWidget2)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_15.addWidget(self.label_9)
+
+        self.label_10 = QLabel(self.layoutWidget2)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.horizontalLayout_15.addWidget(self.label_10)
+
+
+        self.verticalLayout_13.addLayout(self.horizontalLayout_15)
+
+        self.verticalLayout_12 = QVBoxLayout()
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.cb_brandfilteractspd = QComboBox(self.layoutWidget2)
+        self.cb_brandfilteractspd.setObjectName(u"cb_brandfilteractspd")
+
+        self.horizontalLayout_9.addWidget(self.cb_brandfilteractspd)
+
+        self.cb_podcastactspd = QComboBox(self.layoutWidget2)
+        self.cb_podcastactspd.setObjectName(u"cb_podcastactspd")
+
+        self.horizontalLayout_9.addWidget(self.cb_podcastactspd)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_9)
+
+        self.le_actualspend = QLineEdit(self.layoutWidget2)
         self.le_actualspend.setObjectName(u"le_actualspend")
 
-        self.gridLayout_5.addWidget(self.le_actualspend, 1, 1, 1, 1)
-
-        self.bt_updtspendgoal = QPushButton(self.page)
-        self.bt_updtspendgoal.setObjectName(u"bt_updtspendgoal")
-
-        self.gridLayout_5.addWidget(self.bt_updtspendgoal, 3, 0, 1, 1)
-
-        self.bt_submitactualspend = QPushButton(self.page)
-        self.bt_submitactualspend.setObjectName(u"bt_submitactualspend")
-
-        self.gridLayout_5.addWidget(self.bt_submitactualspend, 2, 1, 1, 1)
-
-        self.bt_updtactualspend = QPushButton(self.page)
-        self.bt_updtactualspend.setObjectName(u"bt_updtactualspend")
-
-        self.gridLayout_5.addWidget(self.bt_updtactualspend, 3, 1, 1, 1)
+        self.verticalLayout_12.addWidget(self.le_actualspend)
 
 
-        self.verticalLayout.addLayout(self.gridLayout_5)
+        self.verticalLayout_13.addLayout(self.verticalLayout_12)
+
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.pushButton_9 = QPushButton(self.layoutWidget2)
+        self.pushButton_9.setObjectName(u"pushButton_9")
+
+        self.horizontalLayout_10.addWidget(self.pushButton_9)
+
+        self.pushButton_8 = QPushButton(self.layoutWidget2)
+        self.pushButton_8.setObjectName(u"pushButton_8")
+
+        self.horizontalLayout_10.addWidget(self.pushButton_8)
 
 
-        self.gridLayout_9.addLayout(self.verticalLayout, 1, 0, 1, 1)
+        self.verticalLayout_13.addLayout(self.horizontalLayout_10)
 
-        self.stackedWidget.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.stackedWidget.addWidget(self.page_2)
+        self.tab_datainput.addTab(self.podcast_actual_spend, "")
 
-        self.gridLayout_10.addWidget(self.stackedWidget, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.tab_datainput, 0, 1, 1, 1)
 
-        mw_home.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(mw_home)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1100, 24))
-        self.menubar.setDefaultUp(False)
-        self.menubar.setNativeMenuBar(False)
-        self.file = QMenu(self.menubar)
-        self.file.setObjectName(u"file")
-        self.file.setEnabled(True)
-        mw_home.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(mw_home)
-        self.statusbar.setObjectName(u"statusbar")
-        self.statusbar.setEnabled(False)
-        self.statusbar.setSizeGripEnabled(False)
-        mw_home.setStatusBar(self.statusbar)
-        self.w_dock = QDockWidget(mw_home)
-        self.w_dock.setObjectName(u"w_dock")
-        sizePolicy.setHeightForWidth(self.w_dock.sizePolicy().hasHeightForWidth())
-        self.w_dock.setSizePolicy(sizePolicy)
-        self.w_dock.setMinimumSize(QSize(50, 288))
-        font = QFont()
-        font.setPointSize(9)
-        self.w_dock.setFont(font)
-        self.w_dock.setFeatures(QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
-        self.dockWidgetContents = QWidget()
-        self.dockWidgetContents.setObjectName(u"dockWidgetContents")
-        self.verticalLayout_3 = QVBoxLayout(self.dockWidgetContents)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.bt_home = QToolButton(self.dockWidgetContents)
-        self.bt_home.setObjectName(u"bt_home")
-        icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.GoHome))
-        self.bt_home.setIcon(icon1)
+        self.stackedWidget.addWidget(self.data_upload)
 
-        self.verticalLayout_3.addWidget(self.bt_home)
+        self.horizontalLayout_2.addWidget(self.stackedWidget)
 
-        self.bt_chat = QToolButton(self.dockWidgetContents)
-        self.bt_chat.setObjectName(u"bt_chat")
-        icon2 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.WeatherStorm))
-        self.bt_chat.setIcon(icon2)
+        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.verticalLayout_3.addWidget(self.bt_chat)
+        self.retranslateUi(MainWindow)
 
-        self.bt_brandperformance = QToolButton(self.dockWidgetContents)
-        self.bt_brandperformance.setObjectName(u"bt_brandperformance")
-        icon3 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MailMarkImportant))
-        self.bt_brandperformance.setIcon(icon3)
-
-        self.verticalLayout_3.addWidget(self.bt_brandperformance)
-
-        self.bt_codepodcastinput = QToolButton(self.dockWidgetContents)
-        self.bt_codepodcastinput.setObjectName(u"bt_codepodcastinput")
-        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaEject))
-        self.bt_codepodcastinput.setIcon(icon4)
-
-        self.verticalLayout_3.addWidget(self.bt_codepodcastinput)
-
-        self.verticalSpacer = QSpacerItem(20, 285, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_3.addItem(self.verticalSpacer)
-
-        self.bt_refresh = QToolButton(self.dockWidgetContents)
-        self.bt_refresh.setObjectName(u"bt_refresh")
-        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.MediaSeekForward))
-        self.bt_refresh.setIcon(icon5)
-
-        self.verticalLayout_3.addWidget(self.bt_refresh)
-
-        self.bt_settings = QToolButton(self.dockWidgetContents)
-        self.bt_settings.setObjectName(u"bt_settings")
-        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout))
-        self.bt_settings.setIcon(icon6)
-
-        self.verticalLayout_3.addWidget(self.bt_settings)
-
-        self.w_dock.setWidget(self.dockWidgetContents)
-        mw_home.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.w_dock)
-
-        self.menubar.addAction(self.file.menuAction())
-        self.file.addAction(self.actionclose)
-
-        self.retranslateUi(mw_home)
-
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
+        self.tab_datainput.setCurrentIndex(2)
 
 
-        QMetaObject.connectSlotsByName(mw_home)
+        QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
-    def retranslateUi(self, mw_home):
-        mw_home.setWindowTitle(QCoreApplication.translate("mw_home", u"MainWindow", None))
-        self.actionclose.setText(QCoreApplication.translate("mw_home", u"close", None))
-        self.current_month_revenue.setText(QCoreApplication.translate("mw_home", u"TextLabel", None))
-        self.rev_title.setText(QCoreApplication.translate("mw_home", u"Curent Monthly Revenue", None))
-        self.spend_label.setText(QCoreApplication.translate("mw_home", u"spend goal", None))
+    def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.label.setText("")
+        self.bt_home.setText("")
+        self.bt_brandperformance.setText("")
+        self.bt_chat.setText("")
+        self.bt_datainput.setText("")
+        self.bt_logout.setText("")
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Homepage placeholder", None))
+        self.bt_seeperformance.setText("")
         self.bt_submitchat.setText("")
-        self.lbl_brandfilter.setText(QCoreApplication.translate("mw_home", u"brand", None))
-        self.lbl_datefilter.setText(QCoreApplication.translate("mw_home", u"date filter", None))
-        self.bt_seeperformance.setText(QCoreApplication.translate("mw_home", u"see performance", None))
-        self.bt_submitnewpodcast.setText(QCoreApplication.translate("mw_home", u"submit podcast", None))
-        self.bt_submitnewcode.setText(QCoreApplication.translate("mw_home", u"submit code", None))
-        self.bt_suspendcode.setText(QCoreApplication.translate("mw_home", u"suspend code", None))
-        self.lbl_newcode_3.setText(QCoreApplication.translate("mw_home", u"new podcast", None))
-        self.lbl_newcode_2.setText(QCoreApplication.translate("mw_home", u"Exisiting code", None))
-        self.lbl_newcode.setText(QCoreApplication.translate("mw_home", u"new code", None))
-        self.lbl_podcast_2.setText(QCoreApplication.translate("mw_home", u"podcast", None))
-        self.lbl_newcodestartdate.setText(QCoreApplication.translate("mw_home", u"code start date", None))
-        self.lbl_newcodeenddate.setText(QCoreApplication.translate("mw_home", u"code end date", None))
-        self.lbl_podcast.setText(QCoreApplication.translate("mw_home", u"podcast", None))
-        self.label_5.setText(QCoreApplication.translate("mw_home", u"podcast", None))
-        self.lbl_actualspendbrand.setText(QCoreApplication.translate("mw_home", u"brand", None))
-        self.bt_spendgoal.setText(QCoreApplication.translate("mw_home", u"submit spend goal", None))
-        self.lbl_actualspend.setText(QCoreApplication.translate("mw_home", u"actual spend", None))
-        self.lbl_spendgoal.setText(QCoreApplication.translate("mw_home", u"spend goal", None))
-        self.bt_updtspendgoal.setText(QCoreApplication.translate("mw_home", u"update spend goal", None))
-        self.bt_submitactualspend.setText(QCoreApplication.translate("mw_home", u"submit actual spend", None))
-        self.bt_updtactualspend.setText(QCoreApplication.translate("mw_home", u"update actual spend", None))
-        self.file.setTitle(QCoreApplication.translate("mw_home", u"file", None))
-        self.w_dock.setWindowTitle(QCoreApplication.translate("mw_home", u"podscale", None))
-        self.bt_home.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_chat.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_brandperformance.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_codepodcastinput.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_refresh.setText(QCoreApplication.translate("mw_home", u"...", None))
-        self.bt_settings.setText(QCoreApplication.translate("mw_home", u"...", None))
+        self.label_12.setText(QCoreApplication.translate("MainWindow", u"podcast", None))
+        self.le_newpodcast.setPlaceholderText(QCoreApplication.translate("MainWindow", u"new podcast", None))
+        self.bt_submitnewpodcast.setText(QCoreApplication.translate("MainWindow", u"submit podcast", None))
+        self.tab_datainput.setTabText(self.tab_datainput.indexOf(self.new_podcast), QCoreApplication.translate("MainWindow", u"new podcast", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"start date", None))
+        self.label_13.setText(QCoreApplication.translate("MainWindow", u"end date", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"brand", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"podcast", None))
+        self.le_newcode.setPlaceholderText(QCoreApplication.translate("MainWindow", u"new code", None))
+        self.bt_submitnewcode.setText(QCoreApplication.translate("MainWindow", u"submit new code", None))
+        self.tab_datainput.setTabText(self.tab_datainput.indexOf(self.new_code), QCoreApplication.translate("MainWindow", u"new code", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"code", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"podcast", None))
+        self.label_14.setText(QCoreApplication.translate("MainWindow", u"brand", None))
+        self.label_15.setText(QCoreApplication.translate("MainWindow", u"suspend date", None))
+        self.bt_suspendcode.setText(QCoreApplication.translate("MainWindow", u"suspend code", None))
+        self.tab_datainput.setTabText(self.tab_datainput.indexOf(self.suspend_code), QCoreApplication.translate("MainWindow", u"suspend code", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"brand", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"podcast", None))
+        self.le_spendgoal.setPlaceholderText(QCoreApplication.translate("MainWindow", u"spend goal", None))
+        self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"submit spend goal", None))
+        self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"update spend goal", None))
+        self.tab_datainput.setTabText(self.tab_datainput.indexOf(self.podcast_spend_goal), QCoreApplication.translate("MainWindow", u"podcast spend goal", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"brand", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"podcast", None))
+        self.le_actualspend.setPlaceholderText(QCoreApplication.translate("MainWindow", u"actual spend", None))
+        self.pushButton_9.setText(QCoreApplication.translate("MainWindow", u"update actual spend", None))
+        self.pushButton_8.setText(QCoreApplication.translate("MainWindow", u"submit actual spend", None))
+        self.tab_datainput.setTabText(self.tab_datainput.indexOf(self.podcast_actual_spend), QCoreApplication.translate("MainWindow", u"podcast actual spend", None))
     # retranslateUi
 

@@ -16,6 +16,12 @@ def get(token, endpoint, payload=None):
         items = response.json()
         return items
 
+
+def post(token, endpoint, payload=None):
+    headers = {"Authorization":f"Bearer {token}",
+               "Content-Type": "application/json"}
+    requests.post(server_endpoint+endpoint, headers=headers, json=payload)
+
 def login(username, password):
     data = {"username":username,
             "password":password}

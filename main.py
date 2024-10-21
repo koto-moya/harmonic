@@ -3,12 +3,11 @@ from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from modules.app_requests import get, login, Token
+from modules.app_requests import get, post, login, Token
 from modules.utils import create_message, create_chat
 from config import chat_interface_html_head
 
 class LoginWindow(QtWidgets.QWidget, Ui_login):
-
     login_successful = Signal(Token)
     def __init__(self):
         super().__init__()
@@ -33,6 +32,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.resize(800, 600)
         self.chat_history = ""
         self.te_chathistory.setHtml(chat_interface_html_head+"<body></body>")
+        
         # sidebar select
         self.bt_home.clicked.connect(lambda: self.switch_view(0))
         self.bt_chat.clicked.connect(lambda: self.switch_view(2))
@@ -43,9 +43,9 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bt_submitnewcode.clicked.connect(self.add_new_code)
         self.bt_submitnewpodcast.clicked.connect(self.add_new_podcast)
         self.bt_suspendcode.clicked.connect(self.sus_code)
-        self.bt_seeperformance.clicked.connect(self.display_performance)
-        # brand performance page
         
+        # brand performance page
+        self.bt_seeperformance.clicked.connect(self.display_performance)
         self.table_model = QStandardItemModel()
         self.tbl_brandperformance.setModel(self.table_model)
         self.de_startdate.setDate(QDate(2024,9,1))
@@ -61,12 +61,14 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show()
 
     def intialize_combo_boxes(self):
+        self.cb_activeorinactivecode.setPlaceholderText("active status")
+        self.cb_activeorinactivecode.addItems(["active", "inactive"])
         self.completers = {}
         self.combo_boxes = {"/getcodes": [self.cb_existingcodes],
                             "/getpodcasts":[self.cb_existingpodcasts,self.cb_podcastnewcode, self.cb_podcastactspd,
                                         self.cb_podcastsuspendcode, self.cb_podcastspdgl],
                             "/getbrands":[self.cb_brandfilterperf, self.cb_brandfilterspdgl, self.cb_brandfilteractspd,
-                                          self.cb_brandfilternewcode] 
+                                          self.cb_brandfilternewcode, self.cb_brandsuspendcode] 
                             }
         for endpoint, cbx in self.combo_boxes.items():
             data = get(self.token, endpoint)
@@ -76,17 +78,19 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 completer.setCaseSensitivity(Qt.CaseSensitivity(False))
                 cb.setCompleter(completer)
                 self.completers[cb] = completer
+                cb.setPlaceholderText(endpoint.lstrip("/get"))
                 cb.addItems(data)
                 completer.setModel(cb.model())
         
     def update_combo_boxes(self, endpoint):
-        for cb in self.combo_boxes[endpoint]:
-            self.update_combo_box(cb, self.completers[cb], endpoint)
-
-    def update_combo_box(self, combo_box, completer, endpoint):
-        current_choice = combo_box.currentText()
         data = get(self.token, endpoint)
+        for cb in self.combo_boxes[endpoint]:
+            self.update_combo_box(cb, self.completers[cb], data, endpoint)
+
+    def update_combo_box(self, combo_box, completer, data, endpoint):
+        current_choice = combo_box.currentText()
         combo_box.clear()
+        combo_box.setPlaceholderText(endpoint.lstrip("/get"))
         combo_box.addItems(data)
         completer.setModel(combo_box.model())
         if current_choice in data:
@@ -124,15 +128,32 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table_model.appendRow(row_items)
 
     def add_new_code(self):
-        new_code  = self.le_newcode.toPlainText()
+        new_code  = self.le_newcode.text()
+        startdate = self.de_startdatenewcode.date().toString()
+        enddate = self.de_enddatenewcode.date().toString()
+        brand = self.cb_brandfilternewcode.currentText()
+        podcast = self.cb_podcastnewcode.currentText()
+        activestatus = self.cb_activeorinactivecode.currentText()
+        if activestatus == "active":
+            activestatus = True
+        else:
+            activestatus = False
+        post(self.token, "/newcodes", {"code":new_code, "brand":brand, "podcast":podcast, 
+                                          "activestatus":activestatus, "startdate":startdate, "enddate":enddate})
         self.update_combo_boxes("/getcodes")
 
     def add_new_podcast(self):
+        new_podcast = self.le_newpodcast.text()
+        post(self.token, "/newpodcasts", {"podcastname":new_podcast})
         self.update_combo_boxes("/getpodcasts")
-    
-    def sus_code(self):
-        self.update_combo_boxes("/getcodes")
 
+    def sus_code(self):
+        code = self.cb_existingcodes.currentText()
+        podcast = self.cb_podcastsuspendcode.currentText()
+        brand = self.cb_brandsuspendcode.currentText()
+        suspenddate = self.de_suspenddate.date().toString()
+        post(self.token, "/suspendcodes", {"code":code, "suspenddate":suspenddate, "podcast":podcast, "brand":brand})
+        self.update_combo_boxes("/getcodes")
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication()
