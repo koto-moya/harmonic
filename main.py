@@ -1,9 +1,9 @@
-from homepage_v2.homepage_ui import Ui_MainWindow
+from homepage.homepage_ui import Ui_MainWindow
 from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal, QDate
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from modules.app_requests import get, post, login, Token
+from modules.app_requests import gestalt_get, gestalt_post, login, Token
 from modules.utils import create_message, create_chat
 from config import chat_interface_html_head
 
@@ -71,7 +71,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                           self.cb_brandfilternewcode, self.cb_brandsuspendcode] 
                             }
         for endpoint, cbx in self.combo_boxes.items():
-            data = get(self.token, endpoint)
+            data = gestalt_get(self.token, endpoint)
             for cb in cbx:
                 cb.setEditable(True)
                 completer = QtWidgets.QCompleter(cb)
@@ -83,7 +83,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 completer.setModel(cb.model())
         
     def update_combo_boxes(self, endpoint):
-        data = get(self.token, endpoint)
+        data = gestalt_get(self.token, endpoint)
         for cb in self.combo_boxes[endpoint]:
             self.update_combo_box(cb, self.completers[cb], data, endpoint)
 
@@ -104,10 +104,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # find the equivalent method for line edits
         in_text = self.te_chatinput.toPlainText()
         self.chat_history += create_message("messageoutgoing", in_text)
-        # agent_message = get_agent_response(in_text)
-        #while not agent_message:
-        #   time.sleep(.1)
-        agent_message = "hi boiiiii"
+        agent_message = gestalt_post(self.token, "/chat", in_text)
         self.chat_history += create_message("messageincoming", agent_message)
         chat = create_chat(self.chat_history)
         self.te_chathistory.setHtml(chat)
@@ -121,7 +118,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    "enddate" : self.de_enddate.date().toString(),
                    "brand" : self.cb_brandfilterperf.currentText()}
         self.table_model.clear()
-        data = get(self.token, "/getperformance", payload) # expect this to be a list of lists
+        data = gestalt_get(self.token, "/getperformance", payload) # expect this to be a list of lists
         self.table_model.setHorizontalHeaderLabels(data[0])
         for row in data[1:]:
             row_items = [QStandardItem(str(item)) for item in row]
@@ -138,13 +135,13 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             activestatus = True
         else:
             activestatus = False
-        post(self.token, "/newcodes", {"code":new_code, "brand":brand, "podcast":podcast, 
+        gestalt_post(self.token, "/newcodes", {"code":new_code, "brand":brand, "podcast":podcast, 
                                           "activestatus":activestatus, "startdate":startdate, "enddate":enddate})
         self.update_combo_boxes("/getcodes")
 
     def add_new_podcast(self):
         new_podcast = self.le_newpodcast.text()
-        post(self.token, "/newpodcasts", {"podcastname":new_podcast})
+        gestalt_post(self.token, "/newpodcasts", {"podcastname":new_podcast})
         self.update_combo_boxes("/getpodcasts")
 
     def sus_code(self):
@@ -152,7 +149,7 @@ class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         podcast = self.cb_podcastsuspendcode.currentText()
         brand = self.cb_brandsuspendcode.currentText()
         suspenddate = self.de_suspenddate.date().toString()
-        post(self.token, "/suspendcodes", {"code":code, "suspenddate":suspenddate, "podcast":podcast, "brand":brand})
+        gestalt_post(self.token, "/suspendcodes", {"code":code, "suspenddate":suspenddate, "podcast":podcast, "brand":brand})
         self.update_combo_boxes("/getcodes")
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from config import server_endpoint
 class Token:
     token: str = None
 
-def get(token, endpoint, payload=None):
+def gestalt_get(token, endpoint, payload=None):
     headers = {"Authorization":f"Bearer {token}",
                "Content-Type": "application/json"}
     response = requests.get(server_endpoint+endpoint, headers=headers, params=payload)
@@ -17,7 +17,7 @@ def get(token, endpoint, payload=None):
         return items
 
 
-def post(token, endpoint, payload=None):
+def gestalt_post(token, endpoint, payload=None):
     headers = {"Authorization":f"Bearer {token}",
                "Content-Type": "application/json"}
     requests.post(server_endpoint+endpoint, headers=headers, json=payload)
