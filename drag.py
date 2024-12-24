@@ -88,7 +88,10 @@ class HarmonicPlot(pg.PlotWidget):
         self.units = {}
         self.color_map = {}
         self.scatters = {}
-        self.right_vb = None
+        self.right_vb = pg.ViewBox()
+        self.right_axis = None
+        self.right_axis_items = {}
+        self.right_units = None
         self.vb = self.plot_item.vb  # Main ViewBox
         self.is_datetime = is_datetime
 
@@ -151,6 +154,9 @@ class HarmonicPlot(pg.PlotWidget):
             rateLimit=config.performance.ratelimit_mouse, 
             slot=self._on_mouse_move
         )
+        self.right_axis = None
+        self.right_axis_items = {}  # Track items on right axis
+        self.right_units = None     # Track units for right axis
 
     def wheelEvent(self, ev):
         # Only zoom X-axis on wheel event
@@ -175,7 +181,11 @@ class HarmonicPlot(pg.PlotWidget):
         
         if data_label:
             self.plot_info[data_label] = y_vals
-            self.units[data_label] = units  # Store units with data label
+            self.units[data_label] = units
+            if plot_on_right:
+                self.right_axis_items[data_label] = True
+                if self.right_units is None:
+                    self.right_units = units
 
         # Random color selection instead of popping first color
         furthest_color = random.choice(config.chart.color_palette)
@@ -191,21 +201,42 @@ class HarmonicPlot(pg.PlotWidget):
         )
 
         if plot_on_right:
-            # Create right ViewBox and AxisItem
-            self.right_vb = pg.ViewBox()
-            self.right_vb.setMouseEnabled(x=False, y=False)  # Disable mouse interaction for right axis
-            self.right_axis = pg.AxisItem('right')
-            self.right_axis.setLabel("Right Axis")
-            self.right_axis.setStyle(tickLength=-10)
-
-            # Add AxisItem to the plot layout
-            self.plot_item.layout.addItem(self.right_axis, 2, 2)
-            self.plot_item.showAxis('right')
-            self.right_axis.linkToView(self.right_vb)
-            self.plot_item.scene().addItem(self.right_vb)
+            if self.right_axis is None:
+                # Initialize right axis setup
+                self.right_axis = pg.AxisItem('right')
+                self.plot_item.layout.addItem(self.right_axis, 2, 3)
+                self.right_axis.linkToView(self.right_vb)
+                self.scene().addItem(self.right_vb)
+                self.right_vb.setXLink(self.plot_item.vb)
+                
+                # Match the main viewbox settings
+                self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
+                self.right_vb.enableAutoRange(axis='y')
+                
+                # Style the right axis
+                self.right_axis.setPen(pg.mkPen(
+                    color=config.chart.axis_color,
+                    width=config.chart.axis_width,
+                    alpha=int(255 * config.chart.axis_alpha)
+                ))
+                self.right_axis.setZValue(-1000)
+            
+            # Add item to right viewbox
             self.right_vb.addItem(line)
+            
+            # Update axis label
+            if units == '$':
+                self.right_axis.setLabel(f'Value ({units})', color=config.chart.axis_color)
+            else:
+                self.right_axis.setLabel(f'Value {units if units else ""}', color=config.chart.axis_color)
         else:
             self.plot_item.addItem(line)
+            # Format left axis based on units of first item
+            if len(self.plot_info) == 1:
+                if units == '$':
+                    self.plot_item.getAxis('left').setLabel(f'Value ({units})')
+                else:
+                    self.plot_item.getAxis('left').setLabel(f'Value {units if units else ""}')
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):
@@ -239,7 +270,8 @@ class HarmonicPlot(pg.PlotWidget):
                 values = {
                     label: {
                         'value': data[idx],
-                        'units': self.units.get(label)
+                        'units': self.units.get(label),
+                        'right_axis': label in self.right_axis_items
                     } 
                     for label, data in self.plot_info.items() 
                     if idx < len(data)
@@ -423,12 +455,35 @@ class InfiniteCanvas(QGraphicsScene):
                 volatility=random.uniform(0.5, 1.5)
             )
             
-            # Add 2-3 lines per chart for additional stress
+            # Configure plot widget with data
             plot.plot_widget.x_vals = x_vals
-            plot.plot_widget.addNewLines(y_vals, data_label=f"{title} Price")
-            plot.plot_widget.addNewLines(y_vals * random.uniform(0.8, 1.2), data_label=f"{title} MA-50")
-            if random.random() > 0.5:  # 50% chance of third line
-                plot.plot_widget.addNewLines(y_vals * random.uniform(0.9, 1.1), data_label=f"{title} MA-200")
+            
+            # Add price on left axis
+            plot.plot_widget.addNewLines(
+                y_vals, 
+                data_label=f"{title} Price", 
+                units="$", 
+                plot_on_right=False
+            )
+            
+            # Add moving averages on right axis
+            ma50 = y_vals * random.uniform(0.8, 1.2)
+            plot.plot_widget.addNewLines(
+                ma50, 
+                data_label=f"{title} MA-50", 
+                units="$", 
+                plot_on_right=True
+            )
+            
+            # 50% chance of adding MA-200
+            if random.random() > 0.5:
+                ma200 = y_vals * random.uniform(0.9, 1.1)
+                plot.plot_widget.addNewLines(
+                    ma200, 
+                    data_label=f"{title} MA-200", 
+                    units="$", 
+                    plot_on_right=True
+                )
 
     def deselect_all(self):
         for item in self.items():
