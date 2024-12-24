@@ -7,12 +7,29 @@ class InfiniteCanvas(QGraphicsScene):
     def __init__(self):
         super().__init__()
         self.setSceneRect(-1000, -1000, 2000, 2000)
+        self.plots = {}  # Store plots by ID
         
-        # Create single chart
-        plot = DraggableObject(title="Stock Price vs Fed Rate")
+        # Create initial chart
+        plot_id = self.create_draggable_object("Stock Price vs Fed Rate", pos=(-400, -150))
+        self.add_stock_and_rate_chart(plot_id)
+
+    def create_draggable_object(self, title, pos=(-400, -150), width=780, height=420):
+        """Create a new draggable object and return its ID"""
+        plot = DraggableObject(title=title, width=width, height=height)
         plot.clicked.connect(self.deselect_all)
         self.addItem(plot)
-        plot.setPos(QPointF(-400, -150))  # Center position
+        plot.setPos(QPointF(*pos))
+        
+        plot_id = id(plot)
+        self.plots[plot_id] = plot
+        return plot_id
+
+    def add_stock_and_rate_chart(self, plot_id):
+        """Add stock price and fed rate chart to a draggable object"""
+        if plot_id not in self.plots:
+            return
+            
+        plot = self.plots[plot_id]
         
         # Generate both datasets
         x_vals, stock_vals = generate_stock_data()
