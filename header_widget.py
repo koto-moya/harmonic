@@ -51,8 +51,8 @@ class HeaderWidget(QWidget):
             return
             
         color_map = self.plot_widget.color_map
-        label_width = int(self.parent_width * 0.2)  # Each label gets 20% of width
-        label_height = int(self.parent_height * 0.4)  # Each label gets 40% of height
+        label_width = int(self.parent_width * 0.2)
+        label_height = int(self.parent_height * 0.4)
         
         # Clear existing labels if number of values changed
         if len(values) != len(self.value_labels):
@@ -67,14 +67,13 @@ class HeaderWidget(QWidget):
             
             if label not in self.value_labels:
                 self.value_labels[label] = QLabel()
-                color = color_map.get(label, '#FFFFFF')
                 self.value_labels[label].setFixedSize(QSize(label_width, label_height))
-                self.value_labels[label].setStyleSheet(f"color: {color}; font-size: {config.font.size}px;")
+                # Set base style with global font size only
+                self.value_labels[label].setStyleSheet(f"font-size: {config.font.size}px;")
                 self.value_labels[label].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
                 
-                # Calculate grid position ensuring left column starts at top
-                row = i % (len(values) // 2 + len(values) % 2)  # Distribute evenly
-                col = i // (len(values) // 2 + len(values) % 2)  # Switch columns after half
+                row = i % (len(values) // 2 + len(values) % 2)
+                col = i // (len(values) // 2 + len(values) % 2)
                 self.values_grid.addWidget(self.value_labels[label], row, col)
             
             # Format value based on units
@@ -83,4 +82,9 @@ class HeaderWidget(QWidget):
             else:
                 formatted_value = f"{value:.2f}{units if units else ''}"
             
-            self.value_labels[label].setText(f"{label}: {formatted_value}")
+            # Use HTML to color label and value separately
+            color = color_map.get(label, '#FFFFFF')
+            self.value_labels[label].setText(
+                f'<span style="color: {config.font.color}">{label}: </span>'
+                f'<span style="color: {color}">{formatted_value}</span>'
+            )

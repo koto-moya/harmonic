@@ -4,6 +4,7 @@ import random
 from PySide6.QtCore import Signal, QTimer
 from PySide6.QtGui import QPainter
 from config import config  # Changed to absolute
+from utils import find_furthest_color  # Add this import
 
 class HarmonicPlot(pg.PlotWidget):
     # Add signal
@@ -62,18 +63,23 @@ class HarmonicPlot(pg.PlotWidget):
         # Configure grid and axes separately
         self.plot_item.showGrid(x=False, y=True)
         
-        # Style the grid
+        # Style the grid - keep existing grid styling
         grid_pen = pg.mkPen(color=config.chart.grid_color, alpha=int(255 * config.chart.grid_alpha))
         self.plot_item.showGrid(x=False, y=True, alpha=config.chart.grid_alpha)
         
-        # Style the axes
-        axis_pen = pg.mkPen(
+        # Style the axes - make y-axis fully transparent while keeping x-axis visible
+        x_axis_pen = pg.mkPen(
             color=config.chart.axis_color, 
             width=config.chart.axis_width, 
             alpha=int(255 * config.chart.axis_alpha)
         )
-        self.plot_item.getAxis('left').setPen(axis_pen)
-        self.plot_item.getAxis('bottom').setPen(axis_pen)
+        y_axis_pen = pg.mkPen(
+            color=config.chart.axis_color, 
+            width=config.chart.axis_width, 
+            alpha=0  # Set y-axis to fully transparent
+        )
+        self.plot_item.getAxis('left').setPen(y_axis_pen)
+        self.plot_item.getAxis('bottom').setPen(x_axis_pen)
         
         # Set axis layers
         self.plot_item.getAxis('left').setZValue(-1000)
@@ -128,8 +134,8 @@ class HarmonicPlot(pg.PlotWidget):
                 if self.right_units is None:
                     self.right_units = units
 
-        # Random color selection instead of popping first color
-        furthest_color = random.choice(config.chart.color_palette)
+        # Select color furthest from existing colors using utility function
+        furthest_color = find_furthest_color(config.chart.color_palette, list(self.color_map.values()))
         self.color_map[data_label] = furthest_color
 
         pen = pg.mkPen(color=furthest_color, width=2)
@@ -158,7 +164,7 @@ class HarmonicPlot(pg.PlotWidget):
                 self.right_axis.setPen(pg.mkPen(
                     color=config.chart.axis_color,
                     width=config.chart.axis_width,
-                    alpha=int(255 * config.chart.axis_alpha)
+                    alpha=0  # Match left axis transparency
                 ))
                 self.right_axis.setZValue(-1000)
             

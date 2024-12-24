@@ -13,7 +13,7 @@ class ColorScheme(Enum):
 class FontConfig:
     path: str = "modules/OxygenMono-Regular.ttf"  # Simplified path that we know works
     family: str = "Arial"  # Default fallback font
-    size: int = 8
+    size: int = 9
     color: str = "#FFFFFF"
     weight: int = 400  # Normal weight
 
