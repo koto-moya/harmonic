@@ -22,12 +22,10 @@ class DraggableObject(QGraphicsItem, QObject):
         # Update to use HeaderWidget instead of TitleWidget
         self.header_widget = HeaderWidget(title, width, int(height * 0.06))
         
-        # Generate stock data
-        x_vals, y_vals = generate_stock_data()
-        self.plot_widget = HarmonicPlot(x_vals=x_vals)
+        # Initialize empty plot widget
+        self.plot_widget = HarmonicPlot()
         self.header_widget.set_plot_widget(self.plot_widget)
         self.plot_widget.setFixedSize(width, int(self._height_factor))
-        self.plot_widget.addNewLines(y_vals, data_label="Stock Price", units="$")
 
         self.header_proxy = QGraphicsProxyWidget(self)
         self.plot_proxy = QGraphicsProxyWidget(self)

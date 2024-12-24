@@ -187,10 +187,8 @@ class HarmonicPlot(pg.PlotWidget):
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):
-            # Handle proxy signal case
             pos = evt[0]
         else:
-            # Handle direct signal case
             pos = evt
             
         if self.sceneBoundingRect().contains(pos):
@@ -206,8 +204,21 @@ class HarmonicPlot(pg.PlotWidget):
                 for label, data in self.plot_info.items():
                     if idx < len(data):
                         y = float(data[idx])
+                        
+                        # Determine which viewbox to use based on axis
+                        if label in self.right_axis_items:
+                            vb = self.right_vb
+                        else:
+                            vb = self.vb
+                            
+                        # Transform the point to scene coordinates
+                        point = vb.mapFromView(pg.Point(self.x_vals[idx], y))
+                        scene_point = vb.mapToScene(point)
+                        # Transform back to view coordinates of the main viewbox
+                        view_point = self.vb.mapSceneToView(scene_point)
+                        
                         scatter_points.append({
-                            'pos': (self.x_vals[idx], y),
+                            'pos': (view_point.x(), view_point.y()),
                             'brush': pg.mkBrush(self.color_map.get(label, '#FFFFFF'))
                         })
                 

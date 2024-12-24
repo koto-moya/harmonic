@@ -33,6 +33,21 @@ def generate_stock_data(days=365, start_price=1.0, end_price=100.0, volatility=0
     S = start_price * np.exp((mu - volatility ** 2 / 2) * t + volatility * W)
     return t, np.round(S, 2)
 
+def generate_fed_rates(days=365, start_rate=2.0, end_rate=5.0, volatility=0.3):
+    """Generate simulated Fed rate data with less volatility than stock prices"""
+    t = np.linspace(0, days, days)
+    total_change = np.log(end_rate / start_rate)
+    mu = total_change / days + (volatility ** 2) / 2
+    
+    # Generate smoother random walk for rates
+    W = np.random.standard_normal(size=days)
+    W = np.cumsum(W) * np.sqrt(1/days)
+    W = np.convolve(W, np.ones(20)/20, mode='same')  # Smooth the data
+    
+    # Calculate rate path
+    R = start_rate * np.exp((mu - volatility ** 2 / 2) * t + volatility * W)
+    return t, np.round(R, 2)
+
 def find_furthest_color(palette, existing_colors):
     """Find color from palette that's furthest from existing colors."""
     if not existing_colors:
