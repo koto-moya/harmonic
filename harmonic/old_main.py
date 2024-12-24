@@ -5,10 +5,10 @@ from PySide6.QtCore import Qt, Signal, QDate, QThread
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QTextCursor, QFont
 from modules.app_requests import gestalt_post, login, Token, gestalt_get
 from modules.utils import * 
-from modules.vanity import Nyx
-from config import chat_interface_html_head
+from modules.Nyx import Nyx
+from harmonic.old_config import chat_interface_html_head
 import requests
-from config import server_endpoint
+from harmonic.old_config import server_endpoint
 import time
 import re
 import numpy as np
