@@ -29,12 +29,18 @@ class HeaderWidget(QWidget):
         # Flexible spacer
         self.header_layout.addStretch()
         
-        # Values container with grid layout - modified alignment
+        # Values container with grid layout - modified alignment and position
         self.values_container = QWidget()
         self.values_grid = QGridLayout(self.values_container)
         self.values_grid.setContentsMargins(0, 0, 0, 0)
         self.values_grid.setSpacing(5)
         self.values_grid.setAlignment(Qt.AlignTop)  # Align to top
+        
+        # Calculate position based on config
+        values_position = int(self.parent_width * config.chart.value_label_position)
+        self.values_container.setFixedWidth(self.parent_width - values_position)
+        self.values_container.move(values_position, 0)
+        
         self.header_layout.addWidget(self.values_container)
         
         # Container for value labels
@@ -68,8 +74,8 @@ class HeaderWidget(QWidget):
             if label not in self.value_labels:
                 self.value_labels[label] = QLabel()
                 self.value_labels[label].setFixedSize(QSize(label_width, label_height))
-                # Set base style with global font size only
-                self.value_labels[label].setStyleSheet(f"font-size: {config.font.size}px;")
+                # Update to use value_label_size
+                self.value_labels[label].setStyleSheet(f"font-size: {config.font.value_label_size}px;")
                 self.value_labels[label].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
                 
                 row = i % (len(values) // 2 + len(values) % 2)

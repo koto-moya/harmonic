@@ -14,6 +14,7 @@ class FontConfig:
     path: str = "modules/OxygenMono-Regular.ttf"  # Simplified path that we know works
     family: str = "Arial"  # Default fallback font
     size: int = 9
+    value_label_size: int = 8  # New config for value labels
     color: str = "#FFFFFF"
     weight: int = 400  # Normal weight
 
@@ -36,6 +37,7 @@ class ChartConfig:
     scatter_opacity: int = 120
     y_axis_units: str = None  # Default unit type for y-axis
     currency_symbol: str = '$'  # Default currency symbol
+    value_label_position: float = 0.4  # Position as percentage of header width (0.0 to 1.0)
 
     def __post_init__(self):
         if self.color_palette is None:

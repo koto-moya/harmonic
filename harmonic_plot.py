@@ -36,6 +36,7 @@ class HarmonicPlot(pg.PlotWidget):
         self.right_units = None
         self.vb = self.plot_item.vb  # Main ViewBox
         self.is_datetime = is_datetime
+        self.has_right_axis = False  # Add flag to track right axis presence
 
         if enable_mouseover:
             self.scene().sigMouseMoved.connect(self.mouse_moved)
@@ -57,8 +58,6 @@ class HarmonicPlot(pg.PlotWidget):
         view_box.setLimits(yMin=None, yMax=None)
         
         # Set auto range once for initial view, then disable
-        view_box.enableAutoRange(axis='y')
-        view_box.enableAutoRange(axis='x')
         
         # Configure grid and axes separately
         self.plot_item.showGrid(x=False, y=True)
@@ -67,7 +66,7 @@ class HarmonicPlot(pg.PlotWidget):
         grid_pen = pg.mkPen(color=config.chart.grid_color, alpha=int(255 * config.chart.grid_alpha))
         self.plot_item.showGrid(x=False, y=True, alpha=config.chart.grid_alpha)
         
-        # Style the axes - make y-axis fully transparent while keeping x-axis visible
+        # Style the axes - make y-axes fully transparent while keeping x-axis visible
         x_axis_pen = pg.mkPen(
             color=config.chart.axis_color, 
             width=config.chart.axis_width, 
@@ -106,6 +105,11 @@ class HarmonicPlot(pg.PlotWidget):
         self.right_units = None     # Track units for right axis
 
     def wheelEvent(self, ev):
+        # Ignore wheel events if there's a right axis
+        if self.has_right_axis:
+            ev.accept()
+            return
+            
         # Only zoom X-axis on wheel event
         if self.plot_item.sceneBoundingRect().contains(ev.position()):  # Changed from pos() to position()
             view_box = self.plot_item.getViewBox()
@@ -121,6 +125,13 @@ class HarmonicPlot(pg.PlotWidget):
         if self.right_vb:
             self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
             self.right_vb.linkedViewChanged(self.plot_item.vb, self.right_vb.XAxis)
+
+    def hideAutoRangeButton(self):
+        # Get the ViewBox and hide its auto-range button
+        view_box = self.plot_item.getViewBox()
+        for child in view_box.childItems():
+            if isinstance(child, pg.ButtonItem):
+                child.hide()
 
     def addNewLines(self, y_vals, data_label=None, units=None, plot_on_right=False):
         # Round y_vals to configured precision
@@ -148,6 +159,10 @@ class HarmonicPlot(pg.PlotWidget):
         )
 
         if plot_on_right:
+            self.has_right_axis = True  # Set flag when right axis is added
+            # Hide the auto-range button when we have a right axis
+            self.hideButtons()
+            
             if self.right_axis is None:
                 # Initialize right axis setup
                 self.right_axis = pg.AxisItem('right')
@@ -164,9 +179,13 @@ class HarmonicPlot(pg.PlotWidget):
                 self.right_axis.setPen(pg.mkPen(
                     color=config.chart.axis_color,
                     width=config.chart.axis_width,
-                    alpha=0  # Match left axis transparency
+                    alpha=0  # Make right axis transparent
                 ))
                 self.right_axis.setZValue(-1000)
+            
+            # Lock both viewboxes when right axis exists
+            self.vb.setMouseEnabled(x=False, y=False)
+            self.right_vb.setMouseEnabled(x=False, y=False)
             
             # Add item to right viewbox
             self.right_vb.addItem(line)
