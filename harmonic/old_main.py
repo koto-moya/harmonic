@@ -3,7 +3,7 @@ from login.login_ui import Ui_login
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, Signal, QDate, QThread
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QTextCursor, QFont
-from modules.app_requests import gestalt_post, login, Token, gestalt_get
+from app_requests import gestalt_post, login, Token, gestalt_get
 from modules.utils import * 
 from modules.Nyx import Nyx
 from harmonic.old_config import chat_interface_html_head

@@ -30,10 +30,10 @@ class MainWindow(QGraphicsView):
         self.scene = InfiniteCanvas()
         self.setRenderHint(QPainter.Antialiasing)
         self.setScene(self.scene)
-        self.setBackgroundBrush(QColor("##0A0A0A"))
+        self.setBackgroundBrush(QColor(config.canvas_color))
         self.setDragMode(QGraphicsView.ScrollHandDrag)
-        self.setWindowTitle(config.window_title)
-        self.setGeometry(*config.window_position, *config.window_size)
+        self.setWindowTitle(config.application_title)
+        self.setGeometry(*config.application_position, *config.application_size)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
 
     def wheelEvent(self, event):

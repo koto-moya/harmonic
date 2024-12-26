@@ -1,7 +1,6 @@
 import requests
 from config import server_endpoint
-from pydantic import BaseModel, Extra
-from typing import List, Dict, Optional
+from pydantic import BaseModel
 
 class ConfigParams(BaseModel):
     config_name: str

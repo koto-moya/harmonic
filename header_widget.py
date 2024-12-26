@@ -1,11 +1,18 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QGridLayout, QLabel
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QGridLayout, QLabel, QGraphicsDropShadowEffect
 from PySide6.QtCore import Qt, QSize, Slot
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QColor
 from config import config  # Changed from relative to absolute
 
 class HeaderWidget(QWidget):
     def __init__(self, title: str = "Title", parent_width: int = 0, parent_height: int = 0):
         super().__init__()
+        
+        # Set background for the main widget
+        bg_color = f"rgba({int(config.title.background_color[1:3], 16)}, \
+                         {int(config.title.background_color[3:5], 16)}, \
+                         {int(config.title.background_color[5:7], 16)}, \
+                         {config.title.background_opacity})"
+        self.setStyleSheet(f"background-color: {bg_color};")
         
         # Main horizontal layout
         self.header_layout = QHBoxLayout(self)
@@ -23,17 +30,21 @@ class HeaderWidget(QWidget):
         self.title_label = QLabel(title)
         self.title_label.setFixedSize(QSize(title_width, int(self.parent_height * 0.8)))
         self.title_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.title_label.setStyleSheet(f"color: {config.font.color}; font-size: {config.font.size}px;")
+        self.title_label.setStyleSheet(f"""
+            color: {config.font.color};
+            font-size: {config.font.size}px;
+            background-color: {bg_color};
+        """)
         self.header_layout.addWidget(self.title_label)
         
         # Flexible spacer
-        self.header_layout.addStretch()
+        self.header_layout.addStretch(stretch=1)
         
         # Values container with grid layout - modified alignment and position
         self.values_container = QWidget()
         self.values_grid = QGridLayout(self.values_container)
         self.values_grid.setContentsMargins(0, 0, 0, 0)
-        self.values_grid.setSpacing(5)
+        self.values_grid.setSpacing(1)
         self.values_grid.setAlignment(Qt.AlignTop)  # Align to top
         
         # Calculate position based on config
@@ -41,22 +52,24 @@ class HeaderWidget(QWidget):
         self.values_container.setFixedWidth(self.parent_width - values_position)
         self.values_container.move(values_position, 0)
         
+        self.values_container.setStyleSheet(f"background-color: {bg_color};")
+        
         self.header_layout.addWidget(self.values_container)
         
         # Container for value labels
         self.value_labels = {}
-        self.plot_widget = None
+        self.connected_widget = None
         self.max_cols = 2  # Number of columns in the grid
 
-    def set_plot_widget(self, plot_widget):
-        self.plot_widget = plot_widget
+    def set_connected_widget(self, plot_widget):
+        self.connected_widget = plot_widget
 
     @Slot(dict)
     def update_values(self, values: dict):
-        if not self.plot_widget:
+        if not self.connected_widget:
             return
             
-        color_map = self.plot_widget.color_map
+        color_map = self.connected_widget.color_map
         label_width = int(self.parent_width * 0.2)
         label_height = int(self.parent_height * 0.4)
         
@@ -74,8 +87,14 @@ class HeaderWidget(QWidget):
             if label not in self.value_labels:
                 self.value_labels[label] = QLabel()
                 self.value_labels[label].setFixedSize(QSize(label_width, label_height))
-                # Update to use value_label_size
-                self.value_labels[label].setStyleSheet(f"font-size: {config.font.value_label_size}px;")
+                # Update style to include background
+                self.value_labels[label].setStyleSheet(f"""
+                    font-size: {config.font.value_label_size}px;
+                    background-color: rgba({int(config.title.background_color[1:3], 16)},
+                                         {int(config.title.background_color[3:5], 16)},
+                                         {int(config.title.background_color[5:7], 16)},
+                                         {config.title.background_opacity});
+                """)
                 self.value_labels[label].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
                 
                 row = i % (len(values) // 2 + len(values) % 2)

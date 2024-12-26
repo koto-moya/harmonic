@@ -13,18 +13,18 @@ class ColorScheme(Enum):
 class FontConfig:
     path: str = "modules/OxygenMono-Regular.ttf"  # Simplified path that we know works
     family: str = "Arial"  # Default fallback font
-    size: int = 9
+    size: int = 10
     value_label_size: int = 8  # New config for value labels
-    color: str = "#FFFFFF"
-    weight: int = 400  # Normal weight
+    color: str = "#c9d1d9"
+    weight: int = 500  # Normal weight
 
 @dataclass
 class ChartConfig:
-    background_color: str = "#2d2b2b"
+    background_color: str = "#111111"
+    background_opacity: int = 255*.95  # Add new parameter for background opacity (0-255)
     grid_color: str = "#404040"
     grid_alpha: float = 0.1
-    axis_color: str = "#FFFFFF"
-    axis_alpha: float = 1.0
+    axis_color: str = "#c9d1d9"
     axis_width: float = 1.0
     antialiasing: bool = True  # Single antialiasing toggle
     enable_grid: bool = True
@@ -52,6 +52,8 @@ class TitleConfig:
     margin_factor_width: float = 156.0  # parent_width/156
     margin_factor_height: float = 5.0   # Restore original value
     height_factor: float = 0.06         # Restore original value
+    background_color: str = "#111111"  # Add header background color
+    background_opacity: int = 255  # Add header background opacity (0-255)
 
     def __post_init__(self):
         if self.font is None:
@@ -64,7 +66,7 @@ class PerformanceConfig:
     enable_cache: bool = True
     cache_background: bool = True
     smart_viewport_update: bool = True
-    disable_antialiasing_optimization: bool = True
+    disable_antialiasing_optimization: bool = False
     viewport_anchor: str = "mouse"
     default_array_size: int = 100
     downsampling_mode: str = "peak"
@@ -73,15 +75,16 @@ class PerformanceConfig:
 @dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
-    window_title: str = "Harmonic Plots"
-    window_size: tuple = (1200, 800)
-    window_position: tuple = (100, 100)
+    application_title: str = "Harmonic Plots"
+    canvas_color: str = "#2d2b2b"
+    application_size: tuple = (1920, 1080)
+    application_position: tuple = (100, 100)
     canvas_size: tuple = (2000, 2000)
     font: FontConfig = None
     chart: ChartConfig = None
     title: TitleConfig = None
     enable_numba: bool = True
-    default_chart_size: tuple = (780, 420)
+    default_window_size: tuple = (569, 320)
     performance: PerformanceConfig = None
 
     def __post_init__(self):

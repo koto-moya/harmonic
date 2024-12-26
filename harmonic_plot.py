@@ -1,8 +1,6 @@
 import numpy as np
 import pyqtgraph as pg
-import random
 from PySide6.QtCore import Signal, QTimer
-from PySide6.QtGui import QPainter
 from config import config  # Changed to absolute
 from utils import find_furthest_color  # Add this import
 
@@ -12,21 +10,38 @@ class HarmonicPlot(pg.PlotWidget):
 
     def __init__(self, x_vals=None, enable_mouseover=False, is_datetime=True):
         super().__init__()
-        self.setRenderHint(QPainter.Antialiasing, config.chart.antialiasing)
-        
-        self.plot_item = self.getPlotItem()
-        self.setBackground(config.chart.background_color)
-        self.plot_item.setDownsampling(auto=config.chart.downsampling, mode='peak')  # Enable downsampling
-        self.plot_item.setClipToView(config.chart.clip_to_view)  # Only render visible data
-        
-        # Add the available_colors list that was missing
+        bg_color = pg.mkColor(config.chart.background_color)
+        bg_color.setAlpha(config.chart.background_opacity)
+        self.setBackground(bg_color)
         self.available_colors = config.chart.color_palette.copy()
-        
-        # Pre-allocate numpy arrays for better performance
-        if x_vals is not None:
+        if x_vals is not None and not is_datetime:
             self.x_vals = np.round(x_vals, config.performance.decimal_precision)
-        
+        if enable_mouseover:
+            self.scene().sigMouseMoved.connect(self._on_mouse_move)
+
+        self.scatter = pg.ScatterPlotItem(
+            size=config.chart.scatter_dot_size,  # Use new scatter_dot_size parameter
+            pen=pg.mkPen(None), 
+            brush=pg.mkBrush(255, 255, 255, config.chart.scatter_opacity)
+        )
+
+
+        self.plot_item = self.getPlotItem()
+        self.plot_item.showGrid(x=True, y=True, alpha=config.chart.grid_alpha)
+        #self.plot_item.setDownsampling(auto=config.chart.downsampling, mode='peak')  # Enable downsampling
+        self.plot_item.setClipToView(config.chart.clip_to_view)  # Only render visible data
+        self.plot_item.addItem(self.scatter)
+        self.plot_item.getAxis('left').setZValue(-1000)
+        self.plot_item.getAxis('bottom').setZValue(-1000)
+
+        self.vb = self.plot_item.vb  # Main ViewBox
+        self.vb.sigResized.connect(self.updateViews)
+        self.vb.setMouseEnabled(x=True, y=True)
+        self.vb.setLimits(xMin=None, xMax=None, yMin=None, yMax=None)
+        QTimer.singleShot(0, lambda: self.vb.disableAutoRange())
+
         self.plot_info = {}
+        self.first_plot = True # Add flag to track first plot for axis label
         self.units = {}
         self.color_map = {}
         self.scatters = {}
@@ -34,76 +49,9 @@ class HarmonicPlot(pg.PlotWidget):
         self.right_axis = None
         self.right_axis_items = {}
         self.right_units = None
-        self.vb = self.plot_item.vb  # Main ViewBox
         self.is_datetime = is_datetime
         self.has_right_axis = False  # Add flag to track right axis presence
-
-        if enable_mouseover:
-            self.scene().sigMouseMoved.connect(self.mouse_moved)
-
-        # Add scatter point for mouse tracking with configured size
-        self.scatter = pg.ScatterPlotItem(
-            size=config.chart.scatter_dot_size,  # Use new scatter_dot_size parameter
-            pen=pg.mkPen(None), 
-            brush=pg.mkBrush(255, 255, 255, config.chart.scatter_opacity)
-        )
-        self.plot_item.addItem(self.scatter)
-
-        # Synchronize ViewBoxes
-        self.vb.sigResized.connect(self.updateViews)
-
-        # Lock Y-axis movement and set mouse enabled only for X
-        view_box = self.plot_item.getViewBox()
-        view_box.setMouseEnabled(x=True, y=False)
-        view_box.setLimits(yMin=None, yMax=None)
         
-        # Set auto range once for initial view, then disable
-        
-        # Configure grid and axes separately
-        self.plot_item.showGrid(x=False, y=True)
-        
-        # Style the grid - keep existing grid styling
-        grid_pen = pg.mkPen(color=config.chart.grid_color, alpha=int(255 * config.chart.grid_alpha))
-        self.plot_item.showGrid(x=False, y=True, alpha=config.chart.grid_alpha)
-        
-        # Style the axes - make y-axes fully transparent while keeping x-axis visible
-        x_axis_pen = pg.mkPen(
-            color=config.chart.axis_color, 
-            width=config.chart.axis_width, 
-            alpha=int(255 * config.chart.axis_alpha)
-        )
-        y_axis_pen = pg.mkPen(
-            color=config.chart.axis_color, 
-            width=config.chart.axis_width, 
-            alpha=0  # Set y-axis to fully transparent
-        )
-        self.plot_item.getAxis('left').setPen(y_axis_pen)
-        self.plot_item.getAxis('bottom').setPen(x_axis_pen)
-        
-        # Set axis layers
-        self.plot_item.getAxis('left').setZValue(-1000)
-        self.plot_item.getAxis('bottom').setZValue(-1000)
-        
-        # Wait for the next update cycle to disable auto-range
-        QTimer.singleShot(0, lambda: view_box.disableAutoRange())
-        
-        self.setAntialiasing(False)  # Start with antialiasing off
-
-        # Enable mouse tracking
-        self.scene().sigMouseMoved.connect(self._on_mouse_move)
-
-        # Fix mouse tracking
-        self.plotItem.vb.setAutoVisible(y=1.0)
-        self.scene().sigMouseMoved.connect(self._on_mouse_move)
-        self.proxy = pg.SignalProxy(
-            self.scene().sigMouseMoved, 
-            rateLimit=config.performance.ratelimit_mouse, 
-            slot=self._on_mouse_move
-        )
-        self.right_axis = None
-        self.right_axis_items = {}  # Track items on right axis
-        self.right_units = None     # Track units for right axis
-
     def wheelEvent(self, ev):
         # Ignore wheel events if there's a right axis
         if self.has_right_axis:
@@ -126,16 +74,15 @@ class HarmonicPlot(pg.PlotWidget):
             self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
             self.right_vb.linkedViewChanged(self.plot_item.vb, self.right_vb.XAxis)
 
-    def hideAutoRangeButton(self):
-        # Get the ViewBox and hide its auto-range button
-        view_box = self.plot_item.getViewBox()
-        for child in view_box.childItems():
-            if isinstance(child, pg.ButtonItem):
-                child.hide()
-
     def addNewLines(self, y_vals, data_label=None, units=None, plot_on_right=False):
         # Round y_vals to configured precision
         y_vals = np.round(y_vals, config.performance.decimal_precision)
+
+        if self.x_vals is None:
+            raise ValueError("x_vals must be set before adding new lines")
+        if self.first_plot:
+            self.first_plot = False
+            self.plot_item.getAxis('bottom').setLabel('date' if self.is_datetime else 'Index')
         
         if data_label:
             self.plot_info[data_label] = y_vals
@@ -248,7 +195,9 @@ class HarmonicPlot(pg.PlotWidget):
                     label: {
                         'value': data[idx],
                         'units': self.units.get(label),
-                        'right_axis': label in self.right_axis_items
+                        'right_axis': label in self.right_axis_items,
+                        'x-axis': self.x_vals[idx],
+                        'x-axis-label': self.x_vals[idx]
                     } 
                     for label, data in self.plot_info.items() 
                     if idx < len(data)
