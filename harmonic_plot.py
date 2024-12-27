@@ -1,11 +1,11 @@
 import numpy as np
 import pyqtgraph as pg
 from PySide6.QtCore import Signal, QTimer
+from PySide6.QtGui import QFont
 from config import config  # Changed to absolute
 from utils import find_furthest_color  # Add this import
 
 class HarmonicPlot(pg.PlotWidget):
-    # Add signal
     mouse_moved_signal = Signal(dict)  # Signal to emit {label: value} pairs
 
     def __init__(self, x_vals=None, enable_mouseover=False, is_datetime=True):
@@ -22,18 +22,21 @@ class HarmonicPlot(pg.PlotWidget):
         self.scatter = pg.ScatterPlotItem(
             size=config.chart.scatter_dot_size,  # Use new scatter_dot_size parameter
             pen=pg.mkPen(None), 
-            brush=pg.mkBrush(255, 255, 255, config.chart.scatter_opacity)
+            brush=pg.mkBrush(255, 255, 255, config.chart.scatter_opacity),
+            pxMode=True
         )
 
 
         self.plot_item = self.getPlotItem()
         self.plot_item.showGrid(x=True, y=True, alpha=config.chart.grid_alpha)
-        #self.plot_item.setDownsampling(auto=config.chart.downsampling, mode='peak')  # Enable downsampling
         self.plot_item.setClipToView(config.chart.clip_to_view)  # Only render visible data
         self.plot_item.addItem(self.scatter)
         self.plot_item.getAxis('left').setZValue(-1000)
         self.plot_item.getAxis('bottom').setZValue(-1000)
-
+        font = QFont(config.font.family, config.font.value_label_size)
+        self.plot_item.getAxis('left').setStyle(tickFont=font, tickTextOffset=5)
+        self.plot_item.getAxis('bottom').setStyle(tickFont=font, tickTextOffset=5)
+        self.plot_item.layout.setContentsMargins(5, 0, 5, 1)
         self.vb = self.plot_item.vb  # Main ViewBox
         self.vb.sigResized.connect(self.updateViews)
         self.vb.setMouseEnabled(x=True, y=True)
@@ -74,7 +77,7 @@ class HarmonicPlot(pg.PlotWidget):
             self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
             self.right_vb.linkedViewChanged(self.plot_item.vb, self.right_vb.XAxis)
 
-    def addNewLines(self, y_vals, data_label=None, units=None, plot_on_right=False):
+    def addNewLines(self, y_vals, x_vals=None, data_label=None, units=None, plot_on_right=False):
         # Round y_vals to configured precision
         y_vals = np.round(y_vals, config.performance.decimal_precision)
 
@@ -196,8 +199,8 @@ class HarmonicPlot(pg.PlotWidget):
                         'value': data[idx],
                         'units': self.units.get(label),
                         'right_axis': label in self.right_axis_items,
-                        'x-axis': self.x_vals[idx],
-                        'x-axis-label': self.x_vals[idx]
+                        'x': self.x_vals[idx],
+                        'x_axis': 'date' if self.is_datetime else 'Index'
                     } 
                     for label, data in self.plot_info.items() 
                     if idx < len(data)

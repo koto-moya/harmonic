@@ -78,8 +78,31 @@ class HeaderWidget(QWidget):
             for label in self.value_labels.values():
                 label.setParent(None)
             self.value_labels.clear()
+
+        # First, handle the first value's x-axis info
+        first_key = next(iter(values))
+        x_value = values[first_key]['x']
+        x_label = values[first_key]['x_axis']
         
-        # Add labels in order
+        if 'x_axis' not in self.value_labels:
+            self.value_labels['x_axis'] = QLabel()
+            self.value_labels['x_axis'].setFixedSize(QSize(label_width, label_height))
+            self.value_labels['x_axis'].setStyleSheet(f"""
+                font-size: {config.font.value_label_size}px;
+                background-color: rgba({int(config.title.background_color[1:3], 16)},
+                                     {int(config.title.background_color[3:5], 16)},
+                                     {int(config.title.background_color[5:7], 16)},
+                                     {config.title.background_opacity});
+            """)
+            self.value_labels['x_axis'].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            self.values_grid.addWidget(self.value_labels['x_axis'], 0, 0)  # Always top-left
+        
+        # Format x-axis value
+        x_text = f'<span style="color: {config.font.color}">{x_label}: </span>' \
+                 f'<span style="color: {config.font.color}">{x_value:.0f}</span>'
+        self.value_labels['x_axis'].setText(x_text)
+        
+        # Now handle the rest of the values, starting from position (0,1)
         for i, (label, data) in enumerate(values.items()):
             value = data['value']
             units = data['units']
@@ -87,7 +110,6 @@ class HeaderWidget(QWidget):
             if label not in self.value_labels:
                 self.value_labels[label] = QLabel()
                 self.value_labels[label].setFixedSize(QSize(label_width, label_height))
-                # Update style to include background
                 self.value_labels[label].setStyleSheet(f"""
                     font-size: {config.font.value_label_size}px;
                     background-color: rgba({int(config.title.background_color[1:3], 16)},
@@ -97,8 +119,9 @@ class HeaderWidget(QWidget):
                 """)
                 self.value_labels[label].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
                 
-                row = i % (len(values) // 2 + len(values) % 2)
-                col = i // (len(values) // 2 + len(values) % 2)
+                # Adjust grid positioning to account for x-axis label
+                row = (i + 1) % (len(values) // 2 + len(values) % 2)
+                col = (i + 1) // (len(values) // 2 + len(values) % 2)
                 self.values_grid.addWidget(self.value_labels[label], row, col)
             
             # Format value based on units
