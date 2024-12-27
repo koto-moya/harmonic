@@ -5,20 +5,19 @@ from PySide6.QtCore import Qt
 from header_widget import HeaderWidget  # Changed to absolute
 from harmonic_plot import HarmonicPlot  # Changed to absolute
 from utils import generate_stock_data  # Changed to absolute
-from config import config  # Changed to absolute
 
 class DraggableObject(QGraphicsItem, QObject):
     selected_item = None
     clicked = Signal()
 
-    def __init__(self, title: str = "Plot Title", width=config.default_window_size[0], height=config.default_window_size[1], margins=QMarginsF(0, 0, 0, 1)):
+    def __init__(self, title: str = "Plot Title", width=780, height=420, margins=QMarginsF(0, 0, 0, 1)):
         super().__init__()
         QObject.__init__(self)
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
 
         # Cache commonly used values - increase title height
-        self._content_height = height * 0.92
-        self._title_height = height * 0.08
+        self._plot_height = height * 0.94
+        self._title_height = height * 0.06
         self._width = width
         self.title = title
         self.selected_color =QPen(QColor(255, 50, 26, 255), 1.0) 
@@ -26,7 +25,7 @@ class DraggableObject(QGraphicsItem, QObject):
         
         self.header_proxy = QGraphicsProxyWidget(self)
         self.plot_proxy = QGraphicsProxyWidget(self)
-        self.rect = QRectF(0, 0, width, height)#.marginsRemoved(margins)
+        self.rect = QRectF(0, 0, width, height).marginsRemoved(margins)
 
     def addHeader(self, ):
         self.header_widget = HeaderWidget(self.title, self._width, int(self._title_height))
@@ -35,7 +34,7 @@ class DraggableObject(QGraphicsItem, QObject):
     def addContent(self, content: HarmonicPlot): # only accepts HarmonicPlot for now
         self.addHeader()
         self.header_widget.set_connected_widget(content)
-        content.setFixedSize(self._width, int(self._content_height))
+        content.setFixedSize(self._width, int(self._plot_height))
         content.mouse_moved_signal.connect(self.header_widget.update_values)
         self.plot_proxy.setWidget(content)
         self.plot_proxy.setPos(0, self.header_proxy.size().height())

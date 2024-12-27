@@ -73,6 +73,26 @@ class PerformanceConfig:
     skip_finite_check: bool = True
 
 @dataclass
+class CanvasBarConfig:
+    height: int = 25
+    tab_width: int = 150
+    max_tabs: int = 20
+    background_color: str = "#111111"
+    border_color: str = "#333333"
+    
+    # Tab specific settings
+    tab_background: str = "#111111"
+    tab_active_opacity: float = 0.6
+    tab_hover_opacity: float = 0.05
+    tab_border_radius: str = "4px 4px 0 0"
+    
+    # Button settings
+    button_size: int = 30
+    button_radius: int = 4
+    close_button_size: int = 16
+    close_button_hover: str = "#ff5555"
+
+@dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
     application_title: str = "Harmonic Plots"
@@ -86,6 +106,7 @@ class GlobalConfig:
     enable_numba: bool = True
     default_window_size: tuple = (569, 320)
     performance: PerformanceConfig = None
+    canvas_bar: CanvasBarConfig = None
 
     def __post_init__(self):
         if self.font is None:
@@ -96,6 +117,8 @@ class GlobalConfig:
             self.title = TitleConfig()
         if self.performance is None:
             self.performance = PerformanceConfig()
+        if self.canvas_bar is None:
+            self.canvas_bar = CanvasBarConfig()
 
 # Create default configuration instance
 config = GlobalConfig()

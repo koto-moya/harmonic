@@ -1,8 +1,9 @@
-from PySide6.QtWidgets import QGraphicsScene
-from PySide6.QtCore import QPointF
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsProxyWidget
+from PySide6.QtCore import QPointF, Qt
 from draggable_object import DraggableObject  
 from harmonic_plot import HarmonicPlot
-from utils import generate_stock_data, generate_fed_rates  
+from canvas_bar import CanvasBarWidget  # Add this import
+from utils import generate_stock_data, generate_fed_rates
 
 class InfiniteCanvas(QGraphicsScene):
     def __init__(self):
@@ -56,6 +57,19 @@ class InfiniteCanvas(QGraphicsScene):
         #     units="%", 
         #     plot_on_right=True
         # )
+
+    def handle_wheel_event(self, event, view):
+        """Handle wheel events for the canvas"""
+        pos = event.position()
+        item = view.itemAt(int(pos.x()), int(pos.y()))
+        
+        if isinstance(item, QGraphicsProxyWidget):
+            if isinstance(item.widget(), HarmonicPlot):
+                return False
+        
+        factor = 1.1 if event.angleDelta().y() > 0 else 0.9
+        view.scale(factor, factor)
+        return True
 
     def deselect_all(self):
         for item in self.items():
