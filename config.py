@@ -1,4 +1,5 @@
 import os
+from random import shuffle  # Add at top with other imports
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional
@@ -13,8 +14,8 @@ class ColorScheme(Enum):
 class FontConfig:
     path: str = "modules/OxygenMono-Regular.ttf"  # Simplified path that we know works
     family: str = "Arial"  # Default fallback font
-    size: int = 10
-    value_label_size: int = 8  # New config for value labels
+    size: int = 11
+    value_label_size: int = 10  # New config for value labels
     color: str = "#c9d1d9"
     weight: int = 500  # Normal weight
 
@@ -22,7 +23,6 @@ class FontConfig:
 class ChartConfig:
     background_color: str = "#111111"
     background_opacity: int = 255*.95  # Add new parameter for background opacity (0-255)
-    grid_color: str = "#404040"
     grid_alpha: float = 0.1
     axis_color: str = "#c9d1d9"
     axis_width: float = 1.0
@@ -32,19 +32,28 @@ class ChartConfig:
     downsampling: bool = True
     clip_to_view: bool = True
     color_palette: List[str] = None
-    scatter_size: int = 10
-    scatter_dot_size: int = 5  # New parameter for scatter dots
+    scatter_dot_size: int = 4 # New parameter for scatter dots
     scatter_opacity: int = 120
     y_axis_units: str = None  # Default unit type for y-axis
     currency_symbol: str = '$'  # Default currency symbol
     value_label_position: float = 0.4  # Position as percentage of header width (0.0 to 1.0)
+    axis_font_family: str = "Arial"  # New axis font settings
+    axis_font_size: int = 10
+    axis_font_weight: int = 400
 
     def __post_init__(self):
         if self.color_palette is None:
             self.color_palette = [
                 '#9C179E', '#BD3786', '#D8576B', '#ED7953', '#FB9F3A',
-                '#FECD2A', '#F9E721', '#F5F120', '#E8E621', '#D1EF24'
+                '#FECD2A', '#F9E721', '#F5F120', '#E8E621', '#D1EF24',  # Original 10
+                '#FF0055', '#FF2200', '#FF4C00', '#FF7000', '#FF9400',  # Neon reds/oranges
+                '#FFB700', '#FFD500', '#FFFF00', '#CCFF00', '#99FF00',  # Bright yellows/greens
+                '#66FF00', '#33FF00', '#00FF00', '#00FF66', '#00FF99',  # Neon greens
+                '#00FFFF', '#00CCFF', '#0099FF', '#0066FF', '#3300FF',  # Electric blues
+                '#6600FF', '#9900FF', '#CC00FF', '#FF00FF', '#FF00CC',  # Vivid purples/pinks
+                '#FF0099', '#FF0077', '#FF0066', '#FF0055', '#E6005C'   # Deep magentas/pinks
             ]
+            shuffle(self.color_palette)  # Shuffle the palette on initialization
 
 @dataclass
 class TitleConfig:
@@ -75,8 +84,8 @@ class PerformanceConfig:
 @dataclass
 class CanvasBarConfig:
     height: int = 25
-    tab_width: int = 150
-    max_tabs: int = 20
+    tab_width: int = 125
+    max_tabs: int = 12
     background_color: str = "#111111"
     border_color: str = "#333333"
     
@@ -85,11 +94,14 @@ class CanvasBarConfig:
     tab_active_opacity: float = 0.6
     tab_hover_opacity: float = 0.05
     tab_border_radius: str = "4px 4px 0 0"
+    tab_font_size: int = 18  # New tab font size
+    tab_font_family: str = "Arial"  # New tab font family
+    tab_font_weight: int = 400  # New tab font weight
     
     # Button settings
     button_size: int = 30
     button_radius: int = 4
-    close_button_size: int = 16
+    close_button_size: int = 8
     close_button_hover: str = "#ff5555"
 
 @dataclass

@@ -17,13 +17,16 @@ class CanvasTab(QWidget):
         self.is_home = is_home
         self.is_add_button = is_add_button
         self.highlight_color = random.choice(config.chart.color_palette) if not is_add_button else None
+        self.original_text = name  # Store original text
         
         layout = QHBoxLayout()
-        layout.setContentsMargins(8, 2, 8, 2)
-        layout.setSpacing(4)
+        layout.setContentsMargins(0 if is_home else 0, 0, 0, 0)  # Zero left margin for home tab
+        layout.setSpacing(0)  # Reduced from 4 to 2
 
         if is_add_button:
             # Special case for add button tab
+            layout = QHBoxLayout()
+            layout.setContentsMargins(0, 0, 0, 0)  # Remove all margins from add button
             self.add_btn = QPushButton("+")
             self.add_btn.setFixedSize(config.canvas_bar.button_size, config.canvas_bar.button_size)
             layout.addWidget(self.add_btn)
@@ -31,6 +34,13 @@ class CanvasTab(QWidget):
         else:
             # Normal tab setup
             self.name_label = QLabel(name)
+            #self.name_label.setMinimumWidth(20)  # Minimum width for visibility
+            available_width = config.canvas_bar.tab_width - (24 if not is_home else 8)
+            self.name_label.setMaximumWidth(available_width)  # Leave space for close button
+            # Enable text elision
+            self.name_label.setTextFormat(Qt.PlainText)
+            self.name_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+            self._update_elided_text(name)
             self._apply_base_styles()
             
             if not is_home:
@@ -72,33 +82,41 @@ class CanvasTab(QWidget):
         self.setLayout(layout)
         self._apply_base_styles()
 
+        # Set home tab color explicitly
+        if is_home:
+            self.highlight_color = "#0066FF"  # Dark blue for home tab
+
     def _apply_base_styles(self):
         """Apply base styles to the widget based on its type"""
         if self.is_add_button:
             style = f"""
                 QWidget {{
-                    background: transparent;
+                    background: {config.canvas_bar.background_color};
                 }}
                 QPushButton {{
+                    background: {config.canvas_bar.background_color};
+                    border: none;
                     color: {config.font.color};
-                    font-size: 16px;
+                    font-family: {config.canvas_bar.tab_font_family};
+                    font-size: {config.canvas_bar.tab_font_size}px;
+                    font-weight: {config.canvas_bar.tab_font_weight};
+                    padding: 0;
                 }}
                 QPushButton:hover {{
-                    background: rgba(255, 255, 255, {config.canvas_bar.tab_hover_opacity});
+                    color: {config.canvas_bar.close_button_hover};
                 }}
             """
-            self.setStyleSheet(style)
         else:
             base_style = f"""
                 QWidget {{
-                    background: {config.canvas_bar.tab_background};
-                    border: 1px solid {config.canvas_bar.border_color};
-                    border-radius: {config.canvas_bar.tab_border_radius};
+                    background: transparent;
                     color: {config.font.color};
-                    font-size: {config.font.size}px;
+                    font-family: {config.canvas_bar.tab_font_family};
+                    font-size: {config.canvas_bar.tab_font_size}px;
+                    font-weight: {config.canvas_bar.tab_font_weight};
                 }}
             """
-            self.setStyleSheet(base_style)
+        self.setStyleSheet(style if self.is_add_button else base_style)
 
     def mousePressEvent(self, event):
         self.clicked.emit(str(self.tab_id))  # Convert to string
@@ -112,7 +130,10 @@ class CanvasTab(QWidget):
             text = CanvasBarWidget._get_next_letter()
             self.name_editor.setText(text)
         
-        self.name_label.setText(text)
+        # Update label with elided text
+        metrics = self.name_label.fontMetrics()
+        elidedText = metrics.elidedText(text, Qt.ElideRight, self.name_label.maximumWidth())
+        self.name_label.setText(elidedText)
         self.name_editor.hide()
         self.name_label.show()
         self._on_rename()
@@ -131,16 +152,28 @@ class CanvasTab(QWidget):
     def setActive(self, active: bool):
         """Set active state with highlight color"""
         self.active = active
-        if active:
+        if self.is_home:
+            if active:
+                bg_color = f"rgba(48, 0, 179, 0.5)"  # Dark blue with 50% opacity when active
+            else:
+                bg_color = config.canvas_bar.background_color  # Same as bar background when inactive
+        elif active:
             r = int(self.highlight_color[1:3], 16)
             g = int(self.highlight_color[3:5], 16)
             b = int(self.highlight_color[5:7], 16)
             bg_color = f"rgba({r}, {g}, {b}, {config.canvas_bar.tab_active_opacity})"
         else:
-            bg_color = config.canvas_bar.tab_background
-            
-        self.setStyleSheet(self.styleSheet().replace(
-            "background:", f"background: {bg_color};"))
+            bg_color = "rgba(0, 0, 0, 0)"
+        
+        # Force immediate update with complete style refresh
+        self.setStyleSheet(f"""
+            QWidget {{
+                background: {bg_color};
+                color: {config.font.color};
+                font-size: {config.font.size}px;
+            }}
+        """)
+        self.update()  # Force redraw
 
     def _apply_button_styles(self, button):
         """Apply styles to buttons"""
@@ -154,6 +187,16 @@ class CanvasTab(QWidget):
                 color: {config.canvas_bar.close_button_hover};
             }}
         """)
+
+    def _update_elided_text(self, text: str):
+        """Update the label with ... if text is too long"""
+        if hasattr(self, 'name_label'):
+            metrics = self.name_label.fontMetrics()
+            available_width = self.name_label.maximumWidth() - 4
+            if metrics.horizontalAdvance(text) > available_width:
+                self.name_label.setText("...")
+            else:
+                self.name_label.setText(text)
 
 class CanvasBarWidget(QWidget):
     # Define all signals at the class level
@@ -177,45 +220,107 @@ class CanvasBarWidget(QWidget):
 
     def __init__(self):
         super().__init__()
+        # Add color management
+        self.available_colors = list(config.chart.color_palette)
+        self.used_colors = {}
         self.setFixedHeight(config.canvas_bar.height)
         self.MAX_TABS = config.canvas_bar.max_tabs
         self.TAB_WIDTH = config.canvas_bar.tab_width
         
-        # Main layout
-        main_layout = QHBoxLayout()
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+       
         
-        # Container for tabs (no scroll area)
+        # Create scroll area for tabs
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll_area.setFrameShape(QScrollArea.NoFrame)
+        self.scroll_area.setStyleSheet(f"""
+            QScrollArea {{
+                background: {config.canvas_bar.background_color};
+                border: none;
+            }}
+        """)
+        
+        # Container for tabs
         self.tab_container = QWidget()
         self.tab_layout = QHBoxLayout()
-        self.tab_layout.setContentsMargins(4, 0, 4, 0)
-        self.tab_layout.setSpacing(2)
+        self.tab_layout.setContentsMargins(0, 0, 0, 0)
+        self.tab_layout.setSpacing(0)
         self.tab_layout.addStretch()
         self.tab_container.setLayout(self.tab_layout)
+        
+        # Add tab container to scroll area
+        self.scroll_area.setWidget(self.tab_container)
         
         # Create add button as a special tab
         self.add_tab = CanvasTab("add_button", "+", is_add_button=True)
         self.add_tab.add_btn.clicked.connect(self._on_new_btn_clicked)
         
-        # Setup layout directly without scroll area
-        main_layout.addWidget(self.tab_container, stretch=1)  # Give tabs area stretch priority
+        # Create navigation buttons
+        self.prev_btn = QPushButton("<")
+        self.next_btn = QPushButton(">")
+        for btn in (self.prev_btn, self.next_btn):
+            btn.setFixedSize(20, config.canvas_bar.button_size)
+            btn.setStyleSheet(f"""
+                QPushButton {{
+                    background: {config.canvas_bar.background_color};
+                    border: none;
+                    color: {config.font.color};
+                    font-size: 14px;
+                    padding: 0;
+                }}
+                QPushButton:hover {{
+                    color: {config.canvas_bar.close_button_hover};
+                }}
+            """)
+
+        # Connect scroll buttons
+        self.prev_btn.clicked.connect(self._scroll_left)
+        self.next_btn.clicked.connect(self._scroll_right)
+        
+        # Setup layout with navigation
+        main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        main_layout.addWidget(self.scroll_area, stretch=1)
+        main_layout.addWidget(self.prev_btn)
+        main_layout.addWidget(self.next_btn)
         main_layout.addWidget(self.add_tab)
         self.setLayout(main_layout)
         
         self.setStyleSheet(f"""
             QWidget {{
                 background: {config.canvas_bar.background_color};
-                border-top: 1px solid {config.canvas_bar.border_color};
+            }}
+            QWidget#tab_container {{
+                border: none;
             }}
         """)
+        
+        # Make the tab container have an object name for styling
+        self.tab_container.setObjectName("tab_container")
         
         self.tabs = {}
         self.active_tab = None
         
         # Create home tab immediately
         home_id = "home"
-        self.addCanvas(home_id, "Home", is_home=True)
+        self.addCanvas(home_id, "home", is_home=True)
+
+    def _get_unique_color(self, tab_id: str) -> str:
+        """Get a unique color from the palette"""
+        if not self.available_colors:
+            self.available_colors = list(config.chart.color_palette)
+        color = self.available_colors.pop(0)
+        self.used_colors[tab_id] = color
+        return color
+
+    def _recycle_color(self, tab_id: str):
+        """Return a color to the available pool"""
+        if tab_id in self.used_colors:
+            color = self.used_colors.pop(tab_id)
+            self.available_colors.append(color)
 
     def _on_new_btn_clicked(self):
         """Handle new tab button click"""
@@ -235,6 +340,7 @@ class CanvasBarWidget(QWidget):
             tab_id = f"tab_{self._counter}"  # Generate string ID
             
         tab = CanvasTab(tab_id, name, is_home=is_home)
+        tab.highlight_color = self._get_unique_color(tab_id)  # Assign unique color
         tab.setFixedWidth(self.TAB_WIDTH)
         tab.clicked.connect(self._on_tab_clicked)
         tab.renamed.connect(self.canvas_renamed.emit)
@@ -251,18 +357,10 @@ class CanvasBarWidget(QWidget):
         """No longer needed since tabs have fixed width"""
         pass
 
-    def resizeEvent(self, event):
-        """No longer needs to adjust tab sizes"""
-        super().resizeEvent(event)
-
-    def _on_tab_clicked(self, tab_id: str):
-        """Handle tab selection"""
-        self.setActiveCanvas(tab_id)
-        self.canvas_selected.emit(tab_id)
-        
     def _on_tab_closed(self, tab_id: str):
         """Handle tab closure"""
-        if tab_id in self.tabs and tab_id != "home":  # Prevent closing home tab
+        if tab_id in self.tabs and tab_id != "home":
+            self._recycle_color(tab_id)
             tab = self.tabs.pop(tab_id)
             self.tab_layout.removeWidget(tab)
             tab.deleteLater()
@@ -271,13 +369,22 @@ class CanvasBarWidget(QWidget):
             self.setActiveCanvas("home")
             self.canvas_closed.emit(tab_id)
 
+    def _on_tab_clicked(self, tab_id: str):
+        """Handle tab selection"""
+        self.setActiveCanvas(tab_id)
+        self.canvas_selected.emit(tab_id)
+        
     def setActiveCanvas(self, tab_id: str):
         """Set the active canvas tab"""
-        if self.active_tab and self.active_tab in self.tabs:  # Add safety check
-            self.tabs[self.active_tab].setActive(False)
+        # Deactivate all tabs first
+        for tab in self.tabs.values():
+            tab.setActive(False)
+            
+        # Activate the selected tab
         if tab_id in self.tabs:
             self.tabs[tab_id].setActive(True)
             self.active_tab = tab_id
+            self.update()  # Force redraw of the widget
 
     def sizeHint(self):
         # Add size hint for Layer system
@@ -287,3 +394,16 @@ class CanvasBarWidget(QWidget):
         # Ensure widget stays on top
         super().raise_()
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+
+    def _scroll_left(self):
+        """Scroll tabs left"""
+        current_pos = self.scroll_area.horizontalScrollBar().value()
+        new_pos = max(0, current_pos - self.TAB_WIDTH)
+        self.scroll_area.horizontalScrollBar().setValue(new_pos)
+
+    def _scroll_right(self):
+        """Scroll tabs right"""
+        current_pos = self.scroll_area.horizontalScrollBar().value()
+        max_pos = self.scroll_area.horizontalScrollBar().maximum()
+        new_pos = min(max_pos, current_pos + self.TAB_WIDTH)
+        self.scroll_area.horizontalScrollBar().setValue(new_pos)

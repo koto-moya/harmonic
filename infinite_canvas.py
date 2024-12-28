@@ -36,27 +36,35 @@ class InfiniteCanvas(QGraphicsScene):
         window.addContent(plot)
         
         # Generate both datasets
-        x_vals, stock_vals = generate_stock_data()
+        x_vals, stock_vals_qqq = generate_stock_data()
         _, rate_vals = generate_fed_rates(days=len(x_vals))
+        x_vals, stock_vals_appl = generate_stock_data()
         
         # Configure plot widget with both datasets
         plot.x_vals = x_vals
         
         # Add stock price on left axis
         plot.addNewLines(
-            stock_vals, 
-            data_label="Stock Price", 
+            stock_vals_qqq, 
+            data_label="stock price qqq", 
+            units="$", 
+            plot_on_right=False
+        )
+
+        plot.addNewLines(
+            stock_vals_appl, 
+            data_label="stock price appl", 
             units="$", 
             plot_on_right=False
         )
         
         # Add fed rate on right axis
-        # plot.addNewLines(
-        #     rate_vals, 
-        #     data_label="Fed Rate", 
-        #     units="%", 
-        #     plot_on_right=True
-        # )
+        plot.addNewLines(
+            rate_vals, 
+            data_label="Fed Rate", 
+            units="%", 
+            plot_on_right=True
+        )
 
     def handle_wheel_event(self, event, view):
         """Handle wheel events for the canvas"""

@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsProxyWidget
+from PySide6.QtWidgets import (QGraphicsItem, QGraphicsProxyWidget, 
+                             QPushButton)  # Add QPushButton import
 from PySide6.QtCore import QObject, QRectF, Signal, QMarginsF
 from PySide6.QtGui import QPen, QColor
 from PySide6.QtCore import Qt
@@ -9,6 +10,7 @@ from utils import generate_stock_data  # Changed to absolute
 class DraggableObject(QGraphicsItem, QObject):
     selected_item = None
     clicked = Signal()
+    closed = Signal(object)  # Add signal for close events
 
     def __init__(self, title: str = "Plot Title", width=780, height=420, margins=QMarginsF(0, 0, 0, 1)):
         super().__init__()
@@ -16,16 +18,45 @@ class DraggableObject(QGraphicsItem, QObject):
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
 
         # Cache commonly used values - increase title height
-        self._plot_height = height * 0.94
-        self._title_height = height * 0.06
+        self._plot_height = height * 0.92
+        self._title_height = height * 0.08
         self._width = width
         self.title = title
-        self.selected_color =QPen(QColor(255, 50, 26, 255), 1.0) 
+        self.selected_color =QPen(QColor(48, 0, 179, 255), 1.0) 
         self.unselected_color =QPen(QColor(80, 80, 80, 255), 1.0) 
         
         self.header_proxy = QGraphicsProxyWidget(self)
         self.plot_proxy = QGraphicsProxyWidget(self)
         self.rect = QRectF(0, 0, width, height).marginsRemoved(margins)
+
+        # Add close button
+        self.close_btn = QPushButton("×")
+        self.close_btn.setFixedSize(16, 16)
+        self.close_btn.setStyleSheet("""
+            QPushButton {
+                background: transparent;
+                border: none;
+                color: #c9d1d9;
+                font-size: 14px;
+            }
+            QPushButton:hover {
+                color: #ff5555;
+            }
+        """)
+        self.close_btn.clicked.connect(self._on_close)
+        
+        # Create proxy for close button
+        self.close_btn_proxy = QGraphicsProxyWidget(self)
+        self.close_btn_proxy.setWidget(self.close_btn)
+        # Position in top-right corner with 4px padding
+        self.close_btn_proxy.setPos(width - 20, 4)
+
+    def _on_close(self):
+        """Handle close button click"""
+        self.closed.emit(self)  # Emit signal with self reference
+        if self.scene():
+            self.scene().removeItem(self)
+        self.deleteLater()
 
     def addHeader(self, ):
         self.header_widget = HeaderWidget(self.title, self._width, int(self._title_height))

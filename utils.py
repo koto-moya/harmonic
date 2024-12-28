@@ -5,6 +5,27 @@ from PySide6.QtGui import QFont
 from pyqtgraph.graphicsItems.DateAxisItem import DateAxisItem
 from config import config
 
+# def create_message(direction, message):
+#     return f'''<div class="{direction}">{message}</div>'''
+
+# def create_chat(formatted_chat_history):
+#     # print(chat_interface_html_head + "<body>" + formatted_chat_history + "</body>") 
+#     return chat_interface_html_head + "<body>" + formatted_chat_history + "</div></body>"
+
+# def create_first_stream_chunk(new_token):
+#     # print(f'''<div class="messageincoming">{new_token}</div>''')
+#     return f'''<div class="messageincoming">{new_token}'''
+
+# def create_next_stream_chunk(new_token):
+#     # print(f'''{new_token}</div>''')
+#     return f'''{new_token}'''
+
+# class CustomDateAxisItem(DateAxisItem):
+#     def tickStrings(self, values, scale, spacing):
+#         # Center ticks to midday (12:00 PM)
+#         return [datetime.datetime.fromtimestamp(value).strftime("%m/%d/%y") for value in values]
+    
+
 def apply_font_style(widget):
     """Apply global font style to a widget"""
     font = QFont(config.font.family)

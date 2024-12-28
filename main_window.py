@@ -81,15 +81,14 @@ class MainWindow(QGraphicsView):
         self.setScene(self.home_canvas)
         self.current_scene = self.home_canvas
         
-        # Create and position the canvas bar
+        # Create and position the canvas bar with no margins
         self.canvas_bar = CanvasBarWidget()
         self.canvas_bar_layer = Layer(
             self, 
             self.canvas_bar, 
-            Qt.AlignBottom | Qt.AlignHCenter, 
+            Qt.AlignBottom, # Remove AlignHCenter to make it flush
             setWidth=True
         )
-        self.canvas_bar.setContentsMargins(0, 0, 0, 5)
         self.canvas_bar.raise_()
         
         # Connect signals
