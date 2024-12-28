@@ -52,7 +52,7 @@ def generate_stock_data(days=365, start_price=1.0, end_price=100.0, volatility=0
     
     # Calculate price path
     S = start_price * np.exp((mu - volatility ** 2 / 2) * t + volatility * W)
-    return t, np.round(S, 2)
+    return t, np.round(S, 2) * 100000
 
 def generate_fed_rates(days=365, start_rate=2.0, end_rate=5.0, volatility=0.3):
     """Generate simulated Fed rate data with less volatility than stock prices"""

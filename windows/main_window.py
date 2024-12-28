@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QGraphicsView, QWidget
 from PySide6.QtCore import Qt, QObject, QEvent
 from PySide6.QtGui import QPainter, QColor
-from infinite_canvas import InfiniteCanvas
-from canvas_bar import CanvasBarWidget
+from scenes.infinite_canvas import InfiniteCanvas
+from widgets.canvas_bar import CanvasBarWidget
 from config import config
 
 class Layer(QObject):

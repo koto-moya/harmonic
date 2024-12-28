@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsProxyWidget
 from PySide6.QtCore import QPointF, Qt
-from draggable_object import DraggableObject  
-from harmonic_plot import HarmonicPlot
-from canvas_bar import CanvasBarWidget  # Add this import
-from utils import generate_stock_data, generate_fed_rates
+from widgets.draggable_object import DraggableObject  
+from widgets.harmonic_plot import HarmonicPlot
+from widgets.canvas_bar import CanvasBarWidget  # Add this import
+from utils.utils import generate_stock_data, generate_fed_rates
 
 class InfiniteCanvas(QGraphicsScene):
     def __init__(self):

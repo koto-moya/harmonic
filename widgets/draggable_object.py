@@ -3,9 +3,9 @@ from PySide6.QtWidgets import (QGraphicsItem, QGraphicsProxyWidget,
 from PySide6.QtCore import QObject, QRectF, Signal, QMarginsF
 from PySide6.QtGui import QPen, QColor
 from PySide6.QtCore import Qt
-from header_widget import HeaderWidget  # Changed to absolute
-from harmonic_plot import HarmonicPlot  # Changed to absolute
-from utils import generate_stock_data  # Changed to absolute
+from widgets.header_widget import HeaderWidget  # Changed to absolute
+from widgets.harmonic_plot import HarmonicPlot  # Changed to absolute
+from utils.utils import generate_stock_data  # Changed to absolute
 
 class DraggableObject(QGraphicsItem, QObject):
     selected_item = None

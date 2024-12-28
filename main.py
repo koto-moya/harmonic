@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase, QFont
 
 # Local imports
-from main_window import MainWindow  # Changed from relative to absolute import
+from windows.main_window import MainWindow  # Changed from relative to absolute import
 from config import config  # Changed from relative to absolute import
 
 # Configure pyqtgraph settings

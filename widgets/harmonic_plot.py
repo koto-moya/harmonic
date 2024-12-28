@@ -3,7 +3,7 @@ import pyqtgraph as pg
 from PySide6.QtCore import Signal, QTimer
 from PySide6.QtGui import QFont
 from config import config  # Changed to absolute
-from utils import find_furthest_color  # Add this import
+from utils.utils import find_furthest_color  # Add this import
 
 class HarmonicPlot(pg.PlotWidget):
     mouse_moved_signal = Signal(dict)  # Signal to emit {label: value} pairs
