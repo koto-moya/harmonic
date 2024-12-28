@@ -54,7 +54,38 @@ class HarmonicPlot(pg.PlotWidget):
         self.right_units = None
         self.is_datetime = is_datetime
         self.has_right_axis = False  # Add flag to track right axis presence
+        self.left_axis = self.plot_item.getAxis('left')
+
+    def format_tick_values(self, values):
+        """Format tick values with K/M suffixes"""
+        major_ticks = []
+        minor_ticks = []
         
+        for val in values:
+            if abs(val) >= 1000000:
+                text = f"{val/1000000:.1f}M"
+                major_ticks.append((val, text))
+            elif abs(val) >= 1000:
+                text = f"{val/1000:.1f}K"
+                major_ticks.append((val, text))
+            else:
+                text = f"{val:.2f}"
+                minor_ticks.append((val, text))
+                
+        return [major_ticks, minor_ticks]
+
+    def update_axis_ticks(self):
+        """Update axis ticks with formatted values"""
+        if self.left_axis:
+            view_range = self.left_axis.range
+            # Generate some reasonable tick values within the view range
+            tick_values = np.linspace(view_range[0], view_range[1], 6)
+            formatted_ticks = self.format_tick_values(tick_values)
+            self.left_axis.setTicks(formatted_ticks)
+            
+            if self.right_axis:
+                self.right_axis.setTicks(formatted_ticks)
+
     def wheelEvent(self, ev):
         # Ignore wheel events if there's a right axis
         if self.has_right_axis:
@@ -76,6 +107,7 @@ class HarmonicPlot(pg.PlotWidget):
         if self.right_vb:
             self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
             self.right_vb.linkedViewChanged(self.plot_item.vb, self.right_vb.XAxis)
+        self.update_axis_ticks()  # Update ticks when view changes
 
     def addNewLines(self, y_vals, x_vals=None, data_label=None, units=None, plot_on_right=False):
         # Round y_vals to configured precision
@@ -116,6 +148,7 @@ class HarmonicPlot(pg.PlotWidget):
             if self.right_axis is None:
                 # Initialize right axis setup
                 self.right_axis = pg.AxisItem('right')
+                # Apply same number formatting to right axis
                 self.plot_item.layout.addItem(self.right_axis, 2, 3)
                 self.right_axis.linkToView(self.right_vb)
                 self.scene().addItem(self.right_vb)
@@ -153,6 +186,9 @@ class HarmonicPlot(pg.PlotWidget):
                     self.plot_item.getAxis('left').setLabel(f'({units})')
                 else:
                     self.plot_item.getAxis('left').setLabel(f'{units if units else ""}')
+        
+        # Update axis ticks after adding new lines
+        self.update_axis_ticks()
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):
