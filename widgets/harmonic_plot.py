@@ -4,18 +4,25 @@ from PySide6.QtCore import Signal, QTimer
 from PySide6.QtGui import QFont
 from config import config  # Changed to absolute
 from utils.utils import find_furthest_color  # Add this import
+from utils.utils import CustomDateAxisItem  # Add this import
 
 class HarmonicPlot(pg.PlotWidget):
     mouse_moved_signal = Signal(dict)  # Signal to emit {label: value} pairs
 
     def __init__(self, x_vals=None, enable_mouseover=False, is_datetime=True):
-        super().__init__()
+        # For datetime x-axis, we need to initialize with our custom axis item
+        axis_items = {'bottom': CustomDateAxisItem(orientation='bottom')} if is_datetime else {}
+        super().__init__(axisItems=axis_items)
+        
         bg_color = pg.mkColor(config.chart.background_color)
         bg_color.setAlpha(config.chart.background_opacity)
         self.setBackground(bg_color)
         self.available_colors = config.chart.color_palette.copy()
         if x_vals is not None and not is_datetime:
             self.x_vals = np.round(x_vals, config.performance.decimal_precision)
+        elif x_vals is not None:
+            # Convert datetime x values to timestamps for plotting
+            self.x_vals = x_vals
         if enable_mouseover:
             self.scene().sigMouseMoved.connect(self._on_mouse_move)
 
@@ -57,31 +64,48 @@ class HarmonicPlot(pg.PlotWidget):
         self.left_axis = self.plot_item.getAxis('left')
         self.left_axis.enableAutoSIPrefix(False)
 
-    def format_tick_values(self, values):
-        """Format tick values with K/M suffixes"""
+        # Set axis label if datetime
+        if is_datetime:
+            self.plot_item.getAxis('bottom').setLabel('Date')
+
+    def tick_value_loop(self, values, prefix = '', suffix = ''):
         major_ticks = []
         minor_ticks = []
         
         for val in values:
             if abs(val) >= 1000000:
-                text = f"{val/1000000:.1f}M"
+                text = f"{prefix}{val/1000000:.1f}M {suffix}"
                 major_ticks.append((val, text))
             elif abs(val) >= 1000:
-                text = f"{val/1000:.1f}K"
+                text = f"{prefix}{val/1000:.1f}K{suffix}"
                 major_ticks.append((val, text))
             else:
-                text = f"{val:.2f}"
+                # No decimals for values under 10,000
+                text = f"{prefix}{int(val)}{suffix}"
                 minor_ticks.append((val, text))
                 
         return [major_ticks, minor_ticks]
 
-    def update_axis_ticks(self):
+
+    def format_tick_values(self, values, units=None):
+        """Format tick values with K/M suffixes"""
+        prefix = ''
+        suffix = ''
+        if units:
+            if units == '$':
+                prefix = f"{units} "
+
+            else:
+                suffix = f"{units}"
+        return self.tick_value_loop(values, prefix, suffix)        
+
+    def update_axis_ticks(self, units=None):
         """Update axis ticks with formatted values"""
         if self.left_axis:
             view_range = self.left_axis.range
             # Generate some reasonable tick values within the view range
             tick_values = np.linspace(view_range[0], view_range[1], 6)
-            formatted_ticks = self.format_tick_values(tick_values)
+            formatted_ticks = self.format_tick_values(tick_values, units=units)
             self.left_axis.setTicks(formatted_ticks)
             
             if self.right_axis:
@@ -141,6 +165,8 @@ class HarmonicPlot(pg.PlotWidget):
             downsample=config.chart.downsampling
         )
 
+        # No need for explicit setData call, the PlotDataItem constructor handles it
+        
         if plot_on_right:
             self.has_right_axis = True  # Set flag when right axis is added
             # Hide the auto-range button when we have a right axis
@@ -190,7 +216,7 @@ class HarmonicPlot(pg.PlotWidget):
                     self.plot_item.getAxis('left').setLabel(f'{units if units else ""}')
         
         # Update axis ticks after adding new lines
-        self.update_axis_ticks()
+        self.update_axis_ticks(units=units)
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):
@@ -200,13 +226,15 @@ class HarmonicPlot(pg.PlotWidget):
             
         if self.sceneBoundingRect().contains(pos):
             mouse_point = self.plotItem.vb.mapSceneToView(pos)
-            x = mouse_point.x()
+            mouse_x = mouse_point.x()
             
-            # Find nearest x value
+            # Find nearest x value using timestamp comparison
             if self.x_vals is not None and len(self.x_vals) > 0:
-                idx = min(max(0, int(x)), len(self.x_vals)-1)
+                # Find the closest timestamp
+                idx = min(range(len(self.x_vals)), 
+                         key=lambda i: abs(self.x_vals[i] - mouse_x))
                 
-                # Update scatter point position
+                # Rest of the hover handling code
                 scatter_points = []
                 for label, data in self.plot_info.items():
                     if idx < len(data):

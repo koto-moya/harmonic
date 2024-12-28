@@ -86,7 +86,7 @@ class MainWindow(QGraphicsView):
         self.canvas_bar_layer = Layer(
             self, 
             self.canvas_bar, 
-            Qt.AlignBottom, # Remove AlignHCenter to make it flush
+            Qt.AlignBottom | Qt.AlignLeft, # Remove AlignHCenter to make it flush
             setWidth=True
         )
         self.canvas_bar.raise_()

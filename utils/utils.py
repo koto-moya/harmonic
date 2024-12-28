@@ -35,12 +35,52 @@ def apply_font_style(widget):
     widget.setStyleSheet(f"color: {config.font.color};")
 
 class CustomDateAxisItem(DateAxisItem):
+    def tickSpacing(self, minVal, maxVal, size):
+        # Force monthly ticks
+        return [(3600*24*30.5, 0)]  # Roughly one month intervals
+
     def tickStrings(self, values, scale, spacing):
-        # Center ticks to midday (12:00 PM)
-        return [datetime.datetime.fromtimestamp(value).strftime("%m/%d/%y") for value in values]
+        strings = []
+        for value in values:
+            try:
+                dt = datetime.datetime.fromtimestamp(value)
+                if dt.day <= 15:  # Only show month name for first half of month
+                    strings.append(dt.strftime("%b"))  # %b gives abbreviated month name
+                else:
+                    strings.append('')
+            except:
+                strings.append('')
+        return strings
+
+    def tickValues(self, minVal, maxVal, size):
+        # Generate ticks for the middle of each month for better label positioning
+        spacing = self.tickSpacing(minVal, maxVal, size)[0][0]
+        start_dt = datetime.datetime.fromtimestamp(minVal)
+        end_dt = datetime.datetime.fromtimestamp(maxVal)
+        
+        # Go to start of next month
+        if start_dt.day != 1:
+            start_dt = (start_dt.replace(day=1) + datetime.timedelta(days=32)).replace(day=1)
+        
+        # Generate timestamps for the 15th of each month
+        timestamps = []
+        current = start_dt
+        while current <= end_dt:
+            # Set to middle of month for label positioning
+            mid_month = current.replace(day=15)
+            timestamps.append(mid_month.timestamp())
+            # Move to next month
+            current = (current + datetime.timedelta(days=32)).replace(day=1)
+            
+        return [(spacing, timestamps)]
 
 def generate_stock_data(days=365, start_price=1.0, end_price=100.0, volatility=0.9):  # Increased volatility from 0.02 to 0.15
     """Generate simulated stock price data with geometric Brownian motion"""
+    # Create datetime array for 2024
+    start_date = datetime.datetime(2024, 1, 1)
+    dates = [start_date + datetime.timedelta(days=x) for x in range(days)]
+    timestamps = [d.timestamp() for d in dates]
+    
     t = np.linspace(0, days, days)
     # Calculate drift to reach target price
     total_return = np.log(end_price / start_price)
@@ -52,10 +92,15 @@ def generate_stock_data(days=365, start_price=1.0, end_price=100.0, volatility=0
     
     # Calculate price path
     S = start_price * np.exp((mu - volatility ** 2 / 2) * t + volatility * W)
-    return t, np.round(S, 2) * 100000
+    return timestamps, np.round(S, 2) * 10000
 
 def generate_fed_rates(days=365, start_rate=2.0, end_rate=5.0, volatility=0.3):
     """Generate simulated Fed rate data with less volatility than stock prices"""
+    # Create datetime array for 2024
+    start_date = datetime.datetime(2024, 1, 1)
+    dates = [start_date + datetime.timedelta(days=x) for x in range(days)]
+    timestamps = [d.timestamp() for d in dates]
+    
     t = np.linspace(0, days, days)
     total_change = np.log(end_rate / start_rate)
     mu = total_change / days + (volatility ** 2) / 2
@@ -67,7 +112,7 @@ def generate_fed_rates(days=365, start_rate=2.0, end_rate=5.0, volatility=0.3):
     
     # Calculate rate path
     R = start_rate * np.exp((mu - volatility ** 2 / 2) * t + volatility * W)
-    return t, np.round(R, 2)
+    return timestamps, np.round(R, 2)
 
 def find_furthest_color(palette, existing_colors):
     """Find color from palette that's furthest from existing colors."""
