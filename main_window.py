@@ -94,6 +94,7 @@ class MainWindow(QGraphicsView):
         # Connect signals
         self.canvas_bar.canvas_selected.connect(self.switch_canvas)
         self.canvas_bar.canvas_closed.connect(self.remove_canvas)
+        self.canvas_bar.new_canvas_requested.connect(self.create_new_canvas)
 
     def create_new_canvas(self):
         """Create a new canvas tab"""

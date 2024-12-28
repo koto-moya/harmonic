@@ -46,25 +46,25 @@ class InfiniteCanvas(QGraphicsScene):
         # Add stock price on left axis
         plot.addNewLines(
             stock_vals_qqq, 
-            data_label="stock price qqq", 
+            data_label="appl", 
             units="$", 
             plot_on_right=False
         )
 
         plot.addNewLines(
             stock_vals_appl, 
-            data_label="stock price appl", 
+            data_label="qqq", 
             units="$", 
             plot_on_right=False
         )
         
-        # Add fed rate on right axis
-        plot.addNewLines(
-            rate_vals, 
-            data_label="Fed Rate", 
-            units="%", 
-            plot_on_right=True
-        )
+        # # Add fed rate on right axis
+        # plot.addNewLines(
+        #     rate_vals, 
+        #     data_label="fed rate", 
+        #     units="%", 
+        #     plot_on_right=True
+        # )
 
     def handle_wheel_event(self, event, view):
         """Handle wheel events for the canvas"""

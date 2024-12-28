@@ -142,17 +142,17 @@ class HarmonicPlot(pg.PlotWidget):
             
             # Update axis label
             if units == '$':
-                self.right_axis.setLabel(f'Value ({units})', color=config.chart.axis_color)
+                self.right_axis.setLabel(f'{units}', color=config.chart.axis_color)
             else:
-                self.right_axis.setLabel(f'Value {units if units else ""}', color=config.chart.axis_color)
+                self.right_axis.setLabel(f'{units if units else ""}', color=config.chart.axis_color)
         else:
             self.plot_item.addItem(line)
             # Format left axis based on units of first item
             if len(self.plot_info) == 1:
                 if units == '$':
-                    self.plot_item.getAxis('left').setLabel(f'Value ({units})')
+                    self.plot_item.getAxis('left').setLabel(f'({units})')
                 else:
-                    self.plot_item.getAxis('left').setLabel(f'Value {units if units else ""}')
+                    self.plot_item.getAxis('left').setLabel(f'{units if units else ""}')
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):

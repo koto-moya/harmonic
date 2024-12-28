@@ -85,7 +85,7 @@ class PerformanceConfig:
 class CanvasBarConfig:
     height: int = 25
     tab_width: int = 125
-    max_tabs: int = 12
+    max_tabs: int = 14
     background_color: str = "#111111"
     border_color: str = "#333333"
     

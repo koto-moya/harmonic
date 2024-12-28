@@ -10,7 +10,7 @@ class CanvasTab(QWidget):
     renamed = Signal(str, str)  # Change first parameter to str
     closed = Signal(str)  # Change to str to avoid integer overflow
 
-    def __init__(self, tab_id: str, name: str = "New Canvas", is_home: bool = False, is_add_button: bool = False):
+    def __init__(self, tab_id: str, name: str = "new canvas", is_home: bool = False, is_add_button: bool = False):
         super().__init__()
         self.tab_id = tab_id
         self.active = False
@@ -227,7 +227,9 @@ class CanvasBarWidget(QWidget):
         self.MAX_TABS = config.canvas_bar.max_tabs
         self.TAB_WIDTH = config.canvas_bar.tab_width
         
-       
+        # Initialize tabs dict before anything that might use it
+        self.tabs = {}
+        self.active_tab = None
         
         # Create scroll area for tabs
         self.scroll_area = QScrollArea()
@@ -256,6 +258,7 @@ class CanvasBarWidget(QWidget):
         # Create add button as a special tab
         self.add_tab = CanvasTab("add_button", "+", is_add_button=True)
         self.add_tab.add_btn.clicked.connect(self._on_new_btn_clicked)
+        self._update_add_button_state()  # Initial state check
         
         # Create navigation buttons
         self.prev_btn = QPushButton("<")
@@ -330,11 +333,28 @@ class CanvasBarWidget(QWidget):
         # Emit signal after creating the tab
         self.new_canvas_requested.emit()
 
-    def addCanvas(self, tab_id: str = None, name: str = "New Canvas", is_home: bool = False):
+    def _update_add_button_state(self):
+        """Update add button enabled state based on number of tabs"""
+        is_enabled = len(self.tabs) < self.MAX_TABS
+        self.add_tab.add_btn.setEnabled(is_enabled)
+        self.add_tab.add_btn.setStyleSheet(f"""
+            QPushButton {{
+                background: {config.canvas_bar.background_color};
+                border: none;
+                color: {config.font.color if is_enabled else '#555555'};
+                font-size: 16px;
+                padding: 0;
+            }}
+            QPushButton:hover {{
+                color: {config.canvas_bar.close_button_hover if is_enabled else '#555555'};
+            }}
+        """)
+
+    def addCanvas(self, tab_id: str = None, name: str = "new canvas", is_home: bool = False):
         """Add a new canvas tab"""
         if len(self.tabs) >= self.MAX_TABS:
-            return  # Don't add more than MAX_TABS
-            
+            return
+        # ...existing code...
         if tab_id is None:
             self._counter += 1
             tab_id = f"tab_{self._counter}"  # Generate string ID
@@ -352,6 +372,7 @@ class CanvasBarWidget(QWidget):
         
         # Activate the new tab
         self.setActiveCanvas(tab_id)
+        self._update_add_button_state()  # Update button state after adding tab
 
     def _resize_tabs(self):
         """No longer needed since tabs have fixed width"""
@@ -368,6 +389,7 @@ class CanvasBarWidget(QWidget):
             # Always activate home tab when closing a tab
             self.setActiveCanvas("home")
             self.canvas_closed.emit(tab_id)
+            self._update_add_button_state()  # Update button state after removing tab
 
     def _on_tab_clicked(self, tab_id: str):
         """Handle tab selection"""
