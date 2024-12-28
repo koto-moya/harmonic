@@ -55,6 +55,7 @@ class HarmonicPlot(pg.PlotWidget):
         self.units = {}
         self.color_map = {}
         self.scatters = {}
+        self.left_units = None
         self.right_vb = pg.ViewBox()
         self.right_axis = None
         self.right_axis_items = {}
@@ -77,35 +78,61 @@ class HarmonicPlot(pg.PlotWidget):
                 text = f"{prefix}{val/1000000:.1f}M {suffix}"
                 major_ticks.append((val, text))
             elif abs(val) >= 1000:
-                text = f"{prefix}{val/1000:.1f}K{suffix}"
+                text = f"{prefix}{val/1000:.1f}K {suffix}"
                 major_ticks.append((val, text))
             else:
                 # No decimals for values under 10,000
-                text = f"{prefix}{int(val)}{suffix}"
+                text = f"{prefix}{int(val)} {suffix}"
                 minor_ticks.append((val, text))
                 
         return [major_ticks, minor_ticks]
 
 
-    def format_tick_values(self, values, units=None):
+    def format_tick_values(self, values):
         """Format tick values with K/M suffixes"""
         prefix = ''
         suffix = ''
-        if units:
-            if units == '$':
-                prefix = f"{units} "
+        if self.left_units:
+            if self.left_units == '$':
+                prefix = f"{self.left_units} "
 
             else:
-                suffix = f"{units}"
+                suffix = f"{self.left_units}"
         return self.tick_value_loop(values, prefix, suffix)        
 
-    def update_axis_ticks(self, units=None):
+    def _round_to_significant(self, value):
+        """Round to first significant digit"""
+        if value == 0:
+            return 0
+        magnitude = 10 ** np.floor(np.log10(abs(value)))
+        return np.round(value / magnitude) * magnitude
+
+    def update_axis_ticks(self):
         """Update axis ticks with formatted values"""
         if self.left_axis:
             view_range = self.left_axis.range
-            # Generate some reasonable tick values within the view range
-            tick_values = np.linspace(view_range[0], view_range[1], 6)
-            formatted_ticks = self.format_tick_values(tick_values, units=units)
+            min_val, max_val = view_range
+            
+            # Calculate appropriate step size based on range
+            range_size = max_val - min_val
+            magnitude = 10 ** np.floor(np.log10(range_size))
+            
+            if range_size / magnitude >= 5:
+                step = magnitude
+            elif range_size / magnitude >= 2:
+                step = magnitude / 2
+            else:
+                step = magnitude / 5
+            
+            # Generate rounded tick values
+            start = self._round_to_significant(min_val - (min_val % step))
+            end = self._round_to_significant(max_val + step)
+            tick_values = np.arange(start, end, step)
+            
+            # Filter ticks within view range
+            tick_values = tick_values[(tick_values >= min_val) & (tick_values <= max_val)]
+            
+            formatted_ticks = self.format_tick_values(tick_values)
             self.left_axis.setTicks(formatted_ticks)
             
             if self.right_axis:
@@ -143,6 +170,7 @@ class HarmonicPlot(pg.PlotWidget):
         if self.first_plot:
             self.first_plot = False
             self.plot_item.getAxis('bottom').setLabel('date' if self.is_datetime else 'Index')
+
         
         if data_label:
             self.plot_info[data_label] = y_vals
@@ -151,6 +179,8 @@ class HarmonicPlot(pg.PlotWidget):
                 self.right_axis_items[data_label] = True
                 if self.right_units is None:
                     self.right_units = units
+            else:
+                self.left_units = units
 
         # Select color furthest from existing colors using utility function
         furthest_color = find_furthest_color(config.chart.color_palette, list(self.color_map.values()))
@@ -216,7 +246,7 @@ class HarmonicPlot(pg.PlotWidget):
                     self.plot_item.getAxis('left').setLabel(f'{units if units else ""}')
         
         # Update axis ticks after adding new lines
-        self.update_axis_ticks(units=units)
+        self.update_axis_ticks()
 
     def _on_mouse_move(self, evt):
         if isinstance(evt, tuple):
