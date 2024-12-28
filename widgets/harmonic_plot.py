@@ -55,6 +55,7 @@ class HarmonicPlot(pg.PlotWidget):
         self.is_datetime = is_datetime
         self.has_right_axis = False  # Add flag to track right axis presence
         self.left_axis = self.plot_item.getAxis('left')
+        self.left_axis.enableAutoSIPrefix(False)
 
     def format_tick_values(self, values):
         """Format tick values with K/M suffixes"""
@@ -148,6 +149,7 @@ class HarmonicPlot(pg.PlotWidget):
             if self.right_axis is None:
                 # Initialize right axis setup
                 self.right_axis = pg.AxisItem('right')
+                # Rotate right axis label
                 # Apply same number formatting to right axis
                 self.plot_item.layout.addItem(self.right_axis, 2, 3)
                 self.right_axis.linkToView(self.right_vb)
