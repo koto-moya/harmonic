@@ -115,8 +115,8 @@ class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
     application_title: str = "Harmonic Plots"
     canvas_color: str = "#2d2b2b"
-    application_size: tuple = (1920, 1080)
-    application_position: tuple = (100, 100)
+    application_size: tuple = (1630, 930)  # Updated default window size
+    application_position: tuple = None  # Remove hardcoded position, will be calculated
     canvas_size: tuple = (8000, 8000)
     font: FontConfig = None
     chart: ChartConfig = None

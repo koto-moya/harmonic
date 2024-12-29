@@ -282,14 +282,25 @@ class CanvasBarWidget(QWidget):
         self.prev_btn.clicked.connect(self._scroll_left)
         self.next_btn.clicked.connect(self._scroll_right)
         
-        # Setup layout with navigation
+        # Create spacer widgets with same background color
+        spacer1 = QWidget()
+        spacer2 = QWidget()
+        spacer3 = QWidget()
+        for spacer in (spacer1, spacer2, spacer3):
+            spacer.setFixedWidth(5)
+            spacer.setStyleSheet(f"background: {config.canvas_bar.background_color};")
+        
+        # Setup layout with navigation and consistent background color
         main_layout = QHBoxLayout()
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+        main_layout.setSpacing(0)  # No spacing, we'll use our custom spacers
         main_layout.addWidget(self.scroll_area, stretch=1)
+        main_layout.addWidget(spacer1)
         main_layout.addWidget(self.prev_btn)
         main_layout.addWidget(self.next_btn)
+        main_layout.addWidget(spacer2)
         main_layout.addWidget(self.add_tab)
+        main_layout.addWidget(spacer3)
         self.setLayout(main_layout)
         
         self.setStyleSheet(f"""

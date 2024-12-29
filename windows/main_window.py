@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QGraphicsView, QWidget
+from PySide6.QtWidgets import QGraphicsView, QWidget, QApplication, QSizeGrip
 from PySide6.QtCore import Qt, QObject, QEvent
 from PySide6.QtGui import QPainter, QColor, QPixmap
 from scenes.infinite_canvas import InfiniteCanvas
@@ -46,6 +46,14 @@ class Layer(QObject):
 class MainWindow(QGraphicsView):
     def __init__(self):
         super().__init__()
+        
+        # Calculate center position
+        screen = QApplication.primaryScreen().geometry()
+        window_width = 1630
+        window_height = 930
+        center_x = (screen.width() - window_width) // 2
+        center_y = (screen.height() - window_height) // 2
+        
         self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
         
         self.setCacheMode(
@@ -71,8 +79,16 @@ class MainWindow(QGraphicsView):
         self.setBackgroundBrush(QColor(config.canvas_color))
         self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setWindowTitle(config.application_title)
-        self.setGeometry(*config.application_position, *config.application_size)
+        self.setGeometry(center_x, center_y, window_width, window_height)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
+        
+        # Disable the window system's resize handles
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.MSWindowsFixedSizeDialogHint)
+        
+        # Remove size grip if it exists
+        for child in self.findChildren(QSizeGrip):
+            child.setVisible(False)
+            child.deleteLater()
         
         # Create and store canvases
         self.canvases = {}
