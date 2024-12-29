@@ -68,8 +68,8 @@ class HeaderWidget(QWidget):
 
     def _create_value_labels(self, values):
         """Create initial layout with static labels"""
-        label_width = int(self.parent_width * 0.2)
-        label_height = int(self.parent_height * 0.4)
+        label_width = int(self.parent_width * 0.15)  # Reduced from 0.2
+        label_height = int(self.parent_height * 0.30)  # Reduced from 0.4
         
         for i, (label, data) in enumerate(values.items()):
             if label not in self.static_labels:
@@ -96,7 +96,9 @@ class HeaderWidget(QWidget):
                 row = i % (len(values) // 2 + len(values) % 2)
                 col = i // (len(values) // 2 + len(values) % 2) * 2  # Multiply by 2 for label-value pairs
                 
-                # Add to grid
+                # Add to grid with smaller spacing
+                self.values_grid.setHorizontalSpacing(5)  # Add small horizontal spacing
+                self.values_grid.setVerticalSpacing(0)    # Remove vertical spacing
                 self.values_grid.addWidget(static_label, row, col)
                 self.values_grid.addWidget(value_label, row, col + 1)
                 

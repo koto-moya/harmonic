@@ -290,7 +290,7 @@ class HarmonicPlot(pg.PlotWidget):
                         'units': self.units.get(label),
                         'right_axis': label in self.right_axis_items,
                         'x': self.x_vals[idx],
-                        'x_axis': 'date' if self.is_datetime else 'Index'
+                        'x_axis': 'date' if self.is_datetime else 'index'
                     } 
                     for label, data in self.plot_info.items() 
                     if idx < len(data)
