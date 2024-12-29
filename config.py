@@ -169,6 +169,35 @@ class DraggableConfig:
             }
 
 @dataclass
+class HeaderConfig:
+    # Layout settings
+    margin_horizontal_ratio: float = 0.01  # Percent of parent width
+    margin_vertical_ratio: float = 0.1  # Percent of parent height
+    layout_spacing: int = 5
+    grid_horizontal_spacing: int = 5
+    grid_vertical_spacing: int = 0
+    
+    # Title settings
+    title_width_ratio: float = 0.25  # Percent of parent width
+    title_height_ratio: float = 0.8  # Percent of parent height
+    title_alignment: tuple = (Qt.AlignLeft, Qt.AlignVCenter)
+    
+    # Values container settings
+    values_position_ratio: float = 0.3  # Position as percentage of parent width
+    label_width_ratio: float = 0.15  # Width as percentage of parent width
+    label_height_ratio: float = 0.30  # Height as percentage of parent height
+    max_columns: int = 2
+    
+    # Number formatting
+    million_format: str = "{:.2f}M"
+    thousand_format: str = "{:.1f}K"
+    decimal_format: str = "{:.2f}"
+    
+    # Label alignment
+    static_label_alignment: tuple = (Qt.AlignRight, Qt.AlignVCenter)
+    value_label_alignment: tuple = (Qt.AlignLeft, Qt.AlignVCenter)
+
+@dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
     application_title: str = "Harmonic Plots"
@@ -185,6 +214,7 @@ class GlobalConfig:
     canvas_bar: CanvasBarConfig = None
     parallax: ParallaxConfig = None
     draggable: DraggableConfig = None
+    header: HeaderConfig = None
 
     def __post_init__(self):
         if self.font is None:
@@ -201,6 +231,8 @@ class GlobalConfig:
             self.parallax = ParallaxConfig()
         if self.draggable is None:
             self.draggable = DraggableConfig()
+        if self.header is None:
+            self.header = HeaderConfig()
 
 # Create default configuration instance
 config = GlobalConfig()
