@@ -152,6 +152,13 @@ class CanvasTab(QWidget):
     def setActive(self, active: bool):
         """Set active state with highlight color"""
         self.active = active
+        
+        # Determine font color based on active state
+        if self.is_home:
+            font_color = config.font.color if active else config.canvas_bar.close_button_hover
+        else:
+            font_color = config.font.color if active else self.highlight_color
+        
         if self.is_home:
             if active:
                 bg_color = f"rgba(48, 0, 179, 0.5)"  # Dark blue with 50% opacity when active
@@ -169,7 +176,7 @@ class CanvasTab(QWidget):
         self.setStyleSheet(f"""
             QWidget {{
                 background: {bg_color};
-                color: {config.font.color};
+                color: {font_color};
                 font-size: {config.font.size}px;
             }}
         """)

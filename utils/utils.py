@@ -24,7 +24,12 @@ from config import config
 #     def tickStrings(self, values, scale, spacing):
 #         # Center ticks to midday (12:00 PM)
 #         return [datetime.datetime.fromtimestamp(value).strftime("%m/%d/%y") for value in values]
-    
+def round_to_significant(value):
+    """Round to first significant digit"""
+    if value == 0:
+        return 0
+    magnitude = 10 ** np.floor(np.log10(abs(value)))
+    return np.round(value / magnitude) * magnitude
 
 def apply_font_style(widget):
     """Apply global font style to a widget"""

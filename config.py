@@ -40,6 +40,22 @@ class ChartConfig:
     axis_font_family: str = "Arial"  # New axis font settings
     axis_font_size: int = 10
     axis_font_weight: int = 400
+    mouse_tracking_enabled: bool = True  # Enable mouse tracking by default
+    
+    # Additional mouse-related settings
+    scatter_pen: Optional[str] = None  # Pen for scatter points
+    scatter_brush_color: tuple = (255, 255, 255)  # White color for scatter points
+    scatter_px_mode: bool = True  # Use pixel mode for scatter points
+    
+    # Viewport settings
+    enable_x_mouse: bool = True  # Enable mouse interaction on x-axis
+    enable_y_mouse: bool = True  # Enable mouse interaction on y-axis
+    auto_range_disabled: bool = True  # Disable auto-range by default
+    
+    # Axis settings
+    axis_z_value: int = -1000  # Z-index for axes
+    axis_label_padding: int = 5  # Padding for axis labels
+    plot_margins: tuple = (5, 0, 5, 1)  # Plot margins (left, top, right, bottom)
 
     def __post_init__(self):
         if self.color_palette is None:
@@ -103,12 +119,54 @@ class CanvasBarConfig:
     button_radius: int = 4
     close_button_size: int = 8
     close_button_hover: str = "#ff5555"
+    close_button_style: str = """
+        QPushButton {
+            background: transparent;
+            border: none;
+            color: #c9d1d9;
+            font-size: 18px;
+            font-family: Arial;
+            padding: 0;
+            margin: 0;
+        }
+        QPushButton:hover {
+            color: #ff5555;
+        }
+    """
 
 @dataclass
 class ParallaxConfig:
     factor_x: float = 0.03  # Slower movement for dots
     factor_y: float = 0.03  # Slower movement for dots
     enabled: bool = True    # Toggle parallax effect
+
+@dataclass
+class DraggableConfig:
+    selected_color: str = "#3000b3"  # rgb(48, 0, 179)
+    unselected_color: str = "#505050"  # rgb(80, 80, 80)
+    border_width: float = 1.0
+    plot_height_ratio: float = 0.92
+    title_height_ratio: float = 0.08
+    close_button: dict = None
+
+    def __post_init__(self):
+        if self.close_button is None:
+            self.close_button = {
+                'size': 16,
+                'x_offset': 20,
+                'y_offset': 4,
+                'style': """
+                    QPushButton {
+                        background: transparent;
+                        border: none;
+                        color: #c9d1d9;
+                        font-size: 14px;
+                    }
+                    QPushButton:hover {
+                        color: #ff5555;
+                    }
+                """
+            }
 
 @dataclass
 class GlobalConfig:
@@ -126,6 +184,7 @@ class GlobalConfig:
     performance: PerformanceConfig = None
     canvas_bar: CanvasBarConfig = None
     parallax: ParallaxConfig = None
+    draggable: DraggableConfig = None
 
     def __post_init__(self):
         if self.font is None:
@@ -140,6 +199,8 @@ class GlobalConfig:
             self.canvas_bar = CanvasBarConfig()
         if self.parallax is None:
             self.parallax = ParallaxConfig()
+        if self.draggable is None:
+            self.draggable = DraggableConfig()
 
 # Create default configuration instance
 config = GlobalConfig()

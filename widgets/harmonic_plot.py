@@ -1,16 +1,41 @@
+from typing import Dict, List, Optional, Union, Tuple
 import numpy as np
 import pyqtgraph as pg
 from PySide6.QtCore import Signal, QTimer
 from PySide6.QtGui import QFont
-from config import config  # Changed to absolute
-from utils.utils import find_furthest_color  # Add this import
-from utils.utils import CustomDateAxisItem  # Add this import
+
+# Change absolute imports to relative imports
+from config import config
+from utils.utils import (
+    find_furthest_color,
+    CustomDateAxisItem,
+    round_to_significant
+)
+
 
 class HarmonicPlot(pg.PlotWidget):
-    mouse_moved_signal = Signal(dict)  # Signal to emit {label: value} pairs
+    """
+    A customized plot widget for displaying harmonic data.
+    
+    Supports datetime and numerical x-axes, multiple y-axes, and interactive features.
+    """
+    
+    mouse_moved_signal = Signal(dict)
 
-    def __init__(self, x_vals=None, enable_mouseover=False, is_datetime=True):
-        # For datetime x-axis, we need to initialize with our custom axis item
+    def __init__(
+        self,
+        x_vals: Optional[np.ndarray] = None,
+        enable_mouseover: bool = config.chart.mouse_tracking_enabled,
+        is_datetime: bool = True
+    ) -> None:
+        """
+        Initialize the HarmonicPlot widget.
+
+        Args:
+            x_vals: Array of x-axis values
+            enable_mouseover: Enable mouse tracking functionality
+            is_datetime: Whether x-axis represents datetime values
+        """
         axis_items = {'bottom': CustomDateAxisItem(orientation='bottom')} if is_datetime else {}
         super().__init__(axisItems=axis_items)
         
@@ -21,37 +46,40 @@ class HarmonicPlot(pg.PlotWidget):
         if x_vals is not None and not is_datetime:
             self.x_vals = np.round(x_vals, config.performance.decimal_precision)
         elif x_vals is not None:
-            # Convert datetime x values to timestamps for plotting
             self.x_vals = x_vals
         if enable_mouseover:
             self.scene().sigMouseMoved.connect(self._on_mouse_move)
 
         self.scatter = pg.ScatterPlotItem(
-            size=config.chart.scatter_dot_size,  # Use new scatter_dot_size parameter
-            pen=pg.mkPen(None), 
-            brush=pg.mkBrush(255, 255, 255, config.chart.scatter_opacity),
-            pxMode=True
+            size=config.chart.scatter_dot_size,
+            pen=pg.mkPen(config.chart.scatter_pen), 
+            brush=pg.mkBrush(*config.chart.scatter_brush_color, config.chart.scatter_opacity),
+            pxMode=config.chart.scatter_px_mode
         )
 
 
         self.plot_item = self.getPlotItem()
         self.plot_item.showGrid(x=True, y=True, alpha=config.chart.grid_alpha)
-        self.plot_item.setClipToView(config.chart.clip_to_view)  # Only render visible data
+        self.plot_item.setClipToView(config.chart.clip_to_view)
         self.plot_item.addItem(self.scatter)
-        self.plot_item.getAxis('left').setZValue(-1000)
-        self.plot_item.getAxis('bottom').setZValue(-1000)
+        self.plot_item.getAxis('left').setZValue(config.chart.axis_z_value)
+        self.plot_item.getAxis('bottom').setZValue(config.chart.axis_z_value)
         font = QFont(config.font.family, config.font.value_label_size)
-        self.plot_item.getAxis('left').setStyle(tickFont=font, tickTextOffset=5)
-        self.plot_item.getAxis('bottom').setStyle(tickFont=font, tickTextOffset=5)
-        self.plot_item.layout.setContentsMargins(5, 0, 5, 1)
-        self.vb = self.plot_item.vb  # Main ViewBox
+        self.plot_item.getAxis('left').setStyle(tickFont=font, tickTextOffset=config.chart.axis_label_padding)
+        self.plot_item.getAxis('bottom').setStyle(tickFont=font, tickTextOffset=config.chart.axis_label_padding)
+        self.plot_item.layout.setContentsMargins(*config.chart.plot_margins)
+        self.vb = self.plot_item.vb
         self.vb.sigResized.connect(self.updateViews)
-        self.vb.setMouseEnabled(x=True, y=True)
+        self.vb.setMouseEnabled(
+            x=config.chart.enable_x_mouse,
+            y=config.chart.enable_y_mouse
+        )
         self.vb.setLimits(xMin=None, xMax=None, yMin=None, yMax=None)
-        QTimer.singleShot(0, lambda: self.vb.disableAutoRange())
+        if config.chart.auto_range_disabled:
+            QTimer.singleShot(0, lambda: self.vb.disableAutoRange())
 
         self.plot_info = {}
-        self.first_plot = True # Add flag to track first plot for axis label
+        self.first_plot = True
         self.units = {}
         self.color_map = {}
         self.scatters = {}
@@ -61,15 +89,30 @@ class HarmonicPlot(pg.PlotWidget):
         self.right_axis_items = {}
         self.right_units = None
         self.is_datetime = is_datetime
-        self.has_right_axis = False  # Add flag to track right axis presence
+        self.has_right_axis = False
         self.left_axis = self.plot_item.getAxis('left')
         self.left_axis.enableAutoSIPrefix(False)
 
-        # Set axis label if datetime
         if is_datetime:
             self.plot_item.getAxis('bottom').setLabel('Date')
 
-    def tick_value_loop(self, values, prefix = '', suffix = ''):
+    def tick_value_loop(
+        self,
+        values: np.ndarray,
+        prefix: str = '',
+        suffix: str = ''
+    ) -> List[List[Tuple[float, str]]]:
+        """
+        Format tick values with K/M suffixes.
+
+        Args:
+            values: Array of tick values to format
+            prefix: String to prepend to tick labels
+            suffix: String to append to tick labels
+
+        Returns:
+            List containing major and minor tick value pairs
+        """
         major_ticks = []
         minor_ticks = []
         
@@ -81,15 +124,22 @@ class HarmonicPlot(pg.PlotWidget):
                 text = f"{prefix}{val/1000:.1f}K {suffix}"
                 major_ticks.append((val, text))
             else:
-                # No decimals for values under 10,000
                 text = f"{prefix}{int(val)} {suffix}"
                 minor_ticks.append((val, text))
                 
         return [major_ticks, minor_ticks]
 
 
-    def format_tick_values(self, values):
-        """Format tick values with K/M suffixes"""
+    def format_tick_values(self, values: np.ndarray) -> List[List[Tuple[float, str]]]:
+        """
+        Apply unit formatting to tick values.
+
+        Args:
+            values: Array of values to format
+
+        Returns:
+            Formatted tick values with appropriate units
+        """
         prefix = ''
         suffix = ''
         if self.left_units:
@@ -100,20 +150,12 @@ class HarmonicPlot(pg.PlotWidget):
                 suffix = f"{self.left_units}"
         return self.tick_value_loop(values, prefix, suffix)        
 
-    def _round_to_significant(self, value):
-        """Round to first significant digit"""
-        if value == 0:
-            return 0
-        magnitude = 10 ** np.floor(np.log10(abs(value)))
-        return np.round(value / magnitude) * magnitude
-
-    def update_axis_ticks(self):
-        """Update axis ticks with formatted values"""
+    def update_axis_ticks(self) -> None:
+        """Update axis ticks with formatted values based on current view range."""
         if self.left_axis:
             view_range = self.left_axis.range
             min_val, max_val = view_range
             
-            # Calculate appropriate step size based on range
             range_size = max_val - min_val
             magnitude = 10 ** np.floor(np.log10(range_size))
             
@@ -124,12 +166,10 @@ class HarmonicPlot(pg.PlotWidget):
             else:
                 step = magnitude / 5
             
-            # Generate rounded tick values
-            start = self._round_to_significant(min_val - (min_val % step))
-            end = self._round_to_significant(max_val + step)
+            start = round_to_significant(min_val - (min_val % step))
+            end = round_to_significant(max_val + step)
             tick_values = np.arange(start, end, step)
             
-            # Filter ticks within view range
             tick_values = tick_values[(tick_values >= min_val) & (tick_values <= max_val)]
             
             formatted_ticks = self.format_tick_values(tick_values)
@@ -138,31 +178,47 @@ class HarmonicPlot(pg.PlotWidget):
             if self.right_axis:
                 self.right_axis.setTicks(formatted_ticks)
 
-    def wheelEvent(self, ev):
-        # Ignore wheel events if there's a right axis
+    def wheelEvent(self, ev) -> None:
+        """Handle mouse wheel events for zooming."""
         if self.has_right_axis:
             ev.accept()
             return
             
-        # Only zoom X-axis on wheel event
-        if self.plot_item.sceneBoundingRect().contains(ev.position()):  # Changed from pos() to position()
+        if self.plot_item.sceneBoundingRect().contains(ev.position()):
             view_box = self.plot_item.getViewBox()
             delta = ev.angleDelta().y()
             
             if delta != 0:
                 scale = 1.01 ** (delta / 20.0)
-                view_box.scaleBy(x=scale, y=1.0)  # Only scale X axis
+                view_box.scaleBy(x=scale, y=1.0)
                 
             ev.accept()
 
-    def updateViews(self):
+    def updateViews(self) -> None:
+        """Synchronize views between left and right axes."""
         if self.right_vb:
             self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
             self.right_vb.linkedViewChanged(self.plot_item.vb, self.right_vb.XAxis)
-        self.update_axis_ticks()  # Update ticks when view changes
+        self.update_axis_ticks()
 
-    def addNewLines(self, y_vals, x_vals=None, data_label=None, units=None, plot_on_right=False):
-        # Round y_vals to configured precision
+    def addNewLines(
+        self,
+        y_vals: np.ndarray,
+        x_vals: Optional[np.ndarray] = None,
+        data_label: Optional[str] = None,
+        units: Optional[str] = None,
+        plot_on_right: bool = False
+    ) -> None:
+        """
+        Add new data lines to the plot.
+
+        Args:
+            y_vals: Y-axis values to plot
+            x_vals: Optional X-axis values
+            data_label: Label for the data series
+            units: Units for the data series
+            plot_on_right: Whether to plot on right axis
+        """
         y_vals = np.round(y_vals, config.performance.decimal_precision)
 
         if self.x_vals is None:
@@ -182,7 +238,6 @@ class HarmonicPlot(pg.PlotWidget):
             else:
                 self.left_units = units
 
-        # Select color furthest from existing colors using utility function
         furthest_color = find_furthest_color(config.chart.color_palette, list(self.color_map.values()))
         self.color_map[data_label] = furthest_color
 
@@ -195,54 +250,47 @@ class HarmonicPlot(pg.PlotWidget):
             downsample=config.chart.downsampling
         )
 
-        # No need for explicit setData call, the PlotDataItem constructor handles it
-        
         if plot_on_right:
-            self.has_right_axis = True  # Set flag when right axis is added
-            # Hide the auto-range button when we have a right axis
+            self.has_right_axis = True
             self.hideButtons()
             
             if self.right_axis is None:
-                # Initialize right axis setup
                 self.right_axis = pg.AxisItem('right')
-                # Rotate right axis label
-                # Apply same number formatting to right axis
                 self.plot_item.layout.addItem(self.right_axis, 2, 3)
                 self.right_axis.linkToView(self.right_vb)
                 self.scene().addItem(self.right_vb)
                 self.right_vb.setXLink(self.plot_item.vb)
                 
-                # Match the main viewbox settings
                 self.right_vb.setGeometry(self.plot_item.vb.sceneBoundingRect())
                 self.right_vb.enableAutoRange(axis='y')
                 
-                # Style the right axis
                 self.right_axis.setPen(pg.mkPen(
                     color=config.chart.axis_color,
                     width=config.chart.axis_width,
-                    alpha=0  # Make right axis transparent
+                    alpha=0
                 ))
                 self.right_axis.setZValue(-1000)
-                # Remove y-axis label setting for right axis
                 self.right_axis.setLabel('')
             
-            # Lock both viewboxes when right axis exists
             self.vb.setMouseEnabled(x=False, y=False)
             self.right_vb.setMouseEnabled(x=False, y=False)
             
-            # Add item to right viewbox
             self.right_vb.addItem(line)
             
         else:
             self.plot_item.addItem(line)
-            # Remove y-axis label formatting block
             if len(self.plot_info) == 1:
                 self.plot_item.getAxis('left').setLabel('')
         
-        # Update axis ticks after adding new lines
         self.update_axis_ticks()
 
-    def _on_mouse_move(self, evt):
+    def _on_mouse_move(self, evt) -> None:
+        """
+        Handle mouse movement events for hover effects.
+
+        Args:
+            evt: Mouse event data
+        """
         if isinstance(evt, tuple):
             pos = evt[0]
         else:
@@ -252,28 +300,22 @@ class HarmonicPlot(pg.PlotWidget):
             mouse_point = self.plotItem.vb.mapSceneToView(pos)
             mouse_x = mouse_point.x()
             
-            # Find nearest x value using timestamp comparison
             if self.x_vals is not None and len(self.x_vals) > 0:
-                # Find the closest timestamp
                 idx = min(range(len(self.x_vals)), 
                          key=lambda i: abs(self.x_vals[i] - mouse_x))
                 
-                # Rest of the hover handling code
                 scatter_points = []
                 for label, data in self.plot_info.items():
                     if idx < len(data):
                         y = float(data[idx])
                         
-                        # Determine which viewbox to use based on axis
                         if label in self.right_axis_items:
                             vb = self.right_vb
                         else:
                             vb = self.vb
                             
-                        # Transform the point to scene coordinates
                         point = vb.mapFromView(pg.Point(self.x_vals[idx], y))
                         scene_point = vb.mapToScene(point)
-                        # Transform back to view coordinates of the main viewbox
                         view_point = self.vb.mapSceneToView(scene_point)
                         
                         scatter_points.append({
@@ -283,7 +325,6 @@ class HarmonicPlot(pg.PlotWidget):
                 
                 self.scatter.setData(spots=scatter_points)
                 
-                # Emit values for labels
                 values = {
                     label: {
                         'value': data[idx],
@@ -298,5 +339,4 @@ class HarmonicPlot(pg.PlotWidget):
                 if values:
                     self.mouse_moved_signal.emit(values)
         else:
-            # Clear scatter point when mouse leaves plot
             self.scatter.clear()

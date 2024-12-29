@@ -1,66 +1,108 @@
-from PySide6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QLabel
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QHBoxLayout,
+    QLabel
+)
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QPainter, QColor, QIcon, QPixmap
+from PySide6.QtGui import (
+    QPainter,
+    QColor,
+    QIcon,
+    QMouseEvent
+)
 from config import config
 
+
 class ControlBar(QWidget):
+    """
+    A custom window control bar widget that provides dragging and close functionality.
+    
+    Includes an application icon and a close button, with custom styling and drag behavior.
+    """
+    
     close_requested = Signal()
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the control bar with icon and close button."""
         super().__init__()
-        self.setFixedHeight(30)
+        self.setFixedHeight(config.canvas_bar.height)
         
-        # Create horizontal layout
-        layout = QHBoxLayout()
-        layout.setContentsMargins(5, 0, 5, 0)  # Add small left/right margins
-        layout.setSpacing(5)
+        self.dragging = False
+        self.offset = None
         
-        # Add icon
-        icon_label = QLabel()
-        icon = QIcon("resources/gestalt.ico")  # Adjust path as needed
-        icon_pixmap = icon.pixmap(24, 24)  # Match height of control bar with padding
-        icon_label.setPixmap(icon_pixmap)
-        
-        # Create close button with larger text
-        self.close_button = QPushButton("×")
-        self.close_button.setFixedSize(24, 24)
-        self.close_button.clicked.connect(self.close_requested.emit)
-        self.close_button.setStyleSheet(f"""
-            QPushButton {{
-                background: transparent;
-                border: none;
-                color: {config.font.color};
-                font-size: 18px;  /* Increase font size for the × symbol */
-                font-family: Arial;  /* Use Arial for cleaner symbol rendering */
-                padding: 0;
-                margin: 0;
-            }}
-            QPushButton:hover {{
-                color: {config.canvas_bar.close_button_hover};
-            }}
-        """)
-        
-        # Add widgets to layout
-        layout.addWidget(icon_label)
-        layout.addStretch()  # This pushes the close button to the right
-        layout.addWidget(self.close_button)
-        
-        self.setLayout(layout)
-        
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.fillRect(self.rect(), QColor(config.canvas_bar.background_color))
+        self._setup_layout()
+        self._setup_icon()
+        self._setup_close_button()
 
-    def mousePressEvent(self, event):
+    def _setup_layout(self) -> None:
+        """Configure the main horizontal layout."""
+        self.layout = QHBoxLayout()
+        self.layout.setContentsMargins(5, 0, 5, 0)
+        self.layout.setSpacing(5)
+        self.setLayout(self.layout)
+
+    def _setup_icon(self) -> None:
+        """Add and configure the application icon."""
+        icon_label = QLabel()
+        icon = QIcon("resources/gestalt.ico")
+        icon_pixmap = icon.pixmap(24, 24)
+        icon_label.setPixmap(icon_pixmap)
+        self.layout.addWidget(icon_label)
+        self.layout.addStretch()
+
+    def _setup_close_button(self) -> None:
+        """Create and configure the close button."""
+        self.close_button = QPushButton("×")
+        self.close_button.setFixedSize(
+            config.canvas_bar.button_size,
+            config.canvas_bar.button_size
+        )
+        self.close_button.clicked.connect(self.close_requested.emit)
+        self.close_button.setStyleSheet(config.canvas_bar.close_button_style)
+        self.layout.addWidget(self.close_button)
+
+    def paintEvent(self, event) -> None:
+        """
+        Paint the control bar background.
+
+        Args:
+            event: QPaintEvent instance
+        """
+        painter = QPainter(self)
+        painter.fillRect(
+            self.rect(),
+            QColor(config.canvas_bar.background_color)
+        )
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        """
+        Handle mouse press for window dragging.
+
+        Args:
+            event: QMouseEvent instance
+        """
         if event.button() == Qt.LeftButton:
             self.dragging = True
             self.offset = event.globalPosition().toPoint()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        """
+        Handle mouse movement for window dragging.
+
+        Args:
+            event: QMouseEvent instance
+        """
         if self.dragging and self.offset:
             new_pos = event.globalPosition().toPoint() - self.offset
             self.window().move(self.window().pos() + new_pos)
             self.offset = event.globalPosition().toPoint()
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        """
+        Handle mouse release to end dragging.
+
+        Args:
+            event: QMouseEvent instance
+        """
         self.dragging = False
