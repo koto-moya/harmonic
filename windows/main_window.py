@@ -114,7 +114,8 @@ class MainWindow(QGraphicsView):
         
         # Remove background_pixmap initialization since we're not using images
         self.base_color = QColor(config.canvas_color)
-        self.pattern_color = QColor(config.canvas_color).darker(120)  # Slightly darker for pattern
+        self.pattern_color = QColor(config.canvas_color).lighter(150)  # Lighter dots are less harsh
+        self.dot_size = 2  # Small dots are less noticeable when tearing
 
     def create_new_canvas(self):
         """Create a new canvas tab"""
@@ -143,11 +144,15 @@ class MainWindow(QGraphicsView):
             super().wheelEvent(event)
 
     def drawBackground(self, painter, rect):
-        """Override drawBackground to create a color-based parallax effect"""
+        """Override drawBackground to create a dot-based parallax effect"""
         # Fill with base color first
         painter.fillRect(rect, self.base_color)
         
         if config.parallax.enabled:
+            # Get current transform and scale
+            transform = self.transform()
+            scale = transform.m11()
+            
             # Calculate the parallax offset
             view_center = self.viewport().rect().center()
             scene_center = self.mapToScene(view_center)
@@ -156,24 +161,25 @@ class MainWindow(QGraphicsView):
             parallax_x = scene_center.x() * config.parallax.factor_x
             parallax_y = scene_center.y() * config.parallax.factor_y
             
-            # Define grid size
-            grid_size = 50  # Size of each grid cell
+            # Define dot pattern spacing
+            spacing = 50  # Space between dots
             
             # Calculate offset for parallax effect
-            offset_x = int(parallax_x) % grid_size
-            offset_y = int(parallax_y) % grid_size
+            offset_x = parallax_x % spacing
+            offset_y = parallax_y % spacing
             
-            # Draw grid pattern with parallax offset
-            painter.setPen(self.pattern_color)
+            # Prepare painter for dots
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(self.pattern_color)
             
-            # Draw vertical lines
-            x = rect.left() - (rect.left() % grid_size) - offset_x
-            while x < rect.right():
-                painter.drawLine(int(x), int(rect.top()), int(x), int(rect.bottom()))
-                x += grid_size
+            # Calculate visible rect in scene coordinates
+            visible_rect = self.mapToScene(self.viewport().rect()).boundingRect()
             
-            # Draw horizontal lines
-            y = rect.top() - (rect.top() % grid_size) - offset_y
-            while y < rect.bottom():
-                painter.drawLine(int(rect.left()), int(y), int(rect.right()), int(y))
-                y += grid_size
+            # Draw dot pattern
+            x = visible_rect.left() - (visible_rect.left() % spacing) - offset_x
+            while x <= visible_rect.right():
+                y = visible_rect.top() - (visible_rect.top() % spacing) - offset_y
+                while y <= visible_rect.bottom():
+                    painter.drawEllipse(int(x), int(y), self.dot_size, self.dot_size)
+                    y += spacing
+                x += spacing

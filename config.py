@@ -106,8 +106,8 @@ class CanvasBarConfig:
 
 @dataclass
 class ParallaxConfig:
-    factor_x: float = 0.05  # Reduced for smoother grid movement
-    factor_y: float = 0.05  # Reduced for smoother grid movement
+    factor_x: float = 0.03  # Slower movement for dots
+    factor_y: float = 0.03  # Slower movement for dots
     enabled: bool = True    # Toggle parallax effect
 
 @dataclass
