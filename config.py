@@ -214,7 +214,7 @@ class ControllerConfig:
             border-radius: 3px;
         }
     """
-    placeholder_text: str = "enter command..."
+    placeholder_text: str = ">"
     commands: List[str] = None
     context_label_style: str = """
         QLabel {

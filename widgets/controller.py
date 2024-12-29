@@ -34,7 +34,14 @@ class Controller(QWidget):
             config.controller.margin
         )
         
-        # Initialize empty command context label to reserve space
+        # Create container widget for labels
+        label_container = QWidget()
+        label_container.setFixedHeight(24)  # Fixed height for consistent spacing
+        label_layout = QVBoxLayout(label_container)
+        label_layout.setContentsMargins(0, 0, 0, 0)
+        label_layout.setSpacing(0)
+        
+        # Initialize context label
         self.context_label = QLabel()
         self.context_label.setAlignment(Qt.AlignLeft)
         self.context_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -45,16 +52,18 @@ class Controller(QWidget):
                 padding: 2px 6px;
                 border-radius: 2px;
                 margin-bottom: 2px;
+                opacity: 0;
             }
         """)
-        self.context_label.hide()
         
-        # Spacer label to maintain consistent height
+        # Spacer label
         self.spacer_label = QLabel()
-        self.spacer_label.setFixedHeight(self.context_label.sizeHint().height())
         self.spacer_label.setStyleSheet("background: transparent;")
         
-        # Command input with completer
+        # Add labels to container
+        label_layout.addWidget(self.context_label)
+        
+        # Command input setup remains the same
         self.command_input = QLineEdit()
         self.command_input.setPlaceholderText(config.controller.placeholder_text)
         self.command_input.returnPressed.connect(self.process_command)
@@ -64,9 +73,8 @@ class Controller(QWidget):
         completer.setCaseSensitivity(Qt.CaseInsensitive)
         self.command_input.setCompleter(completer)
         
-        # Add to layout
-        layout.addWidget(self.spacer_label)  # Add spacer first
-        layout.addWidget(self.context_label)  # Add label (hidden initially)
+        # Add to main layout
+        layout.addWidget(label_container)
         layout.addWidget(self.command_input)
         
         self.setFixedWidth(config.controller.width)
@@ -81,7 +89,6 @@ class Controller(QWidget):
             command = self.command_input.text().strip()
             self.current_command = command
             if command in config.controller.commands:
-            # Set context and show label with random color
                 self.context_label.setText(command)
                 self.context_label.setStyleSheet(f"""
                     QLabel {{
@@ -91,12 +98,9 @@ class Controller(QWidget):
                         background-color: {self.get_next_color()};
                         border-radius: 2px;
                         margin-bottom: 2px;
+                        opacity: 1;
                     }}
                 """)
-                self.spacer_label.hide()
-                self.context_label.show()
-                self.context_label.adjustSize()
-                
                 self.command_input.clear()
                 self.command_input.setPlaceholderText("describe content...")
                 self.command_mode = False
@@ -112,7 +116,12 @@ class Controller(QWidget):
                 self.execute_payload()
                 self.command_input.clear()
                 self.command_input.setPlaceholderText(config.controller.placeholder_text)
-                self.context_label.hide()
+                self.context_label.setText("")  # Clear the text
+                self.context_label.setStyleSheet("""
+                    QLabel {
+                        opacity: 0;
+                    }
+                """)
                 self.command_mode = True
 
     def execute_payload(self):
