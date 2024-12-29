@@ -105,6 +105,12 @@ class CanvasBarConfig:
     close_button_hover: str = "#ff5555"
 
 @dataclass
+class ParallaxConfig:
+    factor_x: float = 0.05  # Reduced for smoother grid movement
+    factor_y: float = 0.05  # Reduced for smoother grid movement
+    enabled: bool = True    # Toggle parallax effect
+
+@dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
     application_title: str = "Harmonic Plots"
@@ -119,6 +125,7 @@ class GlobalConfig:
     default_window_size: tuple = (780, 420)
     performance: PerformanceConfig = None
     canvas_bar: CanvasBarConfig = None
+    parallax: ParallaxConfig = None
 
     def __post_init__(self):
         if self.font is None:
@@ -131,6 +138,8 @@ class GlobalConfig:
             self.performance = PerformanceConfig()
         if self.canvas_bar is None:
             self.canvas_bar = CanvasBarConfig()
+        if self.parallax is None:
+            self.parallax = ParallaxConfig()
 
 # Create default configuration instance
 config = GlobalConfig()

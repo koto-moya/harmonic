@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QGraphicsView, QWidget
 from PySide6.QtCore import Qt, QObject, QEvent
-from PySide6.QtGui import QPainter, QColor
+from PySide6.QtGui import QPainter, QColor, QPixmap
 from scenes.infinite_canvas import InfiniteCanvas
 from widgets.canvas_bar import CanvasBarWidget
 from widgets.control_bar import ControlBar  # Add this import
@@ -111,6 +111,10 @@ class MainWindow(QGraphicsView):
         self.canvas_bar.canvas_selected.connect(self.switch_canvas)
         self.canvas_bar.canvas_closed.connect(self.remove_canvas)
         self.canvas_bar.new_canvas_requested.connect(self.create_new_canvas)
+        
+        # Remove background_pixmap initialization since we're not using images
+        self.base_color = QColor(config.canvas_color)
+        self.pattern_color = QColor(config.canvas_color).darker(120)  # Slightly darker for pattern
 
     def create_new_canvas(self):
         """Create a new canvas tab"""
@@ -137,3 +141,39 @@ class MainWindow(QGraphicsView):
             event.accept()
         else:
             super().wheelEvent(event)
+
+    def drawBackground(self, painter, rect):
+        """Override drawBackground to create a color-based parallax effect"""
+        # Fill with base color first
+        painter.fillRect(rect, self.base_color)
+        
+        if config.parallax.enabled:
+            # Calculate the parallax offset
+            view_center = self.viewport().rect().center()
+            scene_center = self.mapToScene(view_center)
+            
+            # Apply parallax factors from config
+            parallax_x = scene_center.x() * config.parallax.factor_x
+            parallax_y = scene_center.y() * config.parallax.factor_y
+            
+            # Define grid size
+            grid_size = 50  # Size of each grid cell
+            
+            # Calculate offset for parallax effect
+            offset_x = int(parallax_x) % grid_size
+            offset_y = int(parallax_y) % grid_size
+            
+            # Draw grid pattern with parallax offset
+            painter.setPen(self.pattern_color)
+            
+            # Draw vertical lines
+            x = rect.left() - (rect.left() % grid_size) - offset_x
+            while x < rect.right():
+                painter.drawLine(int(x), int(rect.top()), int(x), int(rect.bottom()))
+                x += grid_size
+            
+            # Draw horizontal lines
+            y = rect.top() - (rect.top() % grid_size) - offset_y
+            while y < rect.bottom():
+                painter.drawLine(int(rect.left()), int(y), int(rect.right()), int(y))
+                y += grid_size
