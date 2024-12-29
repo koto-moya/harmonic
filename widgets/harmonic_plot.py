@@ -223,6 +223,8 @@ class HarmonicPlot(pg.PlotWidget):
                     alpha=0  # Make right axis transparent
                 ))
                 self.right_axis.setZValue(-1000)
+                # Remove y-axis label setting for right axis
+                self.right_axis.setLabel('')
             
             # Lock both viewboxes when right axis exists
             self.vb.setMouseEnabled(x=False, y=False)
@@ -231,19 +233,11 @@ class HarmonicPlot(pg.PlotWidget):
             # Add item to right viewbox
             self.right_vb.addItem(line)
             
-            # Update axis label
-            if units == '$':
-                self.right_axis.setLabel(f'{units}', color=config.chart.axis_color)
-            else:
-                self.right_axis.setLabel(f'{units if units else ""}', color=config.chart.axis_color)
         else:
             self.plot_item.addItem(line)
-            # Format left axis based on units of first item
+            # Remove y-axis label formatting block
             if len(self.plot_info) == 1:
-                if units == '$':
-                    self.plot_item.getAxis('left').setLabel(f'({units})')
-                else:
-                    self.plot_item.getAxis('left').setLabel(f'{units if units else ""}')
+                self.plot_item.getAxis('left').setLabel('')
         
         # Update axis ticks after adding new lines
         self.update_axis_ticks()

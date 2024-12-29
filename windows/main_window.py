@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt, QObject, QEvent
 from PySide6.QtGui import QPainter, QColor
 from scenes.infinite_canvas import InfiniteCanvas
 from widgets.canvas_bar import CanvasBarWidget
+from widgets.control_bar import ControlBar  # Add this import
 from config import config
 
 class Layer(QObject):
@@ -45,6 +46,8 @@ class Layer(QObject):
 class MainWindow(QGraphicsView):
     def __init__(self):
         super().__init__()
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+        
         self.setCacheMode(
             QGraphicsView.CacheBackground if config.performance.cache_background 
             else QGraphicsView.CacheNone
@@ -80,6 +83,19 @@ class MainWindow(QGraphicsView):
         self.canvases["home"] = self.home_canvas
         self.setScene(self.home_canvas)
         self.current_scene = self.home_canvas
+        
+        # Create and position the control bar
+        self.control_bar = ControlBar()
+        self.control_bar_layer = Layer(
+            self,
+            self.control_bar,
+            Qt.AlignTop | Qt.AlignLeft,
+            setWidth=True
+        )
+        self.control_bar.raise_()
+        
+        # Connect close signal
+        self.control_bar.close_requested.connect(self.close)
         
         # Create and position the canvas bar with no margins
         self.canvas_bar = CanvasBarWidget()

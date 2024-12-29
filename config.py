@@ -74,7 +74,7 @@ class PerformanceConfig:
     ratelimit_mouse: int = 60
     enable_cache: bool = True
     cache_background: bool = True
-    smart_viewport_update: bool = True
+    smart_viewport_update: bool = False
     disable_antialiasing_optimization: bool = False
     viewport_anchor: str = "mouse"
     default_array_size: int = 100
@@ -111,12 +111,12 @@ class GlobalConfig:
     canvas_color: str = "#2d2b2b"
     application_size: tuple = (1920, 1080)
     application_position: tuple = (100, 100)
-    canvas_size: tuple = (2000, 2000)
+    canvas_size: tuple = (8000, 8000)
     font: FontConfig = None
     chart: ChartConfig = None
     title: TitleConfig = None
     enable_numba: bool = True
-    default_window_size: tuple = (569, 320)
+    default_window_size: tuple = (780, 420)
     performance: PerformanceConfig = None
     canvas_bar: CanvasBarConfig = None
 
