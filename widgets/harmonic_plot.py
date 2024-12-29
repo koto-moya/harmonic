@@ -204,7 +204,6 @@ class HarmonicPlot(pg.PlotWidget):
     def addNewLines(
         self,
         y_vals: np.ndarray,
-        x_vals: Optional[np.ndarray] = None,
         data_label: Optional[str] = None,
         units: Optional[str] = None,
         plot_on_right: bool = False
@@ -214,7 +213,6 @@ class HarmonicPlot(pg.PlotWidget):
 
         Args:
             y_vals: Y-axis values to plot
-            x_vals: Optional X-axis values
             data_label: Label for the data series
             units: Units for the data series
             plot_on_right: Whether to plot on right axis

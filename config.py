@@ -198,9 +198,44 @@ class HeaderConfig:
     value_label_alignment: tuple = (Qt.AlignLeft, Qt.AlignVCenter)
 
 @dataclass
+class ControllerConfig:
+    width: int = 300
+    margin: int = 10
+    position_x_offset: int = 20
+    position_y_offset: int = 60
+    style: str = """
+        QWidget {
+            background-color: #2b2b2b;
+            color: #ffffff;
+        }
+        QLineEdit {
+            padding: 5px;
+            border: 1px solid #3d3d3d;
+            border-radius: 3px;
+        }
+    """
+    placeholder_text: str = "enter command..."
+    commands: List[str] = None
+    context_label_style: str = """
+        QLabel {
+            color: #666666;
+            font-size: 12px;
+            padding: 2px;
+        }
+    """
+    
+    def __post_init__(self):
+        if self.commands is None:
+            self.commands = [
+                "/chart",
+                "/table",
+                "/other"
+            ]
+
+@dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
-    application_title: str = "Harmonic"
+    application_title: str = "harmonic"
     canvas_color: str = "#2d2b2b"
     application_size: tuple = (1630, 930)  # Updated default window size
     application_position: tuple = None  # Remove hardcoded position, will be calculated
@@ -215,6 +250,7 @@ class GlobalConfig:
     parallax: ParallaxConfig = None
     draggable: DraggableConfig = None
     header: HeaderConfig = None
+    controller: ControllerConfig = None
 
     def __post_init__(self):
         if self.font is None:
@@ -233,6 +269,8 @@ class GlobalConfig:
             self.draggable = DraggableConfig()
         if self.header is None:
             self.header = HeaderConfig()
+        if self.controller is None:
+            self.controller = ControllerConfig()
 
 # Create default configuration instance
 config = GlobalConfig()

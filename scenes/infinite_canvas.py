@@ -20,47 +20,19 @@ class InfiniteCanvas(QGraphicsScene):
         """Initialize the infinite canvas with default charts."""
         super().__init__()
         self.setSceneRect(-10000, -10000, 20000, 20000)
-        # Remove windows dictionary since we don't need it anymore
 
-    def create_draggable_object(
+    def add_window(
         self,
-        title: str,
-        payload: AssetPayload,
+        window: DraggableObject,
         pos: tuple[float, float] = (-400, -150)
     ) -> DraggableObject:
         """
         Create a new draggable window object with typed payload.
-        
-        Args:
-            title: Window title
-            payload: Asset payload containing type and data
-            pos: Initial position tuple (x, y)
-            
-        Returns:
-            Created DraggableObject instance
         """
-        window = DraggableObject(title=title)
         window.clicked.connect(self.deselect_all)
         self.addItem(window)
         window.setPos(QPointF(*pos))
         
-        # Handle payload based on type
-        if payload.type == "chart":
-            window.add_harmonic_plot(
-                payload.x_values,
-                payload.data_series,
-                payload.is_datetime,
-                payload.enable_mouseover
-            )
-        elif payload.type == "table":
-            # Add table handling here if needed
-            pass
-        elif payload.type == "custom":
-            # Add custom widget handling here if needed
-            pass
-            
-        return window
-
     def handle_wheel_event(self, event: QWheelEvent, view: QGraphicsProxyWidget) -> bool:
         """
         Handle mouse wheel events for zooming.

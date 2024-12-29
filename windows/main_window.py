@@ -112,13 +112,14 @@ class MainWindow(QGraphicsView):
         self.controller = Controller()
         self.controller.setParent(self)
         
-        # Position controller 20px from right edge, 60px from top
+        # Use config values for positioning
         screen_geometry = self.geometry()
-        controller_x = screen_geometry.width() - self.controller.width() - 20
-        controller_y = 60
+        controller_x = screen_geometry.width() - self.controller.width() - config.controller.position_x_offset
+        controller_y = config.controller.position_y_offset
         self.controller.move(controller_x, controller_y)
         
         self.controller.raise_()
+        self.controller.set_current_canvas(self.current_scene)
         self.current_scene_changed.connect(self.controller.set_current_canvas)
 
     def _setup_background(self) -> None:

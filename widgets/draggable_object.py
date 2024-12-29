@@ -15,6 +15,7 @@ from PySide6.QtCore import (
 from PySide6.QtGui import QPen, QColor
 from widgets.header_widget import HeaderWidget
 from widgets.harmonic_plot import HarmonicPlot
+from models.asset_payload import AssetPayload
 from config import config
 
 
@@ -31,29 +32,25 @@ class DraggableObject(QGraphicsItem, QObject):
 
     def __init__(
         self,
-        title: str = "Plot Title",
-        width: int = 780,
-        height: int = 420,
+        payload: AssetPayload,
         margins: QMarginsF = QMarginsF(0, 0, 0, 1)
     ) -> None:
         """
         Initialize the DraggableObject.
 
         Args:
-            title: Title text for the header
-            width: Widget width in pixels
-            height: Widget height in pixels
+            payload: AssetPayload instance
             margins: Margins around the widget
         """
         super().__init__()
         QObject.__init__(self)
         self.setFlags(QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsSelectable)
-
+        self.payload = payload
         # Cache commonly used values
-        self._plot_height = height * config.draggable.plot_height_ratio
-        self._title_height = height * config.draggable.title_height_ratio
-        self._width = width
-        self.title = title
+        self._plot_height = payload.height * config.draggable.plot_height_ratio
+        self._title_height = payload.height * config.draggable.title_height_ratio
+        self._width = payload.width
+        self.title = payload.title
         
         # Configure appearance using config values
         self.selected_color = QPen(QColor(config.draggable.selected_color), config.draggable.border_width)
@@ -62,9 +59,10 @@ class DraggableObject(QGraphicsItem, QObject):
         # Set up widget proxies
         self.header_proxy = QGraphicsProxyWidget(self)
         self.plot_proxy = QGraphicsProxyWidget(self)
-        self.rect = QRectF(0, 0, width, height).marginsRemoved(margins)
+        self.rect = QRectF(0, 0, payload.width, payload.height).marginsRemoved(margins)
 
         self._setup_close_button()
+        self.createContent()
 
     def _setup_close_button(self) -> None:
         """Configure and position the close button."""
@@ -107,29 +105,28 @@ class DraggableObject(QGraphicsItem, QObject):
         self.plot_proxy.setWidget(content)
         self.plot_proxy.setPos(0, self.header_proxy.size().height())
 
-    def add_harmonic_plot(
-        self,
-        x_vals: np.ndarray,
-        data_series: List[tuple[np.ndarray, str, str]],
-        is_datetime: bool = False,
-        enable_mouseover: bool = True
-    ) -> None:
+    def createContent(self) -> None:
         """
         Add a Harmonic plot to this draggable object.
-        
-        Args:
-            x_vals: X-axis values (can be dates or numbers)
-            data_series: List of tuples containing (y_values, label, units)
-            is_datetime: Whether x_vals represent datetime values
-            enable_mouseover: Enable mouseover interactions
         """
-        plot = HarmonicPlot(enable_mouseover=enable_mouseover, is_datetime=is_datetime)
-        self.addContent(plot)
-        
-        plot.x_vals = x_vals
-        for y_vals, label, units in data_series:
-            plot.addNewLines(y_vals, data_label=label, units=units)
+                # Handle payload based on type
+        if self.payload.type == "chart":
+            plot = HarmonicPlot(x_vals=self.payload.x_values, enable_mouseover=self.payload.enable_mouseover, is_datetime=self.payload.is_datetime)
+            self.addContent(plot)
+            for line in self.payload.y_values_left:
+                plot.addNewLines(line, data_label=self.payload.y_label_left, units=self.payload.left_units)
+            if self.payload.dual_axis:
+                for line in self.payload.y_values_right:
+                    plot.addNewLines(line, data_label=self.payload.y_label_right, units=self.payload.right_units, plot_on_right=True)
 
+        elif self.payload.type == "table":
+            # Add table handling here if needed
+            pass
+        elif self.payload.type == "custom":
+            # Add custom widget handling here if needed
+            pass
+        
+            
     def boundingRect(self) -> QRectF:
         """Return the bounding rectangle of the widget."""
         return self.rect
