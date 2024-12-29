@@ -4,14 +4,16 @@ from PySide6.QtWidgets import (
     QApplication,
     QSizeGrip
 )
-from PySide6.QtCore import Qt, QEvent, QRect, QPointF
+from PySide6.QtCore import Qt, QEvent, QRect, QPointF, Signal
 from PySide6.QtGui import QPainter, QColor, QTransform
 
 from scenes.infinite_canvas import InfiniteCanvas
 from widgets.canvas_bar import CanvasBarWidget
 from widgets.control_bar import ControlBar
+from widgets.Nyx import Nyx
 from utils.layer import Layer
 from config import config
+from widgets.controller import Controller
 
 
 class MainWindow(QGraphicsView):
@@ -21,7 +23,7 @@ class MainWindow(QGraphicsView):
     Provides a frameless window with custom controls, multiple canvases,
     and parallax background effects.
     """
-    
+    current_scene_changed = Signal(object)
     def __init__(self) -> None:
         super().__init__()
         self._setup_window()
@@ -106,6 +108,19 @@ class MainWindow(QGraphicsView):
         self.canvas_bar.canvas_closed.connect(self.remove_canvas)
         self.canvas_bar.new_canvas_requested.connect(self.create_new_canvas)
 
+        # Replace the Layer-based controller setup with manual positioning
+        self.controller = Controller()
+        self.controller.setParent(self)
+        
+        # Position controller 20px from right edge, 60px from top
+        screen_geometry = self.geometry()
+        controller_x = screen_geometry.width() - self.controller.width() - 20
+        controller_y = 60
+        self.controller.move(controller_x, controller_y)
+        
+        self.controller.raise_()
+        self.current_scene_changed.connect(self.controller.set_current_canvas)
+
     def _setup_background(self) -> None:
         """Initialize background colors and pattern."""
         self.base_color = QColor(config.canvas_color)
@@ -119,11 +134,17 @@ class MainWindow(QGraphicsView):
         self.canvases[tab_id] = new_canvas
         self.switch_canvas(tab_id)
 
+    def create_draggable_object(self, title, payload) -> None:
+        """Add a draggable object to the current scene."""
+        self.current_scene.create_draggable_object(title, payload)
+        pass
+
     def switch_canvas(self, tab_id: str) -> None:
         """Switch to the specified canvas."""
         if tab_id in self.canvases:
             self.current_scene = self.canvases[tab_id]
             self.setScene(self.current_scene)
+            self.current_scene_changed.emit(self.current_scene)
 
     def remove_canvas(self, tab_id: str) -> None:
         """Remove a canvas when its tab is closed."""

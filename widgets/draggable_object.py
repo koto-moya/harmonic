@@ -1,3 +1,5 @@
+from typing import List, Tuple
+import numpy as np
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsProxyWidget,
@@ -104,6 +106,29 @@ class DraggableObject(QGraphicsItem, QObject):
         content.mouse_moved_signal.connect(self.header_widget.update_values)
         self.plot_proxy.setWidget(content)
         self.plot_proxy.setPos(0, self.header_proxy.size().height())
+
+    def add_harmonic_plot(
+        self,
+        x_vals: np.ndarray,
+        data_series: List[tuple[np.ndarray, str, str]],
+        is_datetime: bool = False,
+        enable_mouseover: bool = True
+    ) -> None:
+        """
+        Add a Harmonic plot to this draggable object.
+        
+        Args:
+            x_vals: X-axis values (can be dates or numbers)
+            data_series: List of tuples containing (y_values, label, units)
+            is_datetime: Whether x_vals represent datetime values
+            enable_mouseover: Enable mouseover interactions
+        """
+        plot = HarmonicPlot(enable_mouseover=enable_mouseover, is_datetime=is_datetime)
+        self.addContent(plot)
+        
+        plot.x_vals = x_vals
+        for y_vals, label, units in data_series:
+            plot.addNewLines(y_vals, data_label=label, units=units)
 
     def boundingRect(self) -> QRectF:
         """Return the bounding rectangle of the widget."""
