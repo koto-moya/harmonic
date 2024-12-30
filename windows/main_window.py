@@ -29,8 +29,12 @@ class MainWindow(QGraphicsView):
     ZOOM_MAX_SCALE = 2.0  # 3x initial scale
     ZOOM_MIN_SCALE = 0.3  # 0.3x initial scale
     
-    def __init__(self,  token) -> None:
+    def __init__(self, token) -> None:
+        if not token:
+            raise ValueError("Invalid token")
         super().__init__()
+        self.token = token
+        self._refs = []  # Keep references to prevent GC
         self.initial_scale = 1.0  # Store initial scale
         self._setup_window()
         self._setup_graphics()
@@ -123,6 +127,9 @@ class MainWindow(QGraphicsView):
         initial_y = config.controller.position_y_offset
         self.controller.move(initial_x, initial_y)
         
+        # Keep references to prevent premature destruction
+        self._refs.extend([self.control_bar, self.canvas_bar, self.controller])
+        
         self.controller.raise_()
         self.controller.set_current_canvas(self.current_scene)
         self.current_scene_changed.connect(self.controller.set_current_canvas)
@@ -212,3 +219,8 @@ class MainWindow(QGraphicsView):
         
         # Make sure controller stays on top
         self.controller.raise_()
+
+    def closeEvent(self, event):
+        """Clean up resources properly."""
+        self._refs.clear()  # Clear references
+        super().closeEvent(event)

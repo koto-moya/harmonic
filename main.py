@@ -22,22 +22,36 @@ pg.setConfigOptions(
 )
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    
-    # Load custom font using known working method
-    path = os.path.join("resources", "OxygenMono-Regular.ttf")
-    abs_path = os.path.abspath(path)
-    font_id = QFontDatabase.addApplicationFont(abs_path)
-    
-    if font_id != -1:
-        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-        font = QFont(font_family, config.font.size)
-        app.setFont(font)
-        config.font.family = font_family  # Update config to use loaded font
-    else:
-        print("Failed to load font")
-    login_window = LoginWindow()
-    login_window.login_successful.connect(lambda token: MainWindow(token).show())
-    #window = MainWindow()
-    login_window.show()
-    sys.exit(app.exec())
+    try:
+        app = QApplication(sys.argv)
+        
+        # Load custom font using known working method
+        path = os.path.join("resources", "OxygenMono-Regular.ttf")
+        abs_path = os.path.abspath(path)
+        font_id = QFontDatabase.addApplicationFont(abs_path)
+        
+        if font_id != -1:
+            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+            font = QFont(font_family, config.font.size)
+            app.setFont(font)
+            config.font.family = font_family
+        else:
+            print("Failed to load font, using system default")
+            
+        # Keep reference to main window to prevent premature garbage collection
+        main_window = None
+        def on_login_success(token):
+            global main_window
+            if token:
+                main_window = MainWindow(token)
+                main_window.show()
+                login_window.close()
+        
+        login_window = LoginWindow()
+        login_window.login_successful.connect(on_login_success)
+        login_window.show()
+        
+        sys.exit(app.exec())
+    except Exception as e:
+        print(f"Critical error: {str(e)}")
+        sys.exit(1)

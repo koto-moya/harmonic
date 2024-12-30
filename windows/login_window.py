@@ -121,22 +121,26 @@ class LoginWindow(QtWidgets.QWidget):
         self.bt_login.setObjectName("bt_login")
         
     def check_login(self):
-        """Handle login attempt."""
-        username = self.le_username.text()
-        password = self.le_password.text()
-        
-        if not username or not password:
-            self.show_error("Please enter both username and password")
-            return
-        
+        """Handle login attempt with error handling."""
         try:
+            username = self.le_username.text()
+            password = self.le_password.text()
+            
+            if not username or not password:
+                self.show_error("Please enter both username and password")
+                return
+            
             token = login(username, password)
             if token:
-                self.login_successful.emit(token)
-                self.close()
+                # Ensure token is valid before emitting
+                if token:
+                    self.login_successful.emit(token)
+                    return
+                self.show_error("Invalid token received")
             else:
                 self.show_error("Invalid credentials")
         except Exception as e:
+            print(f"Login error: {str(e)}")
             self.show_error("Connection error")
     
     def show_error(self, message):
