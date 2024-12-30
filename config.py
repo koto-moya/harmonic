@@ -229,7 +229,8 @@ class ControllerConfig:
             self.commands = [
                 "/chart",
                 "/table",
-                "/other"
+                "/help",
+                "/chat",
             ]
 
 @dataclass
