@@ -133,12 +133,12 @@ class LoginWindow(QtWidgets.QWidget):
             token = login(username, password)
             if token:
                 # Ensure token is valid before emitting
-                if token:
+                if isinstance(token, Token):
                     self.login_successful.emit(token)
                     return
-                self.show_error("Invalid token received")
+                self.show_error("invalid token received")
             else:
-                self.show_error("Invalid credentials")
+                self.show_error("invalid credentials")
         except Exception as e:
             print(f"Login error: {str(e)}")
             self.show_error("Connection error")
