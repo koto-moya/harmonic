@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QSizeGrip
 )
-from PySide6.QtCore import Qt, QEvent, QRect, QPointF, Signal
+from PySide6.QtCore import Qt, QEvent, QRect, QPointF, Signal, QSize
 from PySide6.QtGui import QPainter, QColor, QTransform
 
 from scenes.infinite_canvas import InfiniteCanvas
@@ -24,8 +24,14 @@ class MainWindow(QGraphicsView):
     and parallax background effects.
     """
     current_scene_changed = Signal(object)
+    
+    # Add zoom limit constants
+    ZOOM_MAX_SCALE = 2.0  # 3x initial scale
+    ZOOM_MIN_SCALE = 0.3  # 0.3x initial scale
+    
     def __init__(self) -> None:
         super().__init__()
+        self.initial_scale = 1.0  # Store initial scale
         self._setup_window()
         self._setup_graphics()
         self._setup_canvases()
@@ -113,10 +119,9 @@ class MainWindow(QGraphicsView):
         self.controller.setParent(self)
         
         # Use config values for positioning
-        screen_geometry = self.geometry()
-        controller_x = screen_geometry.width() - self.controller.width() - config.controller.position_x_offset
-        controller_y = config.controller.position_y_offset
-        self.controller.move(controller_x, controller_y)
+        initial_x = self.width() - self.controller.width() - config.controller.position_x_offset
+        initial_y = config.controller.position_y_offset
+        self.controller.move(initial_x, initial_y)
         
         self.controller.raise_()
         self.controller.set_current_canvas(self.current_scene)
@@ -154,40 +159,56 @@ class MainWindow(QGraphicsView):
             self.switch_canvas("home")
 
     def wheelEvent(self, event: QEvent) -> None:
-        """Handle wheel events and delegate to scene."""
-        if self.current_scene and self.current_scene.handle_wheel_event(event, self):
-            event.accept()
-        else:
-            super().wheelEvent(event)
+        """Handle wheel events with zoom limits."""
+        if self.current_scene:
+            # Get current scale
+            current_scale = self.transform().m11()  # Get current horizontal scale
+            
+            # Calculate zoom factor based on wheel delta
+            factor = 1.1 if event.angleDelta().y() > 0 else 0.9
+            new_scale = current_scale * factor
+            
+            # Check if new scale would exceed limits
+            if (new_scale <= self.initial_scale * self.ZOOM_MAX_SCALE and 
+                new_scale >= self.initial_scale * self.ZOOM_MIN_SCALE):
+                # Only apply zoom if within limits
+                if self.current_scene.handle_wheel_event(event, self):
+                    event.accept()
+                    return
+        
+        super().wheelEvent(event)
 
     def drawBackground(self, painter: QPainter, rect: QRect) -> None:
-        """Override drawBackground to create a dot-based parallax effect."""
+        """Draw background with static dot grid pattern."""
         painter.fillRect(rect, self.base_color)
         
-        if config.parallax.enabled:
-            transform: QTransform = self.transform()
-            scale: float = transform.m11()
-            
-            view_center: QPointF = self.viewport().rect().center()
-            scene_center: QPointF = self.mapToScene(view_center)
-            
-            parallax_x: float = scene_center.x() * config.parallax.factor_x
-            parallax_y: float = scene_center.y() * config.parallax.factor_y
-            
-            spacing: int = 50
-            
-            offset_x: float = parallax_x % spacing
-            offset_y: float = parallax_y % spacing
-            
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(self.pattern_color)
-            
-            visible_rect: QRect = self.mapToScene(self.viewport().rect()).boundingRect()
-            
-            x: float = visible_rect.left() - (visible_rect.left() % spacing) - offset_x
-            while x <= visible_rect.right():
-                y: float = visible_rect.top() - (visible_rect.top() % spacing) - offset_y
-                while y <= visible_rect.bottom():
-                    painter.drawEllipse(int(x), int(y), self.dot_size, self.dot_size)
-                    y += spacing
-                x += spacing
+        # Set up dot drawing
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self.pattern_color)
+        
+        # Get visible area
+        visible_rect = self.mapToScene(self.viewport().rect()).boundingRect()
+        
+        # Fixed grid spacing
+        spacing = 50
+        
+        # Draw dots aligned to grid
+        x = visible_rect.left() - (visible_rect.left() % spacing)
+        while x <= visible_rect.right():
+            y = visible_rect.top() - (visible_rect.top() % spacing)
+            while y <= visible_rect.bottom():
+                painter.drawEllipse(int(x), int(y), self.dot_size, self.dot_size)
+                y += spacing
+            x += spacing
+
+    def resizeEvent(self, event: QEvent) -> None:
+        """Handle window resize events."""
+        super().resizeEvent(event)
+        
+        # Update controller position
+        new_width = event.size().width()
+        new_x = new_width - self.controller.width() - config.controller.position_x_offset
+        self.controller.move(new_x, config.controller.position_y_offset)
+        
+        # Make sure controller stays on top
+        self.controller.raise_()

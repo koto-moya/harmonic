@@ -135,12 +135,6 @@ class CanvasBarConfig:
     """
 
 @dataclass
-class ParallaxConfig:
-    factor_x: float = 0.03  # Slower movement for dots
-    factor_y: float = 0.03  # Slower movement for dots
-    enabled: bool = True    # Toggle parallax effect
-
-@dataclass
 class DraggableConfig:
     selected_color: str = "#3000b3"  # rgb(48, 0, 179)
     unselected_color: str = "#505050"  # rgb(80, 80, 80)
@@ -248,7 +242,6 @@ class GlobalConfig:
     default_window_size: tuple = (780, 420)
     performance: PerformanceConfig = None
     canvas_bar: CanvasBarConfig = None
-    parallax: ParallaxConfig = None
     draggable: DraggableConfig = None
     header: HeaderConfig = None
     controller: ControllerConfig = None
@@ -264,8 +257,6 @@ class GlobalConfig:
             self.performance = PerformanceConfig()
         if self.canvas_bar is None:
             self.canvas_bar = CanvasBarConfig()
-        if self.parallax is None:
-            self.parallax = ParallaxConfig()
         if self.draggable is None:
             self.draggable = DraggableConfig()
         if self.header is None:
