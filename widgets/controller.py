@@ -7,6 +7,7 @@ from widgets.draggable_object import DraggableObject
 from config import config
 import numpy as np
 from widgets.command_input import CommandInput  # Add this import
+from utils.color_utils import get_contrast_color  # Add this import
 
 class Controller(QWidget):
     """Widget for accepting text commands and controlling the canvas."""
@@ -90,13 +91,15 @@ class Controller(QWidget):
             command = self.command_input.text().strip()
             self.current_command = command
             if command in config.controller.commands:
+                bg_color = self.get_next_color()
+                text_color = get_contrast_color(bg_color)
                 self.context_label.setText(command)
                 self.context_label.setStyleSheet(f"""
                     QLabel {{
-                        color: #ffffff;
+                        color: {text_color};
                         font-size: 12px;
                         padding: 2px 6px;
-                        background-color: {self.get_next_color()};
+                        background-color: {bg_color};
                         border-radius: 2px;
                         margin-bottom: 2px;
                         opacity: 1;
