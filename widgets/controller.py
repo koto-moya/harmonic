@@ -6,6 +6,7 @@ from scenes.infinite_canvas import InfiniteCanvas
 from widgets.draggable_object import DraggableObject
 from config import config
 import numpy as np
+from widgets.command_input import CommandInput  # Add this import
 
 class Controller(QWidget):
     """Widget for accepting text commands and controlling the canvas."""
@@ -63,9 +64,9 @@ class Controller(QWidget):
         # Add labels to container
         label_layout.addWidget(self.context_label)
         
-        # Command input setup remains the same
-        self.command_input = QLineEdit()
-        self.command_input.setPlaceholderText(config.controller.placeholder_text)
+        # Replace QLineEdit with CommandInput
+        self.command_input = CommandInput()
+        self.command_input.setPlaceholderText("")  # Updated placeholder
         self.command_input.returnPressed.connect(self.process_command)
         
         # Setup completer
