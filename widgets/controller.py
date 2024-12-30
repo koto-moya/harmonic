@@ -8,6 +8,7 @@ from config import config
 import numpy as np
 from widgets.command_input import CommandInput  # Add this import
 from utils.color_utils import get_contrast_color  # Add this import
+from utils.app_requests import gestalt_get, gestalt_post 
 
 class Controller(QWidget):
     """Widget for accepting text commands and controlling the canvas."""
@@ -18,6 +19,7 @@ class Controller(QWidget):
         self.current_canvas = None
         self.command_mode = True
         self.current_command = None
+        self.token = None
         self.setup_ui()
         
     def get_next_color(self) -> str:
@@ -112,12 +114,15 @@ class Controller(QWidget):
             # Create payload and execute
             if self.current_command == "/chart":
                 model_query = self.command_input.text().strip()
-                self.current_request = ChartAssetPayload(
-                    title="command test",
-                    x_values=np.random.rand(10),
-                    y_label_left=model_query,
-                    y_values_left=[np.random.rand(10)])
-                self.execute_payload()
+                data = gestalt_get(self.token.token, {"config_name":model_query, "brand":"lume", "startdate":"2023-05-01", "enddate":"2023-12-31"})
+                # self.current_request = ChartAssetPayload(
+                #     title="command test",
+                #     x_values=data[0],
+                #     y_label_left=["revneue", "spend"],
+                #     y_label_right=["roas"]
+                #     y_values_left=[data[1], data[2]],
+                #     y_values_right=[data[3]],)
+                # self.execute_payload()
                 self.command_input.clear()
                 self.command_input.setPlaceholderText(config.controller.placeholder_text)
                 self.context_label.setText("")  # Clear the text

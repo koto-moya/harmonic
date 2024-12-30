@@ -131,6 +131,7 @@ class MainWindow(QGraphicsView):
         self._refs.extend([self.control_bar, self.canvas_bar, self.controller])
         
         self.controller.raise_()
+        self.controller.token = self.token
         self.controller.set_current_canvas(self.current_scene)
         self.current_scene_changed.connect(self.controller.set_current_canvas)
 

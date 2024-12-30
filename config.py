@@ -230,6 +230,64 @@ class ControllerConfig:
             ]
 
 @dataclass
+class LoginConfig:
+    width: int = 400
+    height: int = 300
+    margin_left: int = 40
+    margin_top: int = 20
+    margin_right: int = 40
+    margin_bottom: int = 40
+    spacing: int = 20
+    
+    # Input fields
+    input_height: int = 36
+    input_font_size: int = 13
+    input_style: str = """
+        padding: 0 10px;
+        border: 1px solid #3d3d3d;
+        border-radius: 4px;
+        color: {font_color};
+        background: #2b2b2b;
+        font-size: 13px;
+        line-height: 36px;
+    """
+    
+    # Title
+    title_font_size: int = 24
+    title_style: str = """
+        color: {font_color};
+        font-size: 24px;
+        font-weight: bold;
+        font-family: {font_family};
+    """
+    
+    # Login button
+    button_padding: int = 10
+    button_font_size: int = 14
+    button_style: str = """
+        padding: 10px;
+        background-color: {selected_color};
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+    """
+    button_hover_color: str = "#4010e3"
+    
+    # Close button
+    close_button_size: int = 30
+    close_button_style: str = """
+        background: transparent;
+        border: none;
+        color: #666666;
+        font-size: 20px;
+    """
+    close_button_hover_color: str = "#ff5555"
+    
+    # Error message
+    error_color: str = "#ff5555"
+
+@dataclass
 class GlobalConfig:
     color_scheme: ColorScheme = ColorScheme.DARK
     application_title: str = "harmonic"
@@ -247,7 +305,8 @@ class GlobalConfig:
     draggable: DraggableConfig = None
     header: HeaderConfig = None
     controller: ControllerConfig = None
-
+    login: LoginConfig = None
+    
     def __post_init__(self):
         if self.font is None:
             self.font = FontConfig()
@@ -265,6 +324,8 @@ class GlobalConfig:
             self.header = HeaderConfig()
         if self.controller is None:
             self.controller = ControllerConfig()
+        if self.login is None:
+            self.login = LoginConfig()
 
 # Create default configuration instance
 config = GlobalConfig()

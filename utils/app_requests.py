@@ -19,7 +19,8 @@ def gestalt_get(token: str, payload):
     response = requests.get(server_endpoint+"/get", headers=headers, params=payload)
     if response.status_code == 200:
         response = response.json()
-        return response[0], response[1]
+        print(response[0],"\n", response[1])
+        return response[0], response[1] # x, y
 
 def gestalt_post(token: str, payload: ConfigParams):
     headers = {"Authorization":f"Bearer {token}",
@@ -44,6 +45,6 @@ def login(username: str, password: str) -> str:
             token = Token()
             token_data = response.json()
             token.token = token_data.get("access_token")
-        return token.token
+        return token
     except:
         return None 

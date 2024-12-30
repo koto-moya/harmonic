@@ -10,7 +10,8 @@ class ChartAssetPayload(AssetPayload):
     type: str = "chart"  # "chart", "table", "custom", etc.
     title: str = None
     x_values: Optional[Any] = None  # Will store numpy array or list
-    y_label_left: str = None
+    x_label: str = None
+    y_label_left: Optional[list] = None
     y_label_right: Optional[str] = None
     multi_line: bool = False
     dual_axis: bool = False

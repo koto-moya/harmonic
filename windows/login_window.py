@@ -11,36 +11,39 @@ class LoginWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("harmonic login")
-        self.setFixedSize(400, 300)
+        self.setFixedSize(config.login.width, config.login.height)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self._setup_ui()
         
     def _setup_ui(self):
         """Setup the login window UI elements."""
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setContentsMargins(40, 20, 40, 40)  # Reduced top margin from 40 to 20
-        layout.setSpacing(20)
+        layout.setContentsMargins(
+            config.login.margin_left,
+            config.login.margin_top,
+            config.login.margin_right,
+            config.login.margin_bottom
+        )
+        layout.setSpacing(config.login.spacing)
         
         # Title
         title = QtWidgets.QLabel("harmonic")
-        title.setStyleSheet(f"""
-            color: {config.font.color};
-            font-size: 24px;
-            font-weight: bold;
-            font-family: {config.font.family};
-        """)
+        title.setStyleSheet(config.login.title_style.format(
+            font_color=config.font.color,
+            font_family=config.font.family
+        ))
         title.setAlignment(Qt.AlignCenter)
         
         # Username input
         self.le_username = QtWidgets.QLineEdit()
         self.le_username.setPlaceholderText("Username")
-        self.le_username.setMinimumHeight(36)  # Add minimum height
+        self.le_username.setMinimumHeight(config.login.input_height)
         
         # Password input
         self.le_password = QtWidgets.QLineEdit()
         self.le_password.setPlaceholderText("Password")
         self.le_password.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.le_password.setMinimumHeight(36)  # Add minimum height
+        self.le_password.setMinimumHeight(config.login.input_height)
         
         # Login button
         self.bt_login = QtWidgets.QPushButton("Login")
@@ -49,24 +52,21 @@ class LoginWindow(QtWidgets.QWidget):
         
         # Error label (hidden by default)
         self.error_label = QtWidgets.QLabel()
-        self.error_label.setStyleSheet("color: #ff5555;")
+        self.error_label.setStyleSheet(f"color: {config.login.error_color};")
         self.error_label.setAlignment(Qt.AlignCenter)
         self.error_label.hide()
         
         # Close button
         close_button = QtWidgets.QPushButton("×")
         close_button.clicked.connect(self.close)
-        close_button.setFixedSize(30, 30)
-        close_button.setStyleSheet("""
-            QPushButton {
-                background: transparent;
-                border: none;
-                color: #666666;
-                font-size: 20px;
-            }
-            QPushButton:hover {
-                color: #ff5555;
-            }
+        close_button.setFixedSize(config.login.close_button_size, config.login.close_button_size)
+        close_button.setStyleSheet(f"""
+            QPushButton {{
+                {config.login.close_button_style}
+            }}
+            QPushButton:hover {{
+                color: {config.login.close_button_hover_color};
+            }}
         """)
         
         # Add widgets to layout
@@ -93,27 +93,16 @@ class LoginWindow(QtWidgets.QWidget):
                 background-color: {config.canvas_bar.background_color};
             }}
             QLineEdit {{
-                padding: 0 10px;  /* Horizontal padding only */
-                border: 1px solid #3d3d3d;
-                border-radius: 4px;
-                color: {config.font.color};
-                background: #2b2b2b;
-                font-size: 13px;
-                line-height: 36px;  /* Match the minimum height */
+                {config.login.input_style.format(font_color=config.font.color)}
             }}
             QLineEdit:focus {{
                 border: 1px solid #666666;
             }}
             QPushButton#bt_login {{
-                padding: 10px;
-                background-color: {config.draggable.selected_color};
-                border: none;
-                border-radius: 4px;
-                color: white;
-                font-size: 14px;
+                {config.login.button_style.format(selected_color=config.draggable.selected_color)}
             }}
             QPushButton#bt_login:hover {{
-                background-color: #4010e3;
+                background-color: {config.login.button_hover_color};
             }}
         """)
         
