@@ -9,8 +9,9 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase, QFont
 
 # Local imports
-from windows.main_window import MainWindow  # Changed from relative to absolute import
-from config import config  # Changed from relative to absolute import
+from windows.main_window import MainWindow  
+from windows.login_window import LoginWindow 
+from config import config  
 
 # Configure pyqtgraph settings
 pg.setConfigOptions(
@@ -35,7 +36,8 @@ if __name__ == "__main__":
         config.font.family = font_family  # Update config to use loaded font
     else:
         print("Failed to load font")
-    
-    window = MainWindow()
-    window.show()
+    login_window = LoginWindow()
+    login_window.login_successful.connect(lambda token: MainWindow(token).show())
+    #window = MainWindow()
+    login_window.show()
     sys.exit(app.exec())

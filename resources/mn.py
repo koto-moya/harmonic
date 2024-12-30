@@ -7,26 +7,12 @@ from modules.app_requests import gestalt_get, gestalt_post, login, Token
 from modules.utils import create_message, create_chat
 from resources.cg import chat_interface_html_head
 
-class LoginWindow(QtWidgets.QWidget, Ui_login):
-    login_successful = Signal(Token)
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
 
-        self.bt_login.clicked.connect(self.check_login)
-
-    def check_login(self):
-        username = self.le_username.text()
-        password = self.le_password.text()
-        token = login(username, password)
-        if token:
-            self.login_successful.emit(token)
-        else:
-            return None
         
 # The home window should only handle the mechanistic action of the UI not actually do any logic
 class HomeWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, token):
+        print(token)
         super().__init__()
         self.setupUi(self)
         self.resize(800, 600)

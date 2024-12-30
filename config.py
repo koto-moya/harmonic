@@ -6,6 +6,8 @@ from typing import Dict, List, Optional
 from PySide6.QtCore import Qt
 from enum import Enum
 
+server_endpoint = "http://192.168.0.150/harmonic"
+
 class ColorScheme(Enum):
     DARK = "dark"
     LIGHT = "light"

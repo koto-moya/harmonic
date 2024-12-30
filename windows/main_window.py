@@ -29,7 +29,7 @@ class MainWindow(QGraphicsView):
     ZOOM_MAX_SCALE = 2.0  # 3x initial scale
     ZOOM_MIN_SCALE = 0.3  # 0.3x initial scale
     
-    def __init__(self) -> None:
+    def __init__(self,  token) -> None:
         super().__init__()
         self.initial_scale = 1.0  # Store initial scale
         self._setup_window()
